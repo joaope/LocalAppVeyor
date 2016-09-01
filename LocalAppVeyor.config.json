@@ -1,0 +1,11 @@
+{
+    //"SkipAppVeyorSteps": false,
+    //"BuildSteps": [
+    //    {
+    //        "Name": "Custom Step",
+    //        "TypeName": "LocalAppVeyor.Pipeline.AppVeyor.InitStep, LocalAppVeyor",
+    //        "ContinueOnFail": true,
+    //        "After": "Init"
+    //    }
+    //]
+}

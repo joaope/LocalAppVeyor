@@ -1,0 +1,59 @@
+{
+    "version": "0.5.0",
+    "authors": [ "joaope" ],
+    "copyright": "joaope 2016",
+    "title": "LocalAppVeyor",
+    "description": "Run your AppVeyor build, locally.",
+    "buildOptions": {
+        "warningsAsErrors": false,
+        "platform": "anycpu",
+        "languageVersion": "csharp6",
+        "debugType": "portable",
+        "emitEntryPoint": true,
+        "copyToOutput": {
+            "include": "../../LocalAppVeyor.config.json"
+        }
+    },
+    "packOptions": {
+        "owners": [ "joaope" ],
+        "summary": "Run your AppVeyor build, locally.",
+        "tags": [ "console", "appveyor", "local", "build", "api" ],
+        "repository": {
+            "type": "git",
+            "url": "https://github.com/joaope/LocalAppVeyor.git"
+        },
+        "projectUrl": "https://github.com/joaope/LocalAppVeyor"
+    },
+    "configurations": {
+        "Debug": {},
+        "Release": {
+            "buildOptions": {
+                "optimize": true
+            }
+        }
+    },
+
+    "dependencies": {
+        "LocalAppVeyor": "0.5.0"
+    },
+
+    "frameworks": {
+        "net451": {
+            "imports": [ "dotnet" ]
+        },
+        "netcoreapp10": {
+            "imports": [ "dotnet" ],
+            "dependencies": {
+                "Microsoft.NETCore.App": {
+                    "version": "1.0.0",
+                    "type": "platform"
+                },
+                "System.AppContext": "4.1.0"
+            }
+        }
+    },
+
+    "runtimes": {
+        "win10-x64": {} 
+    }
+}

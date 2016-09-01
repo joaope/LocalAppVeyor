@@ -1,0 +1,52 @@
+﻿{
+    "version": "0.5.0",
+    "authors": [ "joaope" ],
+    "copyright": "joaope 2016",
+    "title": "LocalAppVeyor",
+    "description": "Run your AppVeyor build, locally.",
+    "buildOptions": {
+        "warningsAsErrors": false,
+        "platform": "anycpu",
+        "languageVersion": "csharp6",
+        "debugType": "portable"
+    },
+    "packOptions": {
+        "owners": [ "joaope" ],
+        "summary": "Run your AppVeyor build, locally.",
+        "tags": [ "console", "appveyor", "local", "build", "api" ],
+        "repository": {
+            "type": "git",
+            "url": "https://github.com/joaope/LocalAppVeyor.git"
+        },
+        "projectUrl": "https://github.com/joaope/LocalAppVeyor"
+    },
+    "configurations": {
+        "Debug": {},
+        "Release": {
+            "buildOptions": {
+                "optimize": true
+            }
+        }
+    },
+
+    "dependencies": {
+        "YamlDotNet.Signed": "0.0.1",
+        "Microsoft.Extensions.Configuration.Json": "1.0.0",
+        "Microsoft.Extensions.Configuration.Binder": "1.0.0"
+    },
+
+    "frameworks": {
+        "net451": {
+            "imports": ["dotnet"]
+        },
+        "netstandard13": {
+            "imports": ["dotnet"],
+            "dependencies": {
+                "NETStandard.Library": "1.6.0",
+                "System.IO.FileSystem": "4.0.1",
+                "System.Runtime.Serialization.Primitives": "4.1.1",
+                "System.Diagnostics.Process": "4.1.0"
+            }
+        }
+    }
+}
