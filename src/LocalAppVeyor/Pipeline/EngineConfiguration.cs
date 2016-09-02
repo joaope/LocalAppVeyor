@@ -6,15 +6,15 @@ namespace LocalAppVeyor.Pipeline
 {
     public class EngineConfiguration
     {
-        public StepConfiguration[] BuildSteps { get; set; }
+        public IEngineStep[] Steps { get; set; }
 
-        public static EngineConfiguration Default => new EngineConfiguration(new StepConfiguration[0]);
+        public static EngineConfiguration Default => new EngineConfiguration(new IEngineStep[0]);
 
-        public EngineConfiguration(IEnumerable<StepConfiguration> buildSteps)
+        public EngineConfiguration(IEnumerable<IEngineStep> steps)
         {
-            if (buildSteps == null) throw new ArgumentNullException(nameof(buildSteps));
-            
-            BuildSteps = buildSteps.ToArray();
+            if (steps == null) throw new ArgumentNullException(nameof(steps));
+
+            Steps = steps.ToArray();
         }
     }
 }

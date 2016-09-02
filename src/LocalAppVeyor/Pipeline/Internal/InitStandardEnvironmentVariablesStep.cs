@@ -1,13 +1,8 @@
-﻿using LocalAppVeyor.Configuration.Model;
-
-namespace LocalAppVeyor.Pipeline.Steps.AppVeyor
+﻿namespace LocalAppVeyor.Pipeline.Internal
 {
-    public class InitStandardEnvironmentVariablesStep : Step
+    internal class InitStandardEnvironmentVariablesStep : InternalEngineStep
     {
-        public InitStandardEnvironmentVariablesStep(BuildConfiguration buildConfiguration) 
-            : base(buildConfiguration)
-        {
-        }
+        public override string Name => "InitEnvironmentVariables";
 
         public override bool Execute(ExecutionContext executionContext)
         {

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using LocalAppVeyor.Configuration.Model;
 using LocalAppVeyor.Configuration.Readers;
+using LocalAppVeyor.Pipeline.Internal;
 using LocalAppVeyor.Pipeline.Output;
 
 namespace LocalAppVeyor.Pipeline
@@ -16,7 +18,7 @@ namespace LocalAppVeyor.Pipeline
         private readonly EngineConfiguration engineConfiguration;
 
         public Engine(
-            EngineConfiguration engineConfiguration, 
+            EngineConfiguration engineConfiguration,
             IBuildConfigurationReader buildConfigurationReader,
             IPipelineOutputter outputter)
             : this(engineConfiguration, buildConfigurationReader.GetBuildConfiguration(), outputter)
@@ -24,14 +26,14 @@ namespace LocalAppVeyor.Pipeline
         }
 
         public Engine(
-            EngineConfiguration engineConfiguration, 
+            EngineConfiguration engineConfiguration,
             BuildConfiguration buildConfiguration,
             IPipelineOutputter outputter)
         {
             if (engineConfiguration == null) throw new ArgumentNullException(nameof(engineConfiguration));
             if (buildConfiguration == null) throw new ArgumentNullException(nameof(buildConfiguration));
             if (outputter == null) throw new ArgumentNullException(nameof(outputter));
-            
+
             this.buildConfiguration = buildConfiguration;
             this.engineConfiguration = engineConfiguration;
             this.outputter = outputter;
@@ -39,40 +41,105 @@ namespace LocalAppVeyor.Pipeline
 
         public void Start()
         {
-            var executionContext = new ExecutionContext(outputter);
+            var executionContext = new ExecutionContext(outputter, buildConfiguration);
 
-            foreach (var buildStep in engineConfiguration.BuildSteps)
+            // Init
+            if (!ExecuteInternalStep(new InitStep(), executionContext))
             {
-                var step = (Step)Activator.CreateInstance(buildStep.StepType, buildConfiguration);
-
-                outputter.Write($"Starting '{buildStep.Name}' step...");
-
-                bool isToContinue;
-
-                try
-                {
-                    isToContinue = step.Execute(executionContext);
-                }
-                catch (Exception e)
-                {
-                    outputter.WriteError($"Unhandled exception: {e.Message}");
-
-                    var eventArgs = new UnhandledStepExceptionEventArgs(e);
-                    UnhandledStepExceptionReceived?.Invoke(this, eventArgs);
-
-                    isToContinue = eventArgs.ContinueExecution;
-                }
-
-                if (!isToContinue && !buildStep.ContinueOnFail)
-                {
-                    outputter.WriteError($"Stopping execution after failing '{buildStep.Name}' step.");
-                    break;
-                }
-
-                outputter.Write($"Finished '{buildStep.Name}' step.");
+                return;
             }
 
+            // Clone
+            if (!ExecuteInternalStep(new CloneFolderStep(), executionContext))
+            {
+                return;
+            }
+
+            // InitStandardEnvironmentVariables
+            if (!ExecuteInternalStep(new InitStandardEnvironmentVariablesStep(), executionContext))
+            {
+                return;
+            }
+
+            // Install
+            if (!ExecuteInternalStep(new InstallStep(), executionContext))
+            {
+                return;
+            }
+
+            // BeforeBuild
+            if (!ExecuteInternalStep(new BeforeBuildStep(), executionContext))
+            {
+                return;
+            }
+
+
+
             outputter.Write("Build execution finished.");
+        }
+
+        private bool ExecuteInternalStep(IEngineStep step, ExecutionContext executionContext)
+        {
+            foreach (var beforeStep in engineConfiguration.Steps.Where(s => s.BeforeStepName == step.Name))
+            {
+                if (!ExecuteSingleStepLogic(beforeStep, executionContext))
+                {
+                    return false;
+                }
+            }
+
+            if (!ExecuteSingleStepLogic(step, executionContext))
+            {
+                return false;
+            }
+
+            foreach (var beforeStep in engineConfiguration.Steps.Where(s => s.AfterStepName == step.Name))
+            {
+                if (!ExecuteSingleStepLogic(beforeStep, executionContext))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private bool ExecuteSingleStepLogic(IEngineStep step, ExecutionContext executionContext)
+        {
+            outputter.Write($"Executing '{step.Name}'...");
+
+            try
+            {
+                if (step.Execute(executionContext))
+                {
+                    outputter.Write($"'{step.Name}' successfully executed.");
+                    return true;
+                }
+
+                if (step.ContinueOnFail)
+                {
+                    outputter.WriteWarning($"'{step.Name}' was not succedeed but execution is continuing anyway...");
+                    return true;
+                }
+
+                outputter.WriteError($"'{step.Name}' failed. Stopping build...");
+                return false;
+            }
+            catch (Exception e)
+            {
+                outputter.WriteError($"Unhandled exception on '{step.Name}' step: {e.Message}");
+
+                var eventArgs = new UnhandledStepExceptionEventArgs(step.Name, e);
+                UnhandledStepExceptionReceived?.Invoke(this, eventArgs);
+
+                if (eventArgs.ContinueExecution)
+                {
+                    outputter.WriteWarning($"Continuing executing after recovering from exception...");
+                    return true;
+                }
+
+                return false;
+            }
         }
     }
 }

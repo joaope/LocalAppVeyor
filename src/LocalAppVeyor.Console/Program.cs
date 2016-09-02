@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using LocalAppVeyor.Configuration.Readers;
 using LocalAppVeyor.Pipeline;
@@ -71,99 +70,54 @@ namespace LocalAppVeyor.Console
                 .AddJsonFile(configFile)
                 .Build();
 
-            var readedSteps = new List<StepConfiguration>();
-            configurationRoot.GetSection(nameof(EngineConfiguration.BuildSteps)).Bind(readedSteps);
+            var stepsAssemblyNames = new List<string>();
+            configurationRoot.GetSection("Steps").Bind(stepsAssemblyNames);
 
-            var readindStepFailed = false;
+            var readingStepFailed = false;
+            var engineSteps = new List<IEngineStep>();
 
-            for (var i = 0; i < readedSteps.Count; i++)
+            foreach (string typeName in stepsAssemblyNames)
             {
-                readindStepFailed = false;
+                readingStepFailed = false;
 
-                var step = readedSteps[i];
+                var stepType = Type.GetType(typeName);
 
-                if (string.IsNullOrEmpty(step.Name))
+                if (stepType == null)
                 {
-                    readindStepFailed = true;
-                    System.Console.WriteLine($"Step {i} doesn't specify a name.");
-                }
-
-                if (string.IsNullOrEmpty(step.TypeName))
-                {
-                    readindStepFailed = true;
-                    System.Console.WriteLine($"Step {i} doesn't specify a type name to be used.");
-                }
-
-                if (step.Type == null)
-                {
-                    readindStepFailed = true;
-                    System.Console.WriteLine($"Step type '{step.TypeName}' not found or unable to be loaded.");
+                    readingStepFailed = true;
+                    System.Console.WriteLine($"Step type '{typeName}' not found or unable to be loaded.");
                     continue;
                 }
 
-                if (!typeof(Step).GetTypeInfo().IsAssignableFrom(step.Type))
+                if (!typeof(IEngineStep).GetTypeInfo().IsAssignableFrom(stepType))
                 {
-                    readindStepFailed = true;
-                    System.Console.WriteLine($"Step type '{step.Type.AssemblyQualifiedName}' not a valid '{nameof(Step)}'.");
+                    readingStepFailed = true;
+                    System.Console.WriteLine($"Step type '{stepType.AssemblyQualifiedName}' not a valid '{nameof(IEngineStep)}'.");
                 }
+
+                if (stepType.GetTypeInfo().GetConstructor(Type.EmptyTypes) == null)
+                {
+                    readingStepFailed = true;
+                    System.Console.WriteLine($"Step type '{stepType.AssemblyQualifiedName}' doesn't provide a parameterless constructor.");
+                }
+
+                var stepInstance = (IEngineStep)Activator.CreateInstance(stepType);
+
+                if (!string.IsNullOrEmpty(stepInstance.Name))
+                {
+                    readingStepFailed = true;
+                    System.Console.WriteLine($"Step type '{stepType.AssemblyQualifiedName}' doesn't provide a name.");
+                }
+
+                engineSteps.Add(stepInstance);
             }
             
-            if (readindStepFailed)
+            if (readingStepFailed)
             {
                 Environment.Exit(1);
             }
 
-            var steps = new List<StepConfiguration>();
-
-            if (!configurationRoot.GetValue<bool>("SkipAppVeyorSteps"))
-            {
-                steps = new List<StepConfiguration>
-                {
-                    new StepConfiguration { Name = "Init", TypeName = "LocalAppVeyor.Pipeline.Steps.AppVeyor.InitStep, LocalAppVeyor" },
-                    new StepConfiguration { Name = "CloneFolder", TypeName = "LocalAppVeyor.Pipeline.Steps.AppVeyor.CloneFolderStep, LocalAppVeyor" },
-                    new StepConfiguration { Name = "InitEnvironmentVariables", TypeName = "LocalAppVeyor.Pipeline.Steps.AppVeyor.InitEnvironmentVariablesStep, LocalAppVeyor" },
-                    new StepConfiguration { Name = "Install", TypeName = "LocalAppVeyor.Pipeline.Steps.AppVeyor.InstallStep, LocalAppVeyor" },
-                    new StepConfiguration { Name = "BeforeBuild", TypeName = "LocalAppVeyor.Pipeline.Steps.AppVeyor.BeforeBuildStep, LocalAppVeyor" },
-                    //new StepConfiguration { Name = "Build", TypeName = "LocalAppVeyor.Pipeline.Steps.AppVeyor.BuildStep, LocalAppVeyor" }
-                };
-            }
-
-            foreach (var readedStep in readedSteps)
-            {
-                if (!string.IsNullOrEmpty(readedStep.Before))
-                {
-                    var index = steps.FindIndex(s => s.Name == readedStep.Before);
-
-                    if (index >= 0)
-                    {
-                        steps.Insert(index, readedStep);
-                    }
-                    else
-                    {
-                        steps.Add(readedStep);
-                    }
-                }
-                else if (!string.IsNullOrEmpty(readedStep.After))
-                {
-                    var index = steps.FindIndex(s => s.Name == readedStep.After);
-
-                    if (index >= 0 && index < steps.Count)
-                    {
-                        steps.Insert(++index, readedStep);
-                    }
-                    else
-                    {
-                        steps.Add(readedStep);
-                    }
-                }
-                else
-                {
-                    steps.Add(readedStep);
-                }
-            }
-
-            return new EngineConfiguration(
-                steps.Select(s => new Pipeline.StepConfiguration(s.Name, s.Type, s.ContinueOnFail)));
+            return new EngineConfiguration(engineSteps);
         }
     }
 }

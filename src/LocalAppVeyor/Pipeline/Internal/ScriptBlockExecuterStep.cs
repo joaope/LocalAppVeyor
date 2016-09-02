@@ -1,24 +1,21 @@
-﻿using LocalAppVeyor.Configuration.Model;
-using LocalAppVeyor.Pipeline.Steps.Internal;
+﻿using System;
+using LocalAppVeyor.Configuration.Model;
 
-namespace LocalAppVeyor.Pipeline.Steps
+namespace LocalAppVeyor.Pipeline.Internal
 {
-    public abstract class ScriptBlockExecuterStep : Step
+    internal abstract class ScriptBlockExecuterStep : InternalEngineStep
     {
-        protected abstract ScriptBlock ScriptBlock { get; }
-
         protected abstract bool IncludeEnvironmentVariables { get; }
 
-        protected ScriptBlockExecuterStep(BuildConfiguration buildConfiguration)
-            : base(buildConfiguration)
-        {
-        }
+        public abstract Func<ExecutionContext, ScriptBlock> RetrieveScriptBlock { get; }
 
         public override bool Execute(ExecutionContext executionContext)
         {
-            if (ScriptBlock != null)
+            var scriptBlock = RetrieveScriptBlock(executionContext);
+
+            if (scriptBlock != null)
             {
-                foreach (var script in ScriptBlock)
+                foreach (var script in scriptBlock)
                 {
                     var result = true;
 

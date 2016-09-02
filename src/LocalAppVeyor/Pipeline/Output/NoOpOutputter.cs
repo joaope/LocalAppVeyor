@@ -6,6 +6,14 @@
         {
         }
 
+        public void WriteSuccess(string successMessage)
+        {
+        }
+
+        public void WriteWarning(string warningMessage)
+        {
+        }
+
         public void WriteError(string errorMessage)
         {
         }

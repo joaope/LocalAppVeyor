@@ -1,20 +1,15 @@
 ﻿using System.IO;
-using LocalAppVeyor.Configuration.Model;
 
-namespace LocalAppVeyor.Pipeline.Steps.AppVeyor
+namespace LocalAppVeyor.Pipeline.Internal
 {
-    public class CloneFolderStep : Step
+    internal class CloneFolderStep : InternalEngineStep
     {
-        private readonly string cloneFolder;
-
-        public CloneFolderStep(BuildConfiguration buildConfiguration) 
-            : base(buildConfiguration)
-        {
-            cloneFolder = buildConfiguration.CloneFolder;
-        }
+        public override string Name => "Clone";
 
         public override bool Execute(ExecutionContext executionContext)
         {
+            var cloneFolder = executionContext.BuildConfiguration.CloneFolder;
+
             if (string.IsNullOrEmpty(cloneFolder))
             {
                 return true;
