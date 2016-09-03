@@ -4,42 +4,39 @@ namespace LocalAppVeyor.Configuration.Model
 {
     public class BuildConfiguration
     {
-        public string Version { get; set; }
+        public string Version { get; internal set; }
 
         [YamlMember(Alias = "init")]
-        public ScriptBlock InitializationScript { get; set; }
+        public virtual ScriptBlock InitializationScript { get; internal set; }
 
         [YamlMember(Alias = "clone_folder")]
-        public string CloneFolder { get; set; }
+        public virtual string CloneFolder { get; internal set; }
 
         [YamlMember(Alias = "os")]
-        public string OperatingSystem { get; set; }
+        public virtual string OperatingSystem { get; internal set; }
 
         [YamlMember(Alias = "environment")]
-        public EnvironmentVariables EnvironmentVariables { get; set; }
+        public virtual EnvironmentVariables EnvironmentVariables { get; internal set; }
 
         [YamlMember(Alias = "install")]
-        public ScriptBlock InstallScript { get; set; }
-
-        //[YamlMember(Alias = "assembly_info")]
-        //public AssemblyInfoPatching AssemblyInfoPatching { get; set; }
+        public virtual ScriptBlock InstallScript { get; internal set; }
 
         [YamlMember(Alias = "platform")]
-        public Platforms Platforms { get; set; }
+        public virtual Platforms Platforms { get; internal set; }
 
         [YamlMember(Alias = "configuration")]
-        public Configurations Configurations { get; set; }
+        public virtual Configurations Configurations { get; internal set; }
 
-        public Build Build { get; set; }
+        public virtual Build Build { get; internal set; }
 
         [YamlMember(Alias = "before_build")]
-        public ScriptBlock BeforeBuildScript { get; set; }
+        public virtual ScriptBlock BeforeBuildScript { get; internal set; }
 
         [YamlMember(Alias = "after_build")]
-        public ScriptBlock AfterBuildScript { get; set; }
+        public virtual ScriptBlock AfterBuildScript { get; internal set; }
 
         [YamlMember(Alias = "build_script")]
-        public ScriptBlock BuildScript { get; set; }
+        public virtual ScriptBlock BuildScript { get; internal set; }
 
 
     }
