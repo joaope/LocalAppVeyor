@@ -33,12 +33,13 @@
         "YamlDotNet.Signed": "0.0.1",
         "Microsoft.Extensions.Configuration.Json": "1.0.0",
         "Microsoft.Extensions.Configuration.Binder": "1.0.0",
-        "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0"
+        "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0",
+        "Microsoft.Build": "14.3.0-prerelease02"
     },
 
     "frameworks": {
         "net451": {
-            "imports": ["dotnet"]
+            "imports": [ "dotnet" ]
         },
         "netstandard13": {
             "imports": ["dotnet"],

@@ -47,13 +47,8 @@
                 "Microsoft.NETCore.App": {
                     "version": "1.0.0",
                     "type": "platform"
-                },
-                "System.AppContext": "4.1.0"
+                }
             }
         }
-    },
-
-    "runtimes": {
-        "win10-x64": {} 
     }
 }
