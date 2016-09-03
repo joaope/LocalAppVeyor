@@ -2,68 +2,97 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using LocalAppVeyor.Configuration.Readers;
+using LocalAppVeyor.Configuration.Model;
+using LocalAppVeyor.Configuration.Reader;
 using LocalAppVeyor.Pipeline;
+using LocalAppVeyor.Pipeline.Output;
 using Microsoft.Extensions.Configuration;
 
 namespace LocalAppVeyor.Console
 {
     public class Program
     {
+        private static readonly IPipelineOutputter PipelineOutputter = new ConsoleOutputter();
+
         public static void Main(string[] args)
         {
-            // Remove this when not testing
-            Directory.SetCurrentDirectory(@"C:\Users\JoaoP\Desktop\app");
+            var engineConfiguration = TryGetEngineConfigurationOrTerminate(@"C:\Users\JoaoP\Desktop\app");
+            var buildConfiguration = TryGetBuildConfigurationOrTerminate(engineConfiguration.RepositoryDirectoryPath);
 
             var engine = new Engine(
-                TryGetEngineConfigurationOrTerminate(null),
-                new BuildConfigurationYamlReader(@"C:\Users\JoaoP\Desktop\app\appveyor.yml"), 
-                new ConsoleOutputter());
+                engineConfiguration,
+                buildConfiguration,
+                PipelineOutputter);
 
             engine.Start();
 
             System.Console.Read();
         }
 
-        private static EngineConfiguration TryGetEngineConfigurationOrTerminate(string configFileOrDirectoryPath)
+        private static BuildConfiguration TryGetBuildConfigurationOrTerminate(string repositoryPath)
         {
-            const string baseConfigFile = "LocalAppVeyor.config.json";
-            string configFile = null;
+            var appVeyorYml = Path.Combine(repositoryPath, "appveyor.yml");
 
-            if (string.IsNullOrEmpty(configFileOrDirectoryPath))
+            if (!File.Exists(appVeyorYml))
             {
-#if NET451
-                configFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, baseConfigFile);
-#else
-                configFile = Path.Combine(AppContext.BaseDirectory, baseConfigFile);
-#endif
-
-                if (!File.Exists(configFile))
-                {
-                    return EngineConfiguration.Default;
-                }
+                PipelineOutputter.WriteError($"AppVeyor.yml file not found on repository path. Build aborted.");
+                Environment.Exit(1);
             }
-            else if (File.Exists(configFileOrDirectoryPath))
-            {
-                configFile = configFileOrDirectoryPath;
-            }
-            else if (Directory.Exists(configFileOrDirectoryPath))
-            {
-                configFile = Path.Combine(configFileOrDirectoryPath, baseConfigFile);
 
-                if (!File.Exists(configFile))
+            BuildConfiguration configuration = null;
+
+            try
+            {
+                configuration = new BuildConfigurationYamlReader(@"C:\Users\JoaoP\Desktop\app\appveyor.yml")
+                    .GetBuildConfiguration();
+            }
+            catch (LocalAppVeyorYamlParsingException)
+            {
+                PipelineOutputter.WriteError($"Error while parsing '{appVeyorYml}' file. Build aborted.");
+                Environment.Exit(1);
+            }
+            catch (LocalAppVeyorException e)
+            {
+                PipelineOutputter.WriteError($"Error parsing '{appVeyorYml}': {e.Message}");
+                Environment.Exit(1);
+            }
+
+            return configuration;
+        }
+
+        private static EngineConfiguration TryGetEngineConfigurationOrTerminate(string repositoryPath)
+        {
+            // Try infer repository path if one is not provided
+            if (!string.IsNullOrEmpty(repositoryPath))
+            {
+                if (!Directory.Exists(repositoryPath))
                 {
-                    System.Console.WriteLine(
-                        $"Invalid LocalAppVeyor console configuration file '{configFileOrDirectoryPath}'.");
+                    PipelineOutputter.WriteError($"Repository directory '{repositoryPath}' not found. Build aborted.");
                     Environment.Exit(1);
                 }
+                else
+                {
+                    PipelineOutputter.Write($"Using '{repositoryPath}' as the repository path.");
+                }
+            }
+            else
+            {
+                PipelineOutputter.Write($"Current directory '{repositoryPath}' will be used as repository path.");
+                repositoryPath = Directory.GetCurrentDirectory();
             }
 
-            if (configFile == null)
+            // Try read config file if exists on console path (for steps, etc.)
+#if NET451
+            var exePath = AppDomain.CurrentDomain.BaseDirectory;
+#else
+            var exePath = AppContext.BaseDirectory;
+#endif
+            
+            var configFile = Path.Combine(exePath, "LocalAppVeyor.config.json");
+
+            if (!File.Exists(configFile))
             {
-                System.Console.WriteLine(
-                    $"'{configFileOrDirectoryPath}' is not a valid configuration file or directory.");
-                Environment.Exit(1);
+                return new EngineConfiguration(repositoryPath, new IEngineStep[0]);
             }
 
             var configurationRoot = new ConfigurationBuilder()
@@ -85,20 +114,20 @@ namespace LocalAppVeyor.Console
                 if (stepType == null)
                 {
                     readingStepFailed = true;
-                    System.Console.WriteLine($"Step type '{typeName}' not found or unable to be loaded.");
+                    PipelineOutputter.WriteError($"Step type '{typeName}' not found or unable to be loaded.");
                     continue;
                 }
 
                 if (!typeof(IEngineStep).GetTypeInfo().IsAssignableFrom(stepType))
                 {
                     readingStepFailed = true;
-                    System.Console.WriteLine($"Step type '{stepType.AssemblyQualifiedName}' not a valid '{nameof(IEngineStep)}'.");
+                    PipelineOutputter.WriteError($"Step type '{stepType.AssemblyQualifiedName}' not a valid '{nameof(IEngineStep)}'.");
                 }
 
                 if (stepType.GetTypeInfo().GetConstructor(Type.EmptyTypes) == null)
                 {
                     readingStepFailed = true;
-                    System.Console.WriteLine($"Step type '{stepType.AssemblyQualifiedName}' doesn't provide a parameterless constructor.");
+                    PipelineOutputter.WriteError($"Step type '{stepType.AssemblyQualifiedName}' doesn't provide a parameterless constructor.");
                 }
 
                 var stepInstance = (IEngineStep)Activator.CreateInstance(stepType);
@@ -106,7 +135,7 @@ namespace LocalAppVeyor.Console
                 if (!string.IsNullOrEmpty(stepInstance.Name))
                 {
                     readingStepFailed = true;
-                    System.Console.WriteLine($"Step type '{stepType.AssemblyQualifiedName}' doesn't provide a name.");
+                    PipelineOutputter.WriteError($"Step type '{stepType.AssemblyQualifiedName}' doesn't provide a name.");
                 }
 
                 engineSteps.Add(stepInstance);
@@ -117,7 +146,9 @@ namespace LocalAppVeyor.Console
                 Environment.Exit(1);
             }
 
-            return new EngineConfiguration(engineSteps);
+            // 
+
+            return new EngineConfiguration(repositoryPath, engineSteps);
         }
     }
 }

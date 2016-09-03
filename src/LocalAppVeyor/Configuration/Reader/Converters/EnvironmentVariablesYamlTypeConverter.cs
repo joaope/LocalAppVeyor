@@ -5,9 +5,9 @@ using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
-namespace LocalAppVeyor.Configuration.Readers.Converters
+namespace LocalAppVeyor.Configuration.Reader.Converters
 {
-    public class EnvironmentVariablesYamlTypeConverter : IYamlTypeConverter
+    internal class EnvironmentVariablesYamlTypeConverter : IYamlTypeConverter
     {
         private readonly Deserializer deserializer;
 

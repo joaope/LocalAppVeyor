@@ -32,7 +32,8 @@
     "dependencies": {
         "YamlDotNet.Signed": "0.0.1",
         "Microsoft.Extensions.Configuration.Json": "1.0.0",
-        "Microsoft.Extensions.Configuration.Binder": "1.0.0"
+        "Microsoft.Extensions.Configuration.Binder": "1.0.0",
+        "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0"
     },
 
     "frameworks": {

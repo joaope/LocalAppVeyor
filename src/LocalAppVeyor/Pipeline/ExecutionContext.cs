@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
 using LocalAppVeyor.Configuration.Model;
 using LocalAppVeyor.Pipeline.Output;
 
@@ -9,33 +6,47 @@ namespace LocalAppVeyor.Pipeline
 {
     public sealed class ExecutionContext
     {
-        public IPipelineOutputter Outputter { get; }
+        public bool IsBuildRunning { get; internal set; }
+
+        public string CurrentBuildOperatingSystem { get; internal set; }
+
+        public string CurrentBuildPlatform { get; internal set; }
+
+        public string CurrentBuildConfiguration { get; internal set; }
+        
+        public string RepositoryDirectory { get; }
+
+        public string CloneDirectory { get; internal set; }
 
         public BuildConfiguration BuildConfiguration { get; }
 
-        private readonly Dictionary<string, string> environmentVariables = new Dictionary<string, string>();
-
-        public ReadOnlyDictionary<string, string> EnvironmentVariables { get; }
-
-        public string WorkingDirectory => Directory.GetCurrentDirectory();
+        public IPipelineOutputter Outputter { get; }
 
         public ExecutionContext(
+            BuildConfiguration buildConfiguration,
             IPipelineOutputter outputter,
-            BuildConfiguration buildConfiguration)
+            string repositoryDirectory)
         {
-            if (outputter == null) throw new ArgumentNullException(nameof(outputter));
             if (buildConfiguration == null) throw new ArgumentNullException(nameof(buildConfiguration));
+            if (outputter == null) throw new ArgumentNullException(nameof(outputter));
+            if (repositoryDirectory == null) throw new ArgumentNullException(nameof(repositoryDirectory));
 
-            Outputter = outputter;
             BuildConfiguration = buildConfiguration;
-            EnvironmentVariables = new ReadOnlyDictionary<string, string>(environmentVariables);
+            Outputter = outputter;
+            RepositoryDirectory = repositoryDirectory;
         }
 
-        public void UpsertEnvironmentVariable(string name, string value)
+        internal void SetBuildState(
+            bool isBuilding,
+            string operatingSystem = "",
+            string platform = "",
+            string configuration = "")
         {
-            if (name == null) throw new ArgumentNullException(nameof(name));
+            IsBuildRunning = isBuilding;
 
-            environmentVariables.Add(name, value);
+            CurrentBuildOperatingSystem = operatingSystem;
+            CurrentBuildPlatform = platform;
+            CurrentBuildConfiguration = configuration;
         }
     }
 }

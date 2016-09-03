@@ -6,14 +6,17 @@ namespace LocalAppVeyor.Pipeline
 {
     public class EngineConfiguration
     {
-        public IEngineStep[] Steps { get; set; }
+        public IEngineStep[] Steps { get; }
 
-        public static EngineConfiguration Default => new EngineConfiguration(new IEngineStep[0]);
+        public string RepositoryDirectoryPath { get; }
 
-        public EngineConfiguration(IEnumerable<IEngineStep> steps)
+        public EngineConfiguration(
+            string repositoryDirectoryPath,
+            IEnumerable<IEngineStep> steps)
         {
             if (steps == null) throw new ArgumentNullException(nameof(steps));
 
+            RepositoryDirectoryPath = repositoryDirectoryPath;
             Steps = steps.ToArray();
         }
     }

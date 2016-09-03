@@ -8,19 +8,11 @@ namespace LocalAppVeyor.Pipeline.Internal
 
         public override bool Execute(ExecutionContext executionContext)
         {
-            var cloneFolder = executionContext.BuildConfiguration.CloneFolder;
+            executionContext.Outputter.Write($"Cloning '{executionContext.RepositoryDirectory}' in to '{executionContext.CloneDirectory}'...");
+            Clone(executionContext.RepositoryDirectory, executionContext.CloneDirectory);
+            executionContext.Outputter.Write("Cloning finished.");
 
-            if (string.IsNullOrEmpty(cloneFolder))
-            {
-                return true;
-            }
-
-            executionContext.Outputter.Write($"Cloning '{executionContext.WorkingDirectory}' into '{cloneFolder}'...");
-            Clone(executionContext.WorkingDirectory, cloneFolder);
-            executionContext.Outputter.Write($"Cloning finished.");
-
-            Directory.SetCurrentDirectory(cloneFolder);
-            executionContext.Outputter.Write($"Working directory changed to be cloning directory.");
+            executionContext.Outputter.Write("Working directory changed to be cloning directory.");
 
             return true;
         }
@@ -29,6 +21,11 @@ namespace LocalAppVeyor.Pipeline.Internal
         {
             var dirSource = new DirectoryInfo(source);
             var dirDestination = new DirectoryInfo(destination);
+
+            if (!dirDestination.Exists)
+            {
+                return;
+            }
 
             // empty destination
             foreach (var fileInfo in dirDestination.GetFiles())

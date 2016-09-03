@@ -7,8 +7,6 @@ namespace LocalAppVeyor.Pipeline.Internal
     {
         public override string Name => "Install";
 
-        protected override bool IncludeEnvironmentVariables => true;
-
         public override Func<ExecutionContext, ScriptBlock> RetrieveScriptBlock
         {
             get { return context => context.BuildConfiguration.InstallScript; }

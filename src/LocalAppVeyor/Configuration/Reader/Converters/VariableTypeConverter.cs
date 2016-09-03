@@ -4,17 +4,10 @@ using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
-namespace LocalAppVeyor.Configuration.Readers.Converters
+namespace LocalAppVeyor.Configuration.Reader.Converters
 {
-    public class VariableTypeConverter : IYamlTypeConverter
+    internal class VariableTypeConverter : IYamlTypeConverter
     {
-        private readonly Deserializer deserializer;
-
-        public VariableTypeConverter(Deserializer deserializer)
-        {
-            this.deserializer = deserializer;
-        }
-
         public bool Accepts(Type type)
         {
             return type == typeof(Variable);
@@ -34,7 +27,6 @@ namespace LocalAppVeyor.Configuration.Readers.Converters
                 {
                     var secureValue = parser.Expect<Scalar>().Value;
 
-                    // for sure we'll have a MappingEnd, otherwise let throw
                     parser.Expect<MappingEnd>();
 
                     return new Variable(name, secureValue, true);

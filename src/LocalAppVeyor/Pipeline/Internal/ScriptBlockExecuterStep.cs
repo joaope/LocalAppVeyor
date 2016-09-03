@@ -5,8 +5,6 @@ namespace LocalAppVeyor.Pipeline.Internal
 {
     internal abstract class ScriptBlockExecuterStep : InternalEngineStep
     {
-        protected abstract bool IncludeEnvironmentVariables { get; }
-
         public abstract Func<ExecutionContext, ScriptBlock> RetrieveScriptBlock { get; }
 
         public override bool Execute(ExecutionContext executionContext)
@@ -41,7 +39,7 @@ namespace LocalAppVeyor.Pipeline.Internal
         private bool ExecuteBatchScript(ExecutionContext executionContext, string script)
         {
             return BatchScriptExecuter.Execute(
-                executionContext.WorkingDirectory,
+                executionContext.CloneDirectory,
                 script,
                 data =>
                 {
@@ -56,8 +54,7 @@ namespace LocalAppVeyor.Pipeline.Internal
                     {
                         executionContext.Outputter.WriteError(data);
                     }
-                },
-                IncludeEnvironmentVariables ? executionContext.EnvironmentVariables : null);
+                });
         }   
     }
 }

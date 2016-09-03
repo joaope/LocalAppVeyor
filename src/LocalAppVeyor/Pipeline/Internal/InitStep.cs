@@ -7,8 +7,6 @@ namespace LocalAppVeyor.Pipeline.Internal
     {
         public override string Name => "Init";
 
-        protected override bool IncludeEnvironmentVariables => true;
-
         public override Func<ExecutionContext, ScriptBlock> RetrieveScriptBlock
         {
             get { return context => context.BuildConfiguration.InitializationScript; }

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 
 namespace LocalAppVeyor.Pipeline
 {
@@ -12,27 +10,19 @@ namespace LocalAppVeyor.Pipeline
             string workingDirectory,
             string script, 
             Action<string> onOutputDataReceived,
-            Action<string> onErrorDataReceived,
-            ReadOnlyDictionary<string, string> environmentVariables)
+            Action<string> onErrorDataReceived)
         {
-            var batchFile = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.bat");
-
-            var scriptBuilder = new StringBuilder();
-
-            if (environmentVariables != null && environmentVariables.Count > 0)
+            if (string.IsNullOrEmpty(script))
             {
-                foreach (var variable in environmentVariables)
-                {
-                    scriptBuilder.AppendLine($"@set {variable.Key}={variable.Value}");
-                }
+                return true;
             }
 
-            scriptBuilder.Append(script);
+            var batchFile = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.bat");
 
             using (var fileStream = new FileStream(batchFile, FileMode.Create, FileAccess.ReadWrite))
             using (var writer = new StreamWriter(fileStream))
             {
-                writer.Write(scriptBuilder.Length > 0 ? scriptBuilder.ToString() : string.Empty);
+                writer.Write(script);
             }
 
             using (var process = Process.Start(new ProcessStartInfo("cmd.exe", $"/c {batchFile}")

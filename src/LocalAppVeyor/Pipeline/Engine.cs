@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using LocalAppVeyor.Configuration.Model;
-using LocalAppVeyor.Configuration.Readers;
+using LocalAppVeyor.Configuration.Reader;
 using LocalAppVeyor.Pipeline.Internal;
 using LocalAppVeyor.Pipeline.Output;
 
@@ -41,7 +42,10 @@ namespace LocalAppVeyor.Pipeline
 
         public void Start()
         {
-            var executionContext = new ExecutionContext(outputter, buildConfiguration);
+            var executionContext = new ExecutionContext(
+                buildConfiguration,
+                outputter,
+                engineConfiguration.RepositoryDirectoryPath);
 
             // Init
             if (!ExecuteInternalStep(new InitStep(), executionContext))
@@ -50,6 +54,10 @@ namespace LocalAppVeyor.Pipeline
             }
 
             // Clone
+            executionContext.CloneDirectory = !string.IsNullOrEmpty(buildConfiguration.CloneFolder)
+                ? buildConfiguration.CloneFolder
+                : @"C:\Projects\LocalAppVeyorTempClone";
+
             if (!ExecuteInternalStep(new CloneFolderStep(), executionContext))
             {
                 return;
@@ -73,7 +81,11 @@ namespace LocalAppVeyor.Pipeline
                 return;
             }
 
-
+            // Build matrix: os -> platform -> configuration
+            var os = buildConfiguration.OperatingSystem ?? string.Empty;
+            var platforms = buildConfiguration.Platforms?.Count > 0 
+                ? buildConfiguration.Platforms.ToList()
+                : new List<string> { string.Empty };
 
             outputter.Write("Build execution finished.");
         }

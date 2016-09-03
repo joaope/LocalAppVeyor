@@ -8,9 +8,9 @@
         {
             executionContext.Outputter.Write("Initializing environment variables...");
 
-            executionContext.UpsertEnvironmentVariable("APPVEYOR_BUILD_FOLDER", executionContext.WorkingDirectory);
-            executionContext.UpsertEnvironmentVariable("CI", "False");
-            executionContext.UpsertEnvironmentVariable("APPVEYOR", "False");
+            System.Environment.SetEnvironmentVariable("APPVEYOR_BUILD_FOLDER", executionContext.CloneDirectory);
+            System.Environment.SetEnvironmentVariable("CI", "False");
+            System.Environment.SetEnvironmentVariable("APPVEYOR", "False");
 
             executionContext.Outputter.Write("Environment variables initialized.");
 
