@@ -52,14 +52,7 @@ namespace LocalAppVeyor.Configuration.Reader
                 }
                 catch (YamlException e)
                 {
-                    if (e.Start != null && e.End != null)
-                    {
-                        throw new LocalAppVeyorYamlParsingException(
-                            "Error while parsing YAML.",
-                            e.Start.Line, e.Start.Column, e.End.Line, e.End.Column);
-                    }
-
-                    throw new LocalAppVeyorYamlParsingException("Unknown error while parsing YAML.");
+                    throw new LocalAppVeyorException("Error while parsing YAML file.", e);
                 }
             }
         }

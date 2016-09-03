@@ -13,6 +13,8 @@ namespace LocalAppVeyor.Pipeline
         public string CurrentBuildPlatform { get; internal set; }
 
         public string CurrentBuildConfiguration { get; internal set; }
+
+        public Variable[] CurrentBuildSpecificVariables { get; set; }
         
         public string RepositoryDirectory { get; }
 
@@ -40,13 +42,15 @@ namespace LocalAppVeyor.Pipeline
             bool isBuilding,
             string operatingSystem = "",
             string platform = "",
-            string configuration = "")
+            string configuration = "",
+            Variable[] variables = null)
         {
             IsBuildRunning = isBuilding;
 
             CurrentBuildOperatingSystem = operatingSystem;
             CurrentBuildPlatform = platform;
             CurrentBuildConfiguration = configuration;
+            CurrentBuildSpecificVariables = variables ?? new Variable[0];
         }
     }
 }

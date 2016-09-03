@@ -46,14 +46,10 @@ namespace LocalAppVeyor.Console
                 configuration = new BuildConfigurationYamlReader(@"C:\Users\JoaoP\Desktop\app\appveyor.yml")
                     .GetBuildConfiguration();
             }
-            catch (LocalAppVeyorYamlParsingException)
+            catch (LocalAppVeyorException)
             {
-                PipelineOutputter.WriteError($"Error while parsing '{appVeyorYml}' file. Build aborted.");
-                Environment.Exit(1);
-            }
-            catch (LocalAppVeyorException e)
-            {
-                PipelineOutputter.WriteError($"Error parsing '{appVeyorYml}': {e.Message}");
+                PipelineOutputter.WriteError($"Error while parsing '{appVeyorYml}' file.");
+                PipelineOutputter.WriteError("Build aborted.");
                 Environment.Exit(1);
             }
 

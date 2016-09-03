@@ -13,7 +13,7 @@ namespace LocalAppVeyor.Configuration.Model
         public virtual string CloneFolder { get; internal set; }
 
         [YamlMember(Alias = "os")]
-        public virtual string OperatingSystem { get; internal set; }
+        public virtual OperatingSystems OperatingSystems { get; internal set; }
 
         [YamlMember(Alias = "environment")]
         public virtual EnvironmentVariables EnvironmentVariables { get; internal set; }

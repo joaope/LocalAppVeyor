@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace LocalAppVeyor.Pipeline
+namespace LocalAppVeyor.Pipeline.Internal
 {
     internal static class BatchScriptExecuter
     {

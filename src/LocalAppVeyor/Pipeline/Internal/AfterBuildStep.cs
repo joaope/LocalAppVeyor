@@ -3,13 +3,13 @@ using LocalAppVeyor.Configuration.Model;
 
 namespace LocalAppVeyor.Pipeline.Internal
 {
-    internal sealed class BeforeBuildStep : ScriptBlockExecuterStep
+    internal sealed class AfterBuildStep : ScriptBlockExecuterStep
     {
-        public override string Name => "BeforeBuild";
+        public override string Name => "AfterBuild";
 
         public override Func<ExecutionContext, ScriptBlock> RetrieveScriptBlock
         {
-            get { return context => context.BuildConfiguration.BeforeBuildScript; }
+            get { return context => context.BuildConfiguration.AfterBuildScript; }
         }
     }
 }

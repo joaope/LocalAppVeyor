@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using LocalAppVeyor.Configuration.Model;
 using LocalAppVeyor.Configuration.Reader;
@@ -48,7 +47,7 @@ namespace LocalAppVeyor.Pipeline
                 engineConfiguration.RepositoryDirectoryPath);
 
             // Init
-            if (!ExecuteInternalStep(new InitStep(), executionContext))
+            if (!new InitStep().Execute(executionContext, engineConfiguration.Steps, UnhandledStepExceptionReceived))
             {
                 return;
             }
@@ -58,100 +57,78 @@ namespace LocalAppVeyor.Pipeline
                 ? buildConfiguration.CloneFolder
                 : @"C:\Projects\LocalAppVeyorTempClone";
 
-            if (!ExecuteInternalStep(new CloneFolderStep(), executionContext))
+            if (!new CloneFolderStep().Execute(executionContext, engineConfiguration.Steps, UnhandledStepExceptionReceived))
             {
                 return;
             }
 
             // InitStandardEnvironmentVariables
-            if (!ExecuteInternalStep(new InitStandardEnvironmentVariablesStep(), executionContext))
+            if (!new InitStandardEnvironmentVariablesStep().Execute(executionContext, engineConfiguration.Steps, UnhandledStepExceptionReceived))
             {
                 return;
             }
 
             // Install
-            if (!ExecuteInternalStep(new InstallStep(), executionContext))
+            if (!new InstallStep().Execute(executionContext, engineConfiguration.Steps, UnhandledStepExceptionReceived))
             {
                 return;
             }
 
             // BeforeBuild
-            if (!ExecuteInternalStep(new BeforeBuildStep(), executionContext))
+            if (!new BeforeBuildStep().Execute(executionContext, engineConfiguration.Steps, UnhandledStepExceptionReceived))
             {
                 return;
             }
 
-            // Build matrix: os -> platform -> configuration
-            var os = buildConfiguration.OperatingSystem ?? string.Empty;
-            var platforms = buildConfiguration.Platforms?.Count > 0 
-                ? buildConfiguration.Platforms.ToList()
-                : new List<string> { string.Empty };
+            // Build if not off; otherwise run build script
+            if (!buildConfiguration.Build.IsAutomaticBuildOff)
+            {
+                var oses = buildConfiguration.OperatingSystems?.Count > 0
+                    ? buildConfiguration.OperatingSystems.ToArray()
+                    : new[] { string.Empty };
+                var platforms = buildConfiguration.Platforms?.Count > 0
+                    ? buildConfiguration.Platforms.ToArray()
+                    : new[] { string.Empty };
+                var configurations = buildConfiguration.Configurations?.Count > 0
+                    ? buildConfiguration.Configurations.ToArray()
+                    : new[] { string.Empty };
+
+                foreach (var os in oses)
+                {
+                    foreach (var platform in platforms)
+                    {
+                        var buildCounter = 0;
+
+                        foreach (var configuration in configurations)
+                        {
+                            var variables = buildCounter < buildConfiguration.EnvironmentVariables.Matrix.Count
+                                ? buildConfiguration.EnvironmentVariables.Matrix[buildCounter].ToArray()
+                                : new Variable[0];
+
+                            executionContext.SetBuildState(true, os, platform, configuration, variables);
+
+                            if (!new BuildStep().Execute(executionContext, engineConfiguration.Steps, UnhandledStepExceptionReceived))
+                            {
+                                return;
+                            }
+
+                            buildCounter++;
+                        }
+                    }
+                }
+            }
+            else if (!new BuildScriptStep().Execute(executionContext, engineConfiguration.Steps, UnhandledStepExceptionReceived))
+            {
+                return;
+            }
+
+            // AfterBuild
+            if (!new AfterBuildStep().Execute(executionContext, engineConfiguration.Steps, UnhandledStepExceptionReceived))
+            {
+                return;
+            }
 
             outputter.Write("Build execution finished.");
-        }
-
-        private bool ExecuteInternalStep(IEngineStep step, ExecutionContext executionContext)
-        {
-            foreach (var beforeStep in engineConfiguration.Steps.Where(s => s.BeforeStepName == step.Name))
-            {
-                if (!ExecuteSingleStepLogic(beforeStep, executionContext))
-                {
-                    return false;
-                }
-            }
-
-            if (!ExecuteSingleStepLogic(step, executionContext))
-            {
-                return false;
-            }
-
-            foreach (var beforeStep in engineConfiguration.Steps.Where(s => s.AfterStepName == step.Name))
-            {
-                if (!ExecuteSingleStepLogic(beforeStep, executionContext))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private bool ExecuteSingleStepLogic(IEngineStep step, ExecutionContext executionContext)
-        {
-            outputter.Write($"Executing '{step.Name}'...");
-
-            try
-            {
-                if (step.Execute(executionContext))
-                {
-                    outputter.Write($"'{step.Name}' successfully executed.");
-                    return true;
-                }
-
-                if (step.ContinueOnFail)
-                {
-                    outputter.WriteWarning($"'{step.Name}' was not succedeed but execution is continuing anyway...");
-                    return true;
-                }
-
-                outputter.WriteError($"'{step.Name}' failed. Stopping build...");
-                return false;
-            }
-            catch (Exception e)
-            {
-                outputter.WriteError($"Unhandled exception on '{step.Name}' step: {e.Message}");
-
-                var eventArgs = new UnhandledStepExceptionEventArgs(step.Name, e);
-                UnhandledStepExceptionReceived?.Invoke(this, eventArgs);
-
-                if (eventArgs.ContinueExecution)
-                {
-                    outputter.WriteWarning($"Continuing executing after recovering from exception...");
-                    return true;
-                }
-
-                return false;
-            }
         }
     }
 }
