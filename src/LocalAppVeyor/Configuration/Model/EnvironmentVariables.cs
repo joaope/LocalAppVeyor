@@ -8,7 +8,7 @@ namespace LocalAppVeyor.Configuration.Model
 
         internal readonly Collection<Variable> InternalCommonVariables = new Collection<Variable>();
 
-        public ReadOnlyCollection<ReadOnlyCollection<Variable>> Matrix { get; internal set; }
+        public ReadOnlyCollection<ReadOnlyCollection<Variable>> Matrix { get; }
 
         internal readonly Collection<ReadOnlyCollection<Variable>> InternalMatrix =
             new Collection<ReadOnlyCollection<Variable>>();
