@@ -84,7 +84,7 @@ namespace LocalAppVeyor.Console
             var exePath = AppContext.BaseDirectory;
 #endif
             
-            var configFile = Path.Combine(exePath, "LocalAppVeyor.config.json");
+            var configFile = Path.Combine(exePath, "LocalAppVeyor.Console.config.json");
 
             if (!File.Exists(configFile))
             {

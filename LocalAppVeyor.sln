@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E2BBF362-2F80-44DA-B669-3FC53D7911AA}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{90C2048F-14A3-4CB7-86DD-B96708B01507}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		global.json = global.json
-		LocalAppVeyor.config.json = LocalAppVeyor.config.json
+		LocalAppVeyor.Console.config.json = LocalAppVeyor.Console.config.json
 	EndProjectSection
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LocalAppVeyor", "src\LocalAppVeyor\LocalAppVeyor.xproj", "{1255F11D-AFFF-4635-9197-9F489A059FB6}"
