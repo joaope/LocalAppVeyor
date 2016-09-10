@@ -5,9 +5,32 @@ namespace LocalAppVeyor.Console
 {
     public class ConsoleOutputter : IPipelineOutputter
     {
+        public void SetColor(ConsoleColor color)
+        {
+            System.Console.ForegroundColor = TransformColor(color, System.Console.BackgroundColor);
+        }
+
+        public void ResetColor()
+        {
+            System.Console.ResetColor();
+        }
+
+        private static ConsoleColor TransformColor(
+            ConsoleColor foreground,
+            ConsoleColor background)
+        {
+            if (foreground != background)
+            {
+                return foreground;
+            }
+
+            return background != ConsoleColor.Black
+                ? ConsoleColor.Black
+                : ConsoleColor.Gray;
+        }
+
         public void Write(string message)
         {
-            System.Console.ForegroundColor = ConsoleColor.White;
             System.Console.WriteLine($"{message ?? "<null>"}");
         }
 

@@ -1,43 +1,68 @@
-﻿using YamlDotNet.Serialization;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace LocalAppVeyor.Configuration.Model
 {
     public class BuildConfiguration
     {
-        public string Version { get; internal set; }
+        public static BuildConfiguration Default => new BuildConfiguration();
 
-        [YamlMember(Alias = "init")]
-        public virtual ScriptBlock InitializationScript { get; internal set; }
+        public string Version { get;}
 
-        [YamlMember(Alias = "clone_folder")]
-        public virtual string CloneFolder { get; internal set; }
+        public ScriptBlock InitializationScript { get; }
 
-        [YamlMember(Alias = "os")]
-        public virtual OperatingSystems OperatingSystems { get; internal set; }
+        public string CloneFolder { get; }
 
-        [YamlMember(Alias = "environment")]
-        public virtual EnvironmentVariables EnvironmentVariables { get; internal set; }
+        public ScriptBlock InstallScript { get; }
 
-        [YamlMember(Alias = "install")]
-        public virtual ScriptBlock InstallScript { get; internal set; }
+        public ReadOnlyCollection<string> OperatingSystems { get; }
 
-        [YamlMember(Alias = "platform")]
-        public virtual Platforms Platforms { get; internal set; }
+        public EnvironmentVariables EnvironmentVariables { get; }
 
-        [YamlMember(Alias = "configuration")]
-        public virtual Configurations Configurations { get; internal set; }
+        public ReadOnlyCollection<string> Platforms { get; }
 
-        public virtual Build Build { get; internal set; }
+        public ReadOnlyCollection<string> Configurations { get; }
 
-        [YamlMember(Alias = "before_build")]
-        public virtual ScriptBlock BeforeBuildScript { get; internal set; }
+        public Build Build { get; }
 
-        [YamlMember(Alias = "after_build")]
-        public virtual ScriptBlock AfterBuildScript { get; internal set; }
+        public ScriptBlock BeforeBuildScript { get; }
 
-        [YamlMember(Alias = "build_script")]
-        public virtual ScriptBlock BuildScript { get; internal set; }
+        public ScriptBlock BuildScript { get; }
 
+        public ScriptBlock AfterBuildScript { get; }
 
+        public BuildConfiguration()
+            : this(null, null, null, null, new string[0], null, new string[0], new string[0], null, null, null, null)
+        {
+        }
+
+        public BuildConfiguration(
+            string version, 
+            ScriptBlock initializationScript, 
+            string cloneFolder, 
+            ScriptBlock installScript, 
+            IEnumerable<string> operatingSystems,
+            EnvironmentVariables environmentVariables,
+            IEnumerable<string> platforms,
+            IEnumerable<string> configurations,
+            Build build, 
+            ScriptBlock beforeBuildScript,
+            ScriptBlock buildScript,
+            ScriptBlock afterBuildScript)
+        {
+            Version = version;
+            InitializationScript = initializationScript ?? new ScriptBlock();
+            CloneFolder = cloneFolder;
+            InstallScript = installScript ?? new ScriptBlock();
+            OperatingSystems = new ReadOnlyCollection<string>(operatingSystems?.ToList() ?? new List<string>());
+            EnvironmentVariables = environmentVariables ?? new EnvironmentVariables();
+            Platforms = new ReadOnlyCollection<string>(platforms?.ToList() ?? new List<string>());
+            Configurations = new ReadOnlyCollection<string>(configurations?.ToList() ?? new List<string>());
+            Build = build ?? new Build();
+            BeforeBuildScript = beforeBuildScript ?? new ScriptBlock();
+            BuildScript = buildScript ?? new ScriptBlock();
+            AfterBuildScript = afterBuildScript ?? new ScriptBlock();
+        }
     }
 }

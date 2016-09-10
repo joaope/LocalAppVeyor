@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using LocalAppVeyor.Configuration.Model;
 using LocalAppVeyor.Configuration.Reader;
 using LocalAppVeyor.Pipeline.Internal;
-using LocalAppVeyor.Pipeline.Output;
 
 namespace LocalAppVeyor.Pipeline
 {
@@ -13,122 +13,133 @@ namespace LocalAppVeyor.Pipeline
 
         private readonly BuildConfiguration buildConfiguration;
 
-        private readonly IPipelineOutputter outputter;
-
         private readonly EngineConfiguration engineConfiguration;
 
         public Engine(
             EngineConfiguration engineConfiguration,
-            IBuildConfigurationReader buildConfigurationReader,
-            IPipelineOutputter outputter)
-            : this(engineConfiguration, buildConfigurationReader.GetBuildConfiguration(), outputter)
+            IBuildConfigurationReader buildConfigurationReader)
+            : this(engineConfiguration, buildConfigurationReader.GetBuildConfiguration())
         {
         }
 
         public Engine(
             EngineConfiguration engineConfiguration,
-            BuildConfiguration buildConfiguration,
-            IPipelineOutputter outputter)
+            BuildConfiguration buildConfiguration)
         {
             if (engineConfiguration == null) throw new ArgumentNullException(nameof(engineConfiguration));
             if (buildConfiguration == null) throw new ArgumentNullException(nameof(buildConfiguration));
-            if (outputter == null) throw new ArgumentNullException(nameof(outputter));
 
             this.buildConfiguration = buildConfiguration;
             this.engineConfiguration = engineConfiguration;
-            this.outputter = outputter;
         }
 
         public void Start()
         {
             var executionContext = new ExecutionContext(
                 buildConfiguration,
-                outputter,
-                engineConfiguration.RepositoryDirectoryPath);
+                engineConfiguration.Outputter,
+                engineConfiguration.RepositoryDirectoryPath,
+                !string.IsNullOrEmpty(buildConfiguration.CloneFolder) ? buildConfiguration.CloneFolder : @"C:\Projects\LocalAppVeyorTempClone");
 
-            // Init
-            if (!new InitStep().Execute(executionContext, engineConfiguration.Steps, UnhandledStepExceptionReceived))
+            var environmentsVariables = buildConfiguration.EnvironmentVariables.Matrix.Count > 0
+                ? buildConfiguration.EnvironmentVariables.Matrix.ToArray()
+                : new IReadOnlyCollection<Variable>[] { null };
+            var configurations = buildConfiguration.Configurations.Count > 0
+                ? buildConfiguration.Configurations.ToArray()
+                : new string[] { null };
+            var platforms = buildConfiguration.Platforms.Count > 0
+                ? buildConfiguration.Platforms.ToArray()
+                : new string[] { null };
+            var oses = buildConfiguration.OperatingSystems.Count > 0
+                ? buildConfiguration.OperatingSystems.ToArray()
+                : new string[] { null };
+
+            foreach (var environmentVariables in environmentsVariables)
             {
-                return;
-            }
-
-            // Clone
-            executionContext.CloneDirectory = !string.IsNullOrEmpty(buildConfiguration.CloneFolder)
-                ? buildConfiguration.CloneFolder
-                : @"C:\Projects\LocalAppVeyorTempClone";
-
-            if (!new CloneFolderStep().Execute(executionContext, engineConfiguration.Steps, UnhandledStepExceptionReceived))
-            {
-                return;
-            }
-
-            // InitStandardEnvironmentVariables
-            if (!new InitStandardEnvironmentVariablesStep().Execute(executionContext, engineConfiguration.Steps, UnhandledStepExceptionReceived))
-            {
-                return;
-            }
-
-            // Install
-            if (!new InstallStep().Execute(executionContext, engineConfiguration.Steps, UnhandledStepExceptionReceived))
-            {
-                return;
-            }
-
-            // BeforeBuild
-            if (!new BeforeBuildStep().Execute(executionContext, engineConfiguration.Steps, UnhandledStepExceptionReceived))
-            {
-                return;
-            }
-
-            // Build if not off; otherwise run build script
-            if (!buildConfiguration.Build.IsAutomaticBuildOff)
-            {
-                var oses = buildConfiguration.OperatingSystems?.Count > 0
-                    ? buildConfiguration.OperatingSystems.ToArray()
-                    : new[] { string.Empty };
-                var platforms = buildConfiguration.Platforms?.Count > 0
-                    ? buildConfiguration.Platforms.ToArray()
-                    : new[] { string.Empty };
-                var configurations = buildConfiguration.Configurations?.Count > 0
-                    ? buildConfiguration.Configurations.ToArray()
-                    : new[] { string.Empty };
-
-                foreach (var os in oses)
+                foreach (var configuration in configurations)
                 {
                     foreach (var platform in platforms)
                     {
-                        var buildCounter = 0;
-
-                        foreach (var configuration in configurations)
+                        foreach (var os in oses)
                         {
-                            var variables = buildCounter < buildConfiguration.EnvironmentVariables.Matrix.Count
-                                ? buildConfiguration.EnvironmentVariables.Matrix[buildCounter].ToArray()
-                                : new Variable[0];
+                            // Update context with new build state
+                            executionContext.SetBuildState(environmentVariables, configuration, platform, os);
 
-                            executionContext.SetBuildState(true, os, platform, configuration, variables);
-
-                            if (!new BuildStep().Execute(executionContext, engineConfiguration.Steps, UnhandledStepExceptionReceived))
+                            try
                             {
-                                return;
+                                ExecuteBuild(executionContext);
                             }
+                            catch (Exception e)
+                            {
+                                executionContext.Outputter.WriteError($"Unhandled exception: {e.Message}");
 
-                            buildCounter++;
+                                var eventArgs = new UnhandledStepExceptionEventArgs(e);
+                                UnhandledStepExceptionReceived?.Invoke(this, eventArgs);
+                                
+                                if (!eventArgs.ContinueExecution)
+                                {
+                                    // Sometimes, you know, goto is the right thing to do!
+                                    goto FailedBuild;
+                                }
+
+                                executionContext.Outputter.WriteWarning("Continuing executing after recovering from exception...");
+                            }
                         }
                     }
                 }
             }
-            else if (!new BuildScriptStep().Execute(executionContext, engineConfiguration.Steps, UnhandledStepExceptionReceived))
+
+            engineConfiguration.Outputter.Write("Build execution finished.");
+            return;
+
+            FailedBuild:
             {
-                return;
+                
+            }
+        }
+
+        private void ExecuteBuild(ExecutionContext executionContext)
+        {
+            // initialize standard variables
+            ExecuteInternalStep(new InitStandardEnvironmentVariablesStep(), executionContext);
+
+            // initialize environment variables (both common and build specific)
+            foreach (
+                var variable
+                in buildConfiguration.EnvironmentVariables.CommonVariables.Concat(executionContext.CurrentBuildSpecificVariables))
+            {
+                Environment.SetEnvironmentVariable(variable.Name, variable.Value);
+            }
+            
+            // Init
+            ExecuteInternalStep(new InitStep(), executionContext);
+
+            // Clone
+            ExecuteInternalStep(new CloneFolderStep(), executionContext);
+
+            // Install
+            ExecuteInternalStep(new InstallStep(), executionContext);
+
+            // Before build
+            ExecuteInternalStep(new BeforeBuildStep(), executionContext);
+
+            // Build
+            if (buildConfiguration.Build.IsAutomaticBuildOff)
+            {
+                ExecuteInternalStep(new BuildScriptStep(), executionContext);
+            }
+            else
+            {
+                ExecuteInternalStep(new BuildStep(), executionContext);
             }
 
-            // AfterBuild
-            if (!new AfterBuildStep().Execute(executionContext, engineConfiguration.Steps, UnhandledStepExceptionReceived))
-            {
-                return;
-            }
+            // After Build
+            ExecuteInternalStep(new AfterBuildStep(), executionContext);
+        }
 
-            outputter.Write("Build execution finished.");
+        private void ExecuteInternalStep(InternalEngineStep step, ExecutionContext executionContext)
+        {
+            step.Execute(executionContext, UnhandledStepExceptionReceived);
         }
     }
 }

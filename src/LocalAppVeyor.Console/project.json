@@ -42,7 +42,7 @@
             "imports": [ "dotnet" ]
         },
         "netcoreapp10": {
-            "imports": [ "dotnet" ],
+            "imports": [ "dotnet", "dnx451" ],
             "dependencies": {
                 "Microsoft.NETCore.App": {
                     "version": "1.0.0",

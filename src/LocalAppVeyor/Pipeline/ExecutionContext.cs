@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LocalAppVeyor.Configuration.Model;
 using LocalAppVeyor.Pipeline.Output;
 
@@ -6,28 +7,27 @@ namespace LocalAppVeyor.Pipeline
 {
     public sealed class ExecutionContext
     {
-        public bool IsBuildRunning { get; internal set; }
+        public string CurrentBuildOperatingSystem { get; private set; }
 
-        public string CurrentBuildOperatingSystem { get; internal set; }
+        public string CurrentBuildPlatform { get; private set; }
 
-        public string CurrentBuildPlatform { get; internal set; }
+        public string CurrentBuildConfiguration { get; private set; }
 
-        public string CurrentBuildConfiguration { get; internal set; }
-
-        public Variable[] CurrentBuildSpecificVariables { get; set; }
+        public IReadOnlyCollection<Variable> CurrentBuildSpecificVariables { get; private set; }
         
-        public string RepositoryDirectory { get; }
+        public string RepositoryDirectory { get; private set; }
 
-        public string CloneDirectory { get; internal set; }
+        public string CloneDirectory { get; private set; }
 
-        public BuildConfiguration BuildConfiguration { get; }
+        public BuildConfiguration BuildConfiguration { get; private set; }
 
-        public IPipelineOutputter Outputter { get; }
+        public IPipelineOutputter Outputter { get; private set; }
 
         public ExecutionContext(
             BuildConfiguration buildConfiguration,
             IPipelineOutputter outputter,
-            string repositoryDirectory)
+            string repositoryDirectory,
+            string cloneDirectory)
         {
             if (buildConfiguration == null) throw new ArgumentNullException(nameof(buildConfiguration));
             if (outputter == null) throw new ArgumentNullException(nameof(outputter));
@@ -36,17 +36,15 @@ namespace LocalAppVeyor.Pipeline
             BuildConfiguration = buildConfiguration;
             Outputter = outputter;
             RepositoryDirectory = repositoryDirectory;
+            CloneDirectory = cloneDirectory;
         }
 
         internal void SetBuildState(
-            bool isBuilding,
-            string operatingSystem = "",
-            string platform = "",
-            string configuration = "",
-            Variable[] variables = null)
+            IReadOnlyCollection<Variable> variables,
+            string configuration,
+            string platform,
+            string operatingSystem)
         {
-            IsBuildRunning = isBuilding;
-
             CurrentBuildOperatingSystem = operatingSystem;
             CurrentBuildPlatform = platform;
             CurrentBuildConfiguration = configuration;

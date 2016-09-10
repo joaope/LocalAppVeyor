@@ -1,31 +1,30 @@
-﻿using YamlDotNet.Serialization;
-
-namespace LocalAppVeyor.Configuration.Model
+﻿namespace LocalAppVeyor.Configuration.Model
 {
     public class Build
     {
-        [YamlIgnore]
-        public bool IsAutomaticBuildOff { get; internal set; }
+        public bool IsAutomaticBuildOff { get; }
 
-        [YamlMember(Alias = "parallel")]
-        public bool IsParallel { get; internal set; }
+        public bool IsParallel { get; }
 
-        [YamlMember(Alias = "project")]
-        public string SolutionFile { get; internal set; }
+        public string SolutionFile { get; }
         
-        public BuildVerbosity? Verbosity { get; internal set; }
+        public BuildVerbosity Verbosity { get; }
 
-        public static implicit operator Build(string offString)
+        public Build()
+            : this(false, false, null, BuildVerbosity.Normal)
         {
-            if (!string.IsNullOrEmpty(offString) && offString == "off")
-            {
-                return new Build
-                {
-                    IsAutomaticBuildOff = true
-                };
-            }
+        }
 
-            return null;
+        public Build(
+            bool isAutomaticBuildOff,
+            bool isParallel, 
+            string solutionFile, 
+            BuildVerbosity verbosity)
+        {
+            IsAutomaticBuildOff = isAutomaticBuildOff;
+            IsParallel = isParallel;
+            SolutionFile = solutionFile;
+            Verbosity = verbosity;
         }
     }
 }

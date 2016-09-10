@@ -1,29 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using LocalAppVeyor.Configuration.Model;
+using LocalAppVeyor.Configuration.Reader.Internal.Model;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
-namespace LocalAppVeyor.Configuration.Reader.Converters
+namespace LocalAppVeyor.Configuration.Reader.Internal
 {
     internal class EnvironmentVariablesYamlTypeConverter : IYamlTypeConverter
     {
         private readonly Deserializer deserializer;
 
-        public EnvironmentVariablesYamlTypeConverter(Deserializer deserializer)
+        public EnvironmentVariablesYamlTypeConverter()
         {
-            this.deserializer = deserializer;
+            deserializer = new DeserializerBuilder()
+                .IgnoreUnmatchedProperties()
+                .Build();
         }
 
         public bool Accepts(Type type)
         {
-            return type == typeof(EnvironmentVariables);
+            return type == typeof(InternalEnvironmentVariables);
         }
 
         public object ReadYaml(IParser parser, Type type)
         {
-            var env = new EnvironmentVariables();
+            var env = new InternalEnvironmentVariables();
 
             parser.Expect<MappingStart>();
 
@@ -43,13 +45,13 @@ namespace LocalAppVeyor.Configuration.Reader.Converters
 
                         do
                         {
-                            var matrixItemVariables = new List<Variable>();
+                            var matrixItemVariables = new List<InternalVariable>();
 
                             parser.Expect<MappingStart>();
 
                             do
                             {
-                                matrixItemVariables.Add(deserializer.Deserialize<Variable>(parser));
+                                matrixItemVariables.Add(deserializer.Deserialize<InternalVariable>(parser));
 
                             } while (!parser.Accept<MappingEnd>());
 
@@ -63,7 +65,7 @@ namespace LocalAppVeyor.Configuration.Reader.Converters
                     }
                     else
                     {
-                        var variable = deserializer.Deserialize<Variable>(parser);
+                        var variable = deserializer.Deserialize<InternalVariable>(parser);
                         env.InternalCommonVariables.Add(variable);
                     }
                 }

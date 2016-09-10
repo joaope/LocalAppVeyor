@@ -24,7 +24,7 @@ namespace LocalAppVeyor.Pipeline.Internal
 
             if (!dirDestination.Exists)
             {
-                return;
+                Directory.CreateDirectory(dirDestination.FullName);
             }
 
             // empty destination
@@ -43,8 +43,6 @@ namespace LocalAppVeyor.Pipeline.Internal
 
         private static void CopyAll(DirectoryInfo source, DirectoryInfo destination)
         {
-            Directory.CreateDirectory(destination.FullName);
-
             // copy each file into destination
             foreach (var file in source.GetFiles())
             {

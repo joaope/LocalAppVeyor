@@ -1,16 +1,16 @@
 ﻿using System;
-using LocalAppVeyor.Configuration.Model;
+using LocalAppVeyor.Configuration.Reader.Internal.Model;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
-namespace LocalAppVeyor.Configuration.Reader.Converters
+namespace LocalAppVeyor.Configuration.Reader.Internal
 {
     internal class VariableTypeConverter : IYamlTypeConverter
     {
         public bool Accepts(Type type)
         {
-            return type == typeof(Variable);
+            return type == typeof(InternalVariable);
         }
 
         public object ReadYaml(IParser parser, Type type)
@@ -29,13 +29,13 @@ namespace LocalAppVeyor.Configuration.Reader.Converters
 
                     parser.Expect<MappingEnd>();
 
-                    return new Variable(name, secureValue, true);
+                    return new InternalVariable(name, secureValue, true);
                 }
 
                 throw new YamlException("error parsing enrivonment variables");
             }
             
-            return new Variable(name, parser.Expect<Scalar>().Value, false);
+            return new InternalVariable(name, parser.Expect<Scalar>().Value, false);
         }
 
         public void WriteYaml(IEmitter emitter, object value, Type type)

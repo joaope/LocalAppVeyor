@@ -12,6 +12,16 @@
             System.Environment.SetEnvironmentVariable("CI", "False");
             System.Environment.SetEnvironmentVariable("APPVEYOR", "False");
 
+            if (!string.IsNullOrEmpty(executionContext.CurrentBuildConfiguration))
+            {
+                System.Environment.SetEnvironmentVariable("CONFIGURATION", executionContext.CurrentBuildConfiguration);
+            }
+
+            if (!string.IsNullOrEmpty(executionContext.CurrentBuildPlatform))
+            {
+                System.Environment.SetEnvironmentVariable("PLATFORM", executionContext.CurrentBuildPlatform);
+            }
+
             executionContext.Outputter.Write("Environment variables initialized.");
 
             return true;

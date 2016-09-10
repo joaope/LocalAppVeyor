@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using LocalAppVeyor.Configuration.Model;
 using LocalAppVeyor.Configuration.Reader;
 using LocalAppVeyor.Pipeline;
 using LocalAppVeyor.Pipeline.Output;
-using Microsoft.Extensions.Configuration;
 
 namespace LocalAppVeyor.Console
 {
@@ -21,8 +18,7 @@ namespace LocalAppVeyor.Console
 
             var engine = new Engine(
                 engineConfiguration,
-                buildConfiguration,
-                PipelineOutputter);
+                buildConfiguration);
 
             engine.Start();
 
@@ -77,74 +73,7 @@ namespace LocalAppVeyor.Console
                 repositoryPath = Directory.GetCurrentDirectory();
             }
 
-            // Try read config file if exists on console path (for steps, etc.)
-#if NET451
-            var exePath = AppDomain.CurrentDomain.BaseDirectory;
-#else
-            var exePath = AppContext.BaseDirectory;
-#endif
-            
-            var configFile = Path.Combine(exePath, "LocalAppVeyor.Console.config.json");
-
-            if (!File.Exists(configFile))
-            {
-                return new EngineConfiguration(repositoryPath, new IEngineStep[0]);
-            }
-
-            var configurationRoot = new ConfigurationBuilder()
-                .AddJsonFile(configFile)
-                .Build();
-
-            var stepsAssemblyNames = new List<string>();
-            configurationRoot.GetSection("Steps").Bind(stepsAssemblyNames);
-
-            var readingStepFailed = false;
-            var engineSteps = new List<IEngineStep>();
-
-            foreach (string typeName in stepsAssemblyNames)
-            {
-                readingStepFailed = false;
-
-                var stepType = Type.GetType(typeName);
-
-                if (stepType == null)
-                {
-                    readingStepFailed = true;
-                    PipelineOutputter.WriteError($"Step type '{typeName}' not found or unable to be loaded.");
-                    continue;
-                }
-
-                if (!typeof(IEngineStep).GetTypeInfo().IsAssignableFrom(stepType))
-                {
-                    readingStepFailed = true;
-                    PipelineOutputter.WriteError($"Step type '{stepType.AssemblyQualifiedName}' not a valid '{nameof(IEngineStep)}'.");
-                }
-
-                if (stepType.GetTypeInfo().GetConstructor(Type.EmptyTypes) == null)
-                {
-                    readingStepFailed = true;
-                    PipelineOutputter.WriteError($"Step type '{stepType.AssemblyQualifiedName}' doesn't provide a parameterless constructor.");
-                }
-
-                var stepInstance = (IEngineStep)Activator.CreateInstance(stepType);
-
-                if (!string.IsNullOrEmpty(stepInstance.Name))
-                {
-                    readingStepFailed = true;
-                    PipelineOutputter.WriteError($"Step type '{stepType.AssemblyQualifiedName}' doesn't provide a name.");
-                }
-
-                engineSteps.Add(stepInstance);
-            }
-            
-            if (readingStepFailed)
-            {
-                Environment.Exit(1);
-            }
-
-            // 
-
-            return new EngineConfiguration(repositoryPath, engineSteps);
+            return new EngineConfiguration(repositoryPath, PipelineOutputter);
         }
     }
 }

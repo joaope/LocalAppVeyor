@@ -13,7 +13,7 @@
 
     "frameworks": {
         "netcoreapp10": {
-            "imports": [ "dotnet" ],
+            "imports": [ "dotnet", "dnx451" ],
             "dependencies": {
                 "Microsoft.NETCore.App": {
                     "type": "platform",

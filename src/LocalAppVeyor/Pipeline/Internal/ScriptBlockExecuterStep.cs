@@ -13,15 +13,15 @@ namespace LocalAppVeyor.Pipeline.Internal
 
             if (scriptBlock != null)
             {
-                foreach (var script in scriptBlock)
+                foreach (var scriptLine in scriptBlock)
                 {
                     var result = true;
 
-                    if (!string.IsNullOrEmpty(script.Batch))
+                    if (!string.IsNullOrEmpty(scriptLine.Script))
                     {
-                        result = ExecuteBatchScript(executionContext, script.Batch);
+                        result = ExecuteBatchScript(executionContext, scriptLine.Script);
                     }
-                    else if (!string.IsNullOrEmpty(script.PowerShell))
+                    else if (!string.IsNullOrEmpty(scriptLine.Script))
                     {
                         // TODO: powershell exec
                     }

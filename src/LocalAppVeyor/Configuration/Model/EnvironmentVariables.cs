@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace LocalAppVeyor.Configuration.Model
 {
@@ -6,17 +8,19 @@ namespace LocalAppVeyor.Configuration.Model
     {
         public ReadOnlyCollection<Variable> CommonVariables { get; }
 
-        internal readonly Collection<Variable> InternalCommonVariables = new Collection<Variable>();
-
-        public ReadOnlyCollection<ReadOnlyCollection<Variable>> Matrix { get; }
-
-        internal readonly Collection<ReadOnlyCollection<Variable>> InternalMatrix =
-            new Collection<ReadOnlyCollection<Variable>>();
+        public ReadOnlyCollection<IReadOnlyCollection<Variable>> Matrix { get; }
 
         public EnvironmentVariables()
+            : this(new Variable[0], new List<IReadOnlyCollection<Variable>>())
         {
-            CommonVariables = new ReadOnlyCollection<Variable>(InternalCommonVariables);
-            Matrix = new ReadOnlyCollection<ReadOnlyCollection<Variable>>(InternalMatrix);
+        }
+
+        public EnvironmentVariables(
+            IEnumerable<Variable> commonVariables,
+            IEnumerable<IReadOnlyCollection<Variable>> matrixVariables)
+        {
+            CommonVariables = new ReadOnlyCollection<Variable>(commonVariables.ToList());
+            Matrix = new ReadOnlyCollection<IReadOnlyCollection<Variable>>(matrixVariables.ToList());
         }
     }
 }

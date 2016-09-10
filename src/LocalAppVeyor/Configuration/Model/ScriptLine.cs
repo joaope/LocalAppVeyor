@@ -1,21 +1,15 @@
-﻿using YamlDotNet.Serialization;
-
-namespace LocalAppVeyor.Configuration.Model
+﻿namespace LocalAppVeyor.Configuration.Model
 {
     public class ScriptLine
     {
-        [YamlMember(Alias = "cmd")]
-        public string Batch { get; internal set; }
+        public ScriptType ScriptType { get; set; }
 
-        [YamlMember(Alias = "ps")]
-        public string PowerShell { get; internal set; }
+        public string Script { get; set; }
 
-        public static implicit operator ScriptLine(string scriptLine)
+        public ScriptLine(ScriptType scriptType, string script)
         {
-            return new ScriptLine
-            {
-                Batch = scriptLine
-            };
+            ScriptType = scriptType;
+            Script = script;
         }
     }
 }

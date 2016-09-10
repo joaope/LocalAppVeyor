@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using LocalAppVeyor.Configuration.Model;
-using LocalAppVeyor.Configuration.Reader.Converters;
+using LocalAppVeyor.Configuration.Reader.Internal;
+using LocalAppVeyor.Configuration.Reader.Internal.Model;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
 namespace LocalAppVeyor.Configuration.Reader
 {
@@ -37,18 +37,20 @@ namespace LocalAppVeyor.Configuration.Reader
 
         public BuildConfiguration GetBuildConfiguration()
         {
-            var yamlDeserializer = new Deserializer(namingConvention: new CamelCaseNamingConvention(), ignoreUnmatched: true);
-
-            yamlDeserializer.RegisterTypeConverter(new EnvironmentVariablesYamlTypeConverter(yamlDeserializer));
-            yamlDeserializer.RegisterTypeConverter(new VariableTypeConverter());
+            var yamlDeserializer = new DeserializerBuilder()
+                .IgnoreUnmatchedProperties()
+                .WithTypeConverter(new EnvironmentVariablesYamlTypeConverter())
+                .WithTypeConverter(new VariableTypeConverter())
+                .Build();
 
             using (var fileStream = new FileStream(YamlFilePath, FileMode.Open))
             using (var streamReader = new StreamReader(fileStream))
             {
                 try
                 {
-                    var conf = yamlDeserializer.Deserialize<BuildConfiguration>(streamReader);
-                    return conf;
+                    var conf = yamlDeserializer.Deserialize<InternalBuildConfiguration>(streamReader);
+
+                    return conf?.ToBuildConfiguration() ?? BuildConfiguration.Default;
                 }
                 catch (YamlException e)
                 {

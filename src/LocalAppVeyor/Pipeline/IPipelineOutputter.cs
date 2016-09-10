@@ -1,7 +1,13 @@
-﻿namespace LocalAppVeyor.Pipeline.Output
+﻿using System;
+
+namespace LocalAppVeyor.Pipeline.Output
 {
     public interface IPipelineOutputter
     {
+        void SetColor(ConsoleColor color);
+
+        void ResetColor();
+
         void Write(string message);
 
         void WriteSuccess(string successMessage);

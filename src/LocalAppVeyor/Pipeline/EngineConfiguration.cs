@@ -1,23 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using LocalAppVeyor.Pipeline.Output;
 
 namespace LocalAppVeyor.Pipeline
 {
     public class EngineConfiguration
     {
-        public IEngineStep[] Steps { get; }
-
         public string RepositoryDirectoryPath { get; }
+
+        public IPipelineOutputter Outputter { get; }
 
         public EngineConfiguration(
             string repositoryDirectoryPath,
-            IEnumerable<IEngineStep> steps)
+            IPipelineOutputter outputter)
         {
-            if (steps == null) throw new ArgumentNullException(nameof(steps));
+            if (repositoryDirectoryPath == null) throw new ArgumentNullException(nameof(repositoryDirectoryPath));
+            if (outputter == null) throw new ArgumentNullException(nameof(outputter));
 
             RepositoryDirectoryPath = repositoryDirectoryPath;
-            Steps = steps.ToArray();
+            Outputter = outputter;
         }
     }
 }
