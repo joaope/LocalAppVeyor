@@ -2,21 +2,17 @@
     "version": "0.5.0",
     "authors": [ "joaope" ],
     "copyright": "joaope 2016",
-    "title": "LocalAppVeyor",
-    "description": "Run your AppVeyor build, locally.",
+    "title": "LocalAppVeyor.Engine",
+    "description": "Allows one to execute AppVeyor build pipeline programatically, for a given local repository and configuration.",
     "buildOptions": {
         "warningsAsErrors": false,
         "platform": "anycpu",
         "languageVersion": "csharp6",
-        "debugType": "portable",
-        "emitEntryPoint": true,
-        "copyToOutput": {
-            "include": "../../LocalAppVeyor.config.json"
-        }
+        "debugType": "portable"
     },
     "packOptions": {
         "owners": [ "joaope" ],
-        "summary": "Run your AppVeyor build, locally.",
+        "summary": "Allows one to execute AppVeyor build pipeline programatically.",
         "tags": [ "console", "appveyor", "local", "build", "api" ],
         "repository": {
             "type": "git",
@@ -34,18 +30,21 @@
     },
 
     "dependencies": {
-        "LocalAppVeyor": "0.5.0"
+        "YamlDotNet": "4.0.0",
+        "Microsoft.Build": "14.3.0",
+        "System.Management.Automation": "1.0.0-alpha9",
+        "Microsoft.Extensions.CommandLineUtils": "1.0.0"
     },
 
     "frameworks": {
         "net451": { },
-        "netcoreapp10": {
-            "imports": [ "dotnet", "dnx451" ],
+        "netstandard16": {
+            "imports": [ "dotnet" ],
             "dependencies": {
-                "Microsoft.NETCore.App": {
-                    "version": "1.0.0",
-                    "type": "platform"
-                }
+                "NETStandard.Library": "1.6.0",
+                "System.IO.FileSystem": "4.0.1",
+                "System.Runtime.Serialization.Primitives": "4.1.1",
+                "System.Diagnostics.Process": "4.1.0"
             }
         }
     }

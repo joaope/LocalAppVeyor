@@ -8,7 +8,11 @@
         "warningsAsErrors": false,
         "platform": "anycpu",
         "languageVersion": "csharp6",
-        "debugType": "portable"
+        "debugType": "portable",
+        "emitEntryPoint": true,
+        "copyToOutput": {
+            "include": "../../LocalAppVeyor.config.json"
+        }
     },
     "packOptions": {
         "owners": [ "joaope" ],
@@ -30,20 +34,18 @@
     },
 
     "dependencies": {
-        "YamlDotNet": "4.0.0",
-        "Microsoft.Build": "14.3.0",
-        "System.Management.Automation": "1.0.0-alpha9"
+        "LocalAppVeyor.Engine": "0.5.0"
     },
 
     "frameworks": {
         "net451": { },
-        "netstandard16": {
-            "imports": [ "dotnet" ],
+        "netcoreapp10": {
+            "imports": [ "dotnet", "dnx451" ],
             "dependencies": {
-                "NETStandard.Library": "1.6.0",
-                "System.IO.FileSystem": "4.0.1",
-                "System.Runtime.Serialization.Primitives": "4.1.1",
-                "System.Diagnostics.Process": "4.1.0"
+                "Microsoft.NETCore.App": {
+                    "version": "1.0.0",
+                    "type": "platform"
+                }
             }
         }
     }

@@ -4,6 +4,7 @@ using LocalAppVeyor.Configuration.Model;
 using LocalAppVeyor.Configuration.Reader;
 using LocalAppVeyor.Pipeline;
 using LocalAppVeyor.Pipeline.Output;
+using Microsoft.Extensions.CommandLineUtils;
 
 namespace LocalAppVeyor.Console
 {
@@ -13,16 +14,47 @@ namespace LocalAppVeyor.Console
 
         public static void Main(string[] args)
         {
-            var engineConfiguration = TryGetEngineConfigurationOrTerminate(@"C:\Users\JoaoP\Desktop\app");
-            var buildConfiguration = TryGetBuildConfigurationOrTerminate(engineConfiguration.RepositoryDirectoryPath);
+            var app = new CommandLineApplication
+            {
+                Name = "LocalAppVeyor",
+                FullName = "LocalAppVeyor",
+                Description = "LocalAppVeyor allows one to run an appveyor.yml build script locally."
+            };
 
-            var engine = new Engine(
-                engineConfiguration,
-                buildConfiguration);
+            app.HelpOption("-?|-h|--help");
+            app.VersionOption("-v|--version", "0.5.0");
 
-            engine.Start();
+            app.Command("build", conf =>
+            {
+                conf.Description = "Executes appveyor.yml build script";
 
-            System.Console.Read();
+                var repositoryPath = conf.Option(
+                    "--dir",
+                    "Repository directory where appveyor.yml is. If not specified, current directory is used",
+                    CommandOptionType.SingleValue);
+
+                conf.OnExecute(() =>
+                {
+                    conf.ShowRootCommandFullNameAndVersion();
+
+                    var engineConfiguration = TryGetEngineConfigurationOrTerminate(repositoryPath.Value());
+                    var buildConfiguration = TryGetBuildConfigurationOrTerminate(engineConfiguration.RepositoryDirectoryPath);
+
+                    var engine = new Engine(
+                        engineConfiguration,
+                        buildConfiguration);
+
+                    return engine.Start() ? 0 : 1;
+                });
+            });
+
+            app.OnExecute(() =>
+            {
+                app.ShowHelp();
+                return 0;
+            });
+
+            app.Execute(args);
         }
 
         private static BuildConfiguration TryGetBuildConfigurationOrTerminate(string repositoryPath)
@@ -31,7 +63,7 @@ namespace LocalAppVeyor.Console
 
             if (!File.Exists(appVeyorYml))
             {
-                PipelineOutputter.WriteError($"AppVeyor.yml file not found on repository path. Build aborted.");
+                PipelineOutputter.WriteError("AppVeyor.yml file not found on repository path. Build aborted.");
                 Environment.Exit(1);
             }
 
@@ -69,11 +101,12 @@ namespace LocalAppVeyor.Console
             }
             else
             {
-                PipelineOutputter.Write($"Current directory '{repositoryPath}' will be used as repository path.");
                 repositoryPath = Directory.GetCurrentDirectory();
+                PipelineOutputter.Write($"Current directory '{repositoryPath}' will be used as repository path.");
             }
 
             return new EngineConfiguration(repositoryPath, PipelineOutputter);
         }
+        
     }
 }

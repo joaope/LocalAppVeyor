@@ -33,7 +33,7 @@ namespace LocalAppVeyor.Pipeline
             this.engineConfiguration = engineConfiguration;
         }
 
-        public void Start()
+        public bool Start()
         {
             var executionContext = new ExecutionContext(
                 buildConfiguration,
@@ -93,11 +93,11 @@ namespace LocalAppVeyor.Pipeline
             }
 
             engineConfiguration.Outputter.Write("Build execution finished.");
-            return;
+            return true;
 
             FastFinish:
             {
-                
+                return false;
             }
         }
 

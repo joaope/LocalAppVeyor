@@ -36,20 +36,23 @@ namespace LocalAppVeyor.Console
 
         public void WriteSuccess(string successMessage)
         {
-            System.Console.ForegroundColor = ConsoleColor.Green;
+            SetColor(ConsoleColor.Green);
             System.Console.WriteLine($"{successMessage ?? "<null>"}");
+            ResetColor();
         }
 
         public void WriteWarning(string warningMessage)
         {
-            System.Console.ForegroundColor = ConsoleColor.Yellow;
+            SetColor(ConsoleColor.Yellow);
             System.Console.WriteLine($"{warningMessage ?? "<null>"}");
+            ResetColor();
         }
 
         public void WriteError(string errorMessage)
         {
-            System.Console.ForegroundColor = ConsoleColor.Red;
+            SetColor(ConsoleColor.Red);
             System.Console.WriteLine($"{errorMessage ?? "<null>"}");
+            ResetColor();
         }
     }
 }
