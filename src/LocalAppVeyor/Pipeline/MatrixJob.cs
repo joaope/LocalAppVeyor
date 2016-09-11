@@ -5,13 +5,13 @@ namespace LocalAppVeyor.Pipeline
 {
     public sealed class MatrixJob
     {
-        public string CurrentBuildOperatingSystem { get; }
+        public string OperatingSystem { get; }
 
-        public string CurrentBuildPlatform { get; }
+        public string Platform { get; }
 
-        public string CurrentBuildConfiguration { get; }
+        public string Configuration { get; }
 
-        public IReadOnlyCollection<Variable> CurrentBuildSpecificVariables { get; }
+        public IReadOnlyCollection<Variable> Variables { get; }
 
         public MatrixJob(
             IReadOnlyCollection<Variable> variables,
@@ -19,10 +19,10 @@ namespace LocalAppVeyor.Pipeline
             string platform,
             string operatingSystem)
         {
-            CurrentBuildOperatingSystem = operatingSystem;
-            CurrentBuildPlatform = platform;
-            CurrentBuildConfiguration = configuration;
-            CurrentBuildSpecificVariables = variables;
+            OperatingSystem = operatingSystem;
+            Platform = platform;
+            Configuration = configuration;
+            Variables = variables ?? new Variable[0];
         }
     }
 }

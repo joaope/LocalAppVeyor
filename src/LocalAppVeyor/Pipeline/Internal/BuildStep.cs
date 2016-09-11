@@ -11,8 +11,8 @@ namespace LocalAppVeyor.Pipeline.Internal
 
         public override bool Execute(ExecutionContext executionContext)
         {
-            var platform = executionContext.CurrentJob.CurrentBuildPlatform;
-            var configuration = executionContext.CurrentJob.CurrentBuildConfiguration;
+            var platform = executionContext.CurrentJob.Platform;
+            var configuration = executionContext.CurrentJob.Configuration;
             string slnProjFile;
 
             if (File.Exists(executionContext.BuildConfiguration.Build.SolutionFile))

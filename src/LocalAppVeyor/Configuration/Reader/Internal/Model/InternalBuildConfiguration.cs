@@ -53,7 +53,7 @@ namespace LocalAppVeyor.Configuration.Reader.Internal.Model
                 InstallScript?.ToScriptBlock(),
                 OperatingSystems,
                 EnvironmentVariables?.ToEnvironmentVariables(),
-                Matrix.ToMatrix(),
+                Matrix?.ToMatrix(),
                 Platforms,
                 Configurations,
                 Build?.ToBuild(),
