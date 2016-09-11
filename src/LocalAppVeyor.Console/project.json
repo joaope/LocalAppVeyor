@@ -38,9 +38,7 @@
     },
 
     "frameworks": {
-        "net451": {
-            "imports": [ "dotnet" ]
-        },
+        "net451": { },
         "netcoreapp10": {
             "imports": [ "dotnet", "dnx451" ],
             "dependencies": {

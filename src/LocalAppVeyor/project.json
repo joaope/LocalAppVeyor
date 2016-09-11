@@ -35,9 +35,7 @@
     },
 
     "frameworks": {
-        "net451": {
-            "imports": [ "dotnet" ]
-        },
+        "net451": { },
         "netstandard13": {
             "imports": [ "dotnet" ],
             "dependencies": {
