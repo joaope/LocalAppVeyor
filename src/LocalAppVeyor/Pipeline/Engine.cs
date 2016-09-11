@@ -54,37 +54,40 @@ namespace LocalAppVeyor.Pipeline
                 ? buildConfiguration.OperatingSystems.ToArray()
                 : new string[] { null };
 
+            // lets get inside the matrix
             foreach (var environmentVariables in environmentsVariables)
+            foreach (var configuration in configurations)
+            foreach (var platform in platforms)
+            foreach (var os in oses)
             {
-                foreach (var configuration in configurations)
+                // Update context with new build state
+                executionContext.CurrentJob = new MatrixJob(environmentVariables, configuration, platform, os);
+
+                try
                 {
-                    foreach (var platform in platforms)
-                    {
-                        foreach (var os in oses)
-                        {
-                            // Update context with new build state
-                            executionContext.SetBuildState(environmentVariables, configuration, platform, os);
+                    ExecuteBuild(executionContext);
+                }
+                catch (Exception e)
+                {
+                    executionContext.Outputter.WriteError($"Unhandled exception: {e.Message}");
 
-                            try
-                            {
-                                ExecuteBuild(executionContext);
-                            }
-                            catch (Exception e)
-                            {
-                                executionContext.Outputter.WriteError($"Unhandled exception: {e.Message}");
-
-                                var eventArgs = new UnhandledStepExceptionEventArgs(e);
-                                UnhandledStepExceptionReceived?.Invoke(this, eventArgs);
+                    var eventArgs = new UnhandledStepExceptionEventArgs(e);
+                    UnhandledStepExceptionReceived?.Invoke(this, eventArgs);
                                 
-                                if (!eventArgs.ContinueExecution)
-                                {
-                                    // Sometimes, you know, goto is the right thing to do!
-                                    goto FailedBuild;
-                                }
-
-                                executionContext.Outputter.WriteWarning("Continuing executing after recovering from exception...");
-                            }
-                        }
+                    // someone handled this exception and chose to continue
+                    if (eventArgs.ContinueExecution)
+                    {
+                        executionContext.Outputter.WriteWarning("Continuing executing after recovering from exception...");
+                    }
+                    // fast_finish is set on configuration
+                    else if (buildConfiguration.Matrix.IsFastFinish)
+                    {
+                        goto FastFinish;
+                    }
+                    // otherwise just continue to next build from matrix
+                    else
+                    {
+                        break;
                     }
                 }
             }
@@ -92,7 +95,7 @@ namespace LocalAppVeyor.Pipeline
             engineConfiguration.Outputter.Write("Build execution finished.");
             return;
 
-            FailedBuild:
+            FastFinish:
             {
                 
             }
@@ -106,7 +109,7 @@ namespace LocalAppVeyor.Pipeline
             // initialize environment variables (both common and build specific)
             foreach (
                 var variable
-                in buildConfiguration.EnvironmentVariables.CommonVariables.Concat(executionContext.CurrentBuildSpecificVariables))
+                in buildConfiguration.EnvironmentVariables.CommonVariables.Concat(executionContext.CurrentJob.CurrentBuildSpecificVariables))
             {
                 Environment.SetEnvironmentVariable(variable.Name, variable.Value);
             }

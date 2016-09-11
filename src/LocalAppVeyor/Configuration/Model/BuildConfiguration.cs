@@ -14,6 +14,8 @@ namespace LocalAppVeyor.Configuration.Model
 
         public string CloneFolder { get; }
 
+        public Matrix Matrix { get; }
+
         public ScriptBlock InstallScript { get; }
 
         public ReadOnlyCollection<string> OperatingSystems { get; }
@@ -33,17 +35,18 @@ namespace LocalAppVeyor.Configuration.Model
         public ScriptBlock AfterBuildScript { get; }
 
         public BuildConfiguration()
-            : this(null, null, null, null, new string[0], null, new string[0], new string[0], null, null, null, null)
+            : this(null, null, null, null, new string[0], null, null, new string[0], new string[0], null, null, null, null)
         {
         }
 
         public BuildConfiguration(
             string version, 
-            ScriptBlock initializationScript, 
+            ScriptBlock initializationScript,
             string cloneFolder, 
             ScriptBlock installScript, 
             IEnumerable<string> operatingSystems,
             EnvironmentVariables environmentVariables,
+            Matrix matrix,
             IEnumerable<string> platforms,
             IEnumerable<string> configurations,
             Build build, 
@@ -57,6 +60,7 @@ namespace LocalAppVeyor.Configuration.Model
             InstallScript = installScript ?? new ScriptBlock();
             OperatingSystems = new ReadOnlyCollection<string>(operatingSystems?.ToList() ?? new List<string>());
             EnvironmentVariables = environmentVariables ?? new EnvironmentVariables();
+            Matrix = matrix ?? new Matrix();
             Platforms = new ReadOnlyCollection<string>(platforms?.ToList() ?? new List<string>());
             Configurations = new ReadOnlyCollection<string>(configurations?.ToList() ?? new List<string>());
             Build = build ?? new Build();

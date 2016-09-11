@@ -20,6 +20,9 @@ namespace LocalAppVeyor.Configuration.Reader.Internal.Model
         [YamlMember(Alias = "environment")]
         public InternalEnvironmentVariables EnvironmentVariables { get; set; }
 
+        [YamlMember(Alias = "matrix")]
+        public InternalMatrix Matrix { get; set; }
+
         [YamlMember(Alias = "install")]
         public InternalScriptBlock InstallScript { get; set; }
 
@@ -50,6 +53,7 @@ namespace LocalAppVeyor.Configuration.Reader.Internal.Model
                 InstallScript?.ToScriptBlock(),
                 OperatingSystems,
                 EnvironmentVariables?.ToEnvironmentVariables(),
+                Matrix.ToMatrix(),
                 Platforms,
                 Configurations,
                 Build?.ToBuild(),
