@@ -17,13 +17,13 @@ namespace LocalAppVeyor.Pipeline.Internal
                 {
                     var result = true;
 
-                    if (!string.IsNullOrEmpty(scriptLine.Script))
+                    if (scriptLine.ScriptType == ScriptType.Batch)
                     {
                         result = ExecuteBatchScript(executionContext, scriptLine.Script);
                     }
-                    else if (!string.IsNullOrEmpty(scriptLine.Script))
+                    else if (scriptLine.ScriptType == ScriptType.PowerShell)
                     {
-                        // TODO: powershell exec
+                        result = ExecutePowerShellScript(executionContext, scriptLine.Script);
                     }
 
                     if (!result)
@@ -55,6 +55,27 @@ namespace LocalAppVeyor.Pipeline.Internal
                         executionContext.Outputter.WriteError(data);
                     }
                 });
-        }   
+        }
+
+        private bool ExecutePowerShellScript(ExecutionContext executionContext, string script)
+        {
+            return PowerShellScriptExecuter.Execute(
+                executionContext.CloneDirectory,
+                script,
+                data =>
+                {
+                    if (data != null)
+                    {
+                        executionContext.Outputter.Write(data);
+                    }
+                },
+                data =>
+                {
+                    if (data != null)
+                    {
+                        executionContext.Outputter.WriteError(data);
+                    }
+                });
+        }
     }
 }

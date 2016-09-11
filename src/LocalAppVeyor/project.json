@@ -31,12 +31,13 @@
 
     "dependencies": {
         "YamlDotNet": "4.0.0",
-        "Microsoft.Build": "14.3.0"
+        "Microsoft.Build": "14.3.0",
+        "System.Management.Automation": "1.0.0-alpha9"
     },
 
     "frameworks": {
         "net451": { },
-        "netstandard13": {
+        "netstandard16": {
             "imports": [ "dotnet" ],
             "dependencies": {
                 "NETStandard.Library": "1.6.0",
