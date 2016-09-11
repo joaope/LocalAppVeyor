@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LocalAppVeyor
+namespace LocalAppVeyor.Engine
 {
     public class LocalAppVeyorException : Exception
     {

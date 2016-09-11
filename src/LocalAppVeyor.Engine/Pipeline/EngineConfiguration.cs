@@ -1,7 +1,6 @@
 ﻿using System;
-using LocalAppVeyor.Pipeline.Output;
 
-namespace LocalAppVeyor.Pipeline
+namespace LocalAppVeyor.Engine.Pipeline
 {
     public class EngineConfiguration
     {

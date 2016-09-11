@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LocalAppVeyor.Configuration.Reader.Internal.Model
+namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
 {
     internal class InternalOperatingSystems : List<string>
     {

@@ -1,6 +1,6 @@
-﻿using LocalAppVeyor.Configuration.Model;
+﻿using LocalAppVeyor.Engine.Configuration.Model;
 
-namespace LocalAppVeyor.Configuration.Reader
+namespace LocalAppVeyor.Engine.Configuration.Reader
 {
     public interface IBuildConfigurationReader
     {

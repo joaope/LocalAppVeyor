@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Management.Automation;
 
-namespace LocalAppVeyor.Pipeline.Internal
+namespace LocalAppVeyor.Engine.Pipeline.Internal
 {
     internal static class PowerShellScriptExecuter
     {

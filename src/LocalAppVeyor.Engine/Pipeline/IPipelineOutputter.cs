@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LocalAppVeyor.Pipeline.Output
+namespace LocalAppVeyor.Engine.Pipeline
 {
     public interface IPipelineOutputter
     {

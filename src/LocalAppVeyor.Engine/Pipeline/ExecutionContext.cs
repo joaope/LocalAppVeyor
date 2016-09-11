@@ -1,8 +1,7 @@
 ﻿using System;
-using LocalAppVeyor.Configuration.Model;
-using LocalAppVeyor.Pipeline.Output;
+using LocalAppVeyor.Engine.Configuration.Model;
 
-namespace LocalAppVeyor.Pipeline
+namespace LocalAppVeyor.Engine.Pipeline
 {
     public sealed class ExecutionContext
     {

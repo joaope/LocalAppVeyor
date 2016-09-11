@@ -3,7 +3,7 @@ using System.IO;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
 
-namespace LocalAppVeyor.Pipeline.Internal
+namespace LocalAppVeyor.Engine.Pipeline.Internal
 {
     internal class BuildStep : InternalEngineStep
     {

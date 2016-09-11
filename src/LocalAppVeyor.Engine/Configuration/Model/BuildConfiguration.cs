@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace LocalAppVeyor.Configuration.Model
+namespace LocalAppVeyor.Engine.Configuration.Model
 {
     public class BuildConfiguration
     {

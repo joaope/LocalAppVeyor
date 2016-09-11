@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace LocalAppVeyor.Pipeline.Internal
+namespace LocalAppVeyor.Engine.Pipeline.Internal
 {
     internal class CloneFolderStep : InternalEngineStep
     {

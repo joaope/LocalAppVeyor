@@ -1,4 +1,4 @@
-﻿namespace LocalAppVeyor.Pipeline.Internal
+﻿namespace LocalAppVeyor.Engine.Pipeline.Internal
 {
     internal abstract class InternalEngineStep
     {

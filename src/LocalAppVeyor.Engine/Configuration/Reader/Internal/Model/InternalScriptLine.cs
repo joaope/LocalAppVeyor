@@ -1,7 +1,7 @@
-﻿using LocalAppVeyor.Configuration.Model;
+﻿using LocalAppVeyor.Engine.Configuration.Model;
 using YamlDotNet.Serialization;
 
-namespace LocalAppVeyor.Configuration.Reader.Internal.Model
+namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
 {
     internal class InternalScriptLine
     {

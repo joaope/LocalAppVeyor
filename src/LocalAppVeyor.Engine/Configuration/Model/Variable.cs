@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace LocalAppVeyor.Configuration.Model
+namespace LocalAppVeyor.Engine.Configuration.Model
 {
     [DebuggerDisplay("Name = {Name}, Value = {Value}, IsSecure = {IsSecuredValue}")]
     public class Variable

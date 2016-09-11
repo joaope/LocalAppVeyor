@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
-using LocalAppVeyor.Configuration.Model;
-using LocalAppVeyor.Configuration.Reader.Internal;
-using LocalAppVeyor.Configuration.Reader.Internal.Model;
+using LocalAppVeyor.Engine.Configuration.Model;
+using LocalAppVeyor.Engine.Configuration.Reader.Internal;
+using LocalAppVeyor.Engine.Configuration.Reader.Internal.Model;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 
-namespace LocalAppVeyor.Configuration.Reader
+namespace LocalAppVeyor.Engine.Configuration.Reader
 {
     public class BuildConfigurationYamlReader : IBuildConfigurationReader
     {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using LocalAppVeyor.Configuration.Model;
+using LocalAppVeyor.Engine.Configuration.Model;
 
-namespace LocalAppVeyor.Configuration.Reader.Internal.Model
+namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
 {
     internal class InternalScriptBlock : List<InternalScriptLine>
     {

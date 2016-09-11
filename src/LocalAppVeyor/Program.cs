@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
-using LocalAppVeyor.Configuration.Model;
-using LocalAppVeyor.Configuration.Reader;
-using LocalAppVeyor.Pipeline;
-using LocalAppVeyor.Pipeline.Output;
+using LocalAppVeyor.Engine;
+using LocalAppVeyor.Engine.Configuration.Model;
+using LocalAppVeyor.Engine.Configuration.Reader;
+using LocalAppVeyor.Engine.Pipeline;
 using Microsoft.Extensions.CommandLineUtils;
 
-namespace LocalAppVeyor.Console
+namespace LocalAppVeyor
 {
     public class Program
     {
@@ -14,7 +14,7 @@ namespace LocalAppVeyor.Console
 
         public static void Main(string[] args)
         {
-            var app = new CommandLineApplication
+            var app = new CommandLineApplication(false)
             {
                 Name = "LocalAppVeyor",
                 FullName = "LocalAppVeyor",
@@ -40,7 +40,7 @@ namespace LocalAppVeyor.Console
                     var engineConfiguration = TryGetEngineConfigurationOrTerminate(repositoryPath.Value());
                     var buildConfiguration = TryGetBuildConfigurationOrTerminate(engineConfiguration.RepositoryDirectoryPath);
 
-                    var engine = new Engine(
+                    var engine = new Engine.Pipeline.Engine(
                         engineConfiguration,
                         buildConfiguration);
 

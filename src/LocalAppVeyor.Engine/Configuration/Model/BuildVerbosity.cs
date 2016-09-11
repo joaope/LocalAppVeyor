@@ -1,4 +1,4 @@
-﻿namespace LocalAppVeyor.Configuration.Model
+﻿namespace LocalAppVeyor.Engine.Configuration.Model
 {
     public enum BuildVerbosity
     {

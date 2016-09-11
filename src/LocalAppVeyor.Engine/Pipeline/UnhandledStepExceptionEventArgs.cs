@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LocalAppVeyor.Pipeline
+namespace LocalAppVeyor.Engine.Pipeline
 {
     public class UnhandledStepExceptionEventArgs
     {

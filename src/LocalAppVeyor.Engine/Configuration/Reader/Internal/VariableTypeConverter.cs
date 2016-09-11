@@ -1,10 +1,10 @@
 ﻿using System;
-using LocalAppVeyor.Configuration.Reader.Internal.Model;
+using LocalAppVeyor.Engine.Configuration.Reader.Internal.Model;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
-namespace LocalAppVeyor.Configuration.Reader.Internal
+namespace LocalAppVeyor.Engine.Configuration.Reader.Internal
 {
     internal class VariableTypeConverter : IYamlTypeConverter
     {

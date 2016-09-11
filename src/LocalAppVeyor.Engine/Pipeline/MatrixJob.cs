@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using LocalAppVeyor.Configuration.Model;
+using LocalAppVeyor.Engine.Configuration.Model;
 
-namespace LocalAppVeyor.Pipeline
+namespace LocalAppVeyor.Engine.Pipeline
 {
     public sealed class MatrixJob
     {

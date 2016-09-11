@@ -1,7 +1,7 @@
 ﻿using System;
-using LocalAppVeyor.Configuration.Model;
+using LocalAppVeyor.Engine.Configuration.Model;
 
-namespace LocalAppVeyor.Pipeline.Internal
+namespace LocalAppVeyor.Engine.Pipeline.Internal
 {
     internal sealed class AfterBuildStep : ScriptBlockExecuterStep
     {

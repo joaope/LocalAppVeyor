@@ -1,7 +1,7 @@
 ﻿using System;
-using LocalAppVeyor.Pipeline.Output;
+using LocalAppVeyor.Engine.Pipeline;
 
-namespace LocalAppVeyor.Console
+namespace LocalAppVeyor
 {
     public class ConsoleOutputter : IPipelineOutputter
     {

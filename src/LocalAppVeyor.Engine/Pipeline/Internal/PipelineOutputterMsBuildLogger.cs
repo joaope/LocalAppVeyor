@@ -1,10 +1,9 @@
 ﻿using System;
-using LocalAppVeyor.Configuration.Model;
-using LocalAppVeyor.Pipeline.Output;
+using LocalAppVeyor.Engine.Configuration.Model;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging;
 
-namespace LocalAppVeyor.Pipeline.Internal
+namespace LocalAppVeyor.Engine.Pipeline.Internal
 {
     internal class PipelineOutputterMsBuildLogger : ConsoleLogger
     {

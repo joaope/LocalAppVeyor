@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LocalAppVeyor.Configuration.Model;
-using LocalAppVeyor.Configuration.Reader;
-using LocalAppVeyor.Pipeline.Internal;
+using LocalAppVeyor.Engine.Configuration.Model;
+using LocalAppVeyor.Engine.Configuration.Reader;
+using LocalAppVeyor.Engine.Pipeline.Internal;
 
-namespace LocalAppVeyor.Pipeline
+namespace LocalAppVeyor.Engine.Pipeline
 {
     public sealed class Engine
     {
