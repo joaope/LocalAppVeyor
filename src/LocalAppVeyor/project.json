@@ -31,8 +31,7 @@
 
     "dependencies": {
         "YamlDotNet": "4.0.0",
-        "Microsoft.Build": "14.3.0",
-        "CommandLineParser": "2.0.275-beta"
+        "Microsoft.Build": "14.3.0"
     },
 
     "frameworks": {
@@ -40,7 +39,7 @@
             "imports": [ "dotnet" ]
         },
         "netstandard13": {
-            "imports": [ "dotnet", "dnx451" ],
+            "imports": [ "dotnet" ],
             "dependencies": {
                 "NETStandard.Library": "1.6.0",
                 "System.IO.FileSystem": "4.0.1",
