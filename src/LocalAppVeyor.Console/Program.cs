@@ -39,7 +39,7 @@ namespace LocalAppVeyor.Console
 
             try
             {
-                configuration = new BuildConfigurationYamlReader(@"C:\Users\JoaoP\Desktop\app\appveyor.yml")
+                configuration = new BuildConfigurationYamlReader(appVeyorYml)
                     .GetBuildConfiguration();
             }
             catch (LocalAppVeyorException)
