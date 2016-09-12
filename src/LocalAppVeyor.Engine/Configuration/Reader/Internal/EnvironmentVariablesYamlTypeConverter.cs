@@ -15,6 +15,7 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal
         {
             deserializer = new DeserializerBuilder()
                 .IgnoreUnmatchedProperties()
+                .WithTypeConverter(new VariableTypeConverter())
                 .Build();
         }
 
