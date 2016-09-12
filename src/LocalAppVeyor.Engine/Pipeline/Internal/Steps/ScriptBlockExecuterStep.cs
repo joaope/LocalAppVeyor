@@ -17,20 +17,17 @@ namespace LocalAppVeyor.Engine.Pipeline.Internal.Steps
             {
                 foreach (var scriptLine in scriptBlock)
                 {
-                    var result = true;
-
-                    if (scriptLine.ScriptType == ScriptType.Batch)
+                    if (string.IsNullOrEmpty(scriptLine.Script))
                     {
-                        result = ExecuteBatchScript(executionContext, scriptLine.Script);
-                    }
-                    else if (scriptLine.ScriptType == ScriptType.PowerShell)
-                    {
-                        result = ExecutePowerShellScript(executionContext, scriptLine.Script);
+                        return true;
                     }
 
-                    if (!result)
+                    switch (scriptLine.ScriptType)
                     {
-                        return false;
+                        case ScriptType.Batch:
+                            return ExecuteBatchScript(executionContext, scriptLine.Script);
+                        case ScriptType.PowerShell:
+                            return ExecutePowerShellScript(executionContext, scriptLine.Script);
                     }
                 }
             }

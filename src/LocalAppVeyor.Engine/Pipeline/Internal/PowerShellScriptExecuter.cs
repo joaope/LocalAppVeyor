@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Management.Automation;
+using Debugger = System.Diagnostics.Debugger;
 
 namespace LocalAppVeyor.Engine.Pipeline.Internal
 {
@@ -13,7 +14,7 @@ namespace LocalAppVeyor.Engine.Pipeline.Internal
         {
             using (var powerShell = PowerShell.Create())
             {
-                var errors = false;
+                var errorsOccured = false;
 
                 powerShell.AddScript(script);
 
@@ -25,12 +26,12 @@ namespace LocalAppVeyor.Engine.Pipeline.Internal
                 powerShell.Streams.Error.DataAdded += (sender, args) =>
                 {
                     onOutputDataReceived(powerShell.Streams.Error[args.Index].ErrorDetails.Message);
-                    errors = true;
+                    errorsOccured = true;
                 };
 
                 powerShell.Invoke();
 
-                return errors;
+                return errorsOccured;
             }
         }
     }
