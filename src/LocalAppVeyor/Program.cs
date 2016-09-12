@@ -46,7 +46,7 @@ namespace LocalAppVeyor
 
                     return engine.Start() ? 0 : 1;
                 });
-            });
+            }, false);
 
             app.OnExecute(() =>
             {
