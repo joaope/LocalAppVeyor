@@ -1,16 +1,18 @@
-﻿using System;
-using LocalAppVeyor.Engine.Configuration.Model;
+﻿using LocalAppVeyor.Engine.Configuration.Model;
 
-namespace LocalAppVeyor.Engine.Pipeline.Internal
+namespace LocalAppVeyor.Engine.Pipeline.Internal.Steps
 {
-    internal abstract class ScriptBlockExecuterStep : InternalEngineStep
+    internal abstract class ScriptBlockExecuterStep : IInternalEngineStep
     {
-        public abstract Func<ExecutionContext, ScriptBlock> RetrieveScriptBlock { get; }
+        private readonly ScriptBlock scriptBlock;
 
-        public override bool Execute(ExecutionContext executionContext)
+        protected ScriptBlockExecuterStep(ScriptBlock scriptBlock)
         {
-            var scriptBlock = RetrieveScriptBlock(executionContext);
+            this.scriptBlock = scriptBlock;
+        }
 
+        public bool Execute(ExecutionContext executionContext)
+        {
             if (scriptBlock != null)
             {
                 foreach (var scriptLine in scriptBlock)
@@ -36,7 +38,7 @@ namespace LocalAppVeyor.Engine.Pipeline.Internal
             return true;
         }
 
-        private bool ExecuteBatchScript(ExecutionContext executionContext, string script)
+        private static bool ExecuteBatchScript(ExecutionContext executionContext, string script)
         {
             return BatchScriptExecuter.Execute(
                 executionContext.CloneDirectory,
@@ -57,7 +59,7 @@ namespace LocalAppVeyor.Engine.Pipeline.Internal
                 });
         }
 
-        private bool ExecutePowerShellScript(ExecutionContext executionContext, string script)
+        private static bool ExecutePowerShellScript(ExecutionContext executionContext, string script)
         {
             return PowerShellScriptExecuter.Execute(
                 executionContext.CloneDirectory,

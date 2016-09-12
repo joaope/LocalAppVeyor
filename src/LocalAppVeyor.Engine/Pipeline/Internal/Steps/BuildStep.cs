@@ -3,13 +3,11 @@ using System.IO;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
 
-namespace LocalAppVeyor.Engine.Pipeline.Internal
+namespace LocalAppVeyor.Engine.Pipeline.Internal.Steps
 {
-    internal class BuildStep : InternalEngineStep
+    internal class BuildStep : IInternalEngineStep
     {
-        public override string Name => "Build";
-
-        public override bool Execute(ExecutionContext executionContext)
+        public bool Execute(ExecutionContext executionContext)
         {
             var platform = executionContext.CurrentJob.Platform;
             var configuration = executionContext.CurrentJob.Configuration;

@@ -1,20 +1,26 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
-namespace LocalAppVeyor.Engine.Pipeline.Internal
+namespace LocalAppVeyor.Engine.Pipeline.Internal.Steps
 {
-    internal class CloneFolderStep : InternalEngineStep
+    internal class CloneFolderStep : IInternalEngineStep
     {
-        public override string Name => "Clone";
-
-        public override bool Execute(ExecutionContext executionContext)
+        public bool Execute(ExecutionContext executionContext)
         {
             executionContext.Outputter.Write($"Cloning '{executionContext.RepositoryDirectory}' in to '{executionContext.CloneDirectory}'...");
-            Clone(executionContext.RepositoryDirectory, executionContext.CloneDirectory);
-            executionContext.Outputter.Write("Cloning finished.");
 
-            executionContext.Outputter.Write("Working directory changed to be cloning directory.");
+            try
+            {
+                Clone(executionContext.RepositoryDirectory, executionContext.CloneDirectory);
 
-            return true;
+                executionContext.Outputter.Write("Cloning finished.");
+                return true;
+            }
+            catch (Exception e)
+            {
+                executionContext.Outputter.WriteError($"Error while cloning folder: {e.Message}");
+                return false;
+            }
         }
 
         private static void Clone(string source, string destination)

@@ -4,16 +4,52 @@ using System.Linq;
 using LocalAppVeyor.Engine.Configuration.Model;
 using LocalAppVeyor.Engine.Configuration.Reader;
 using LocalAppVeyor.Engine.Pipeline.Internal;
+using LocalAppVeyor.Engine.Pipeline.Internal.KnownExceptions;
+using LocalAppVeyor.Engine.Pipeline.Internal.Steps;
 
 namespace LocalAppVeyor.Engine.Pipeline
 {
     public sealed class Engine
     {
-        public event UnhandledStepExceptionHandler UnhandledStepExceptionReceived;
-
         private readonly BuildConfiguration buildConfiguration;
 
         private readonly EngineConfiguration engineConfiguration;
+
+        private MatrixJob[] jobs;
+
+        public MatrixJob[] Jobs
+        {
+            get
+            {
+                if (jobs != null)
+                {
+                    return jobs;
+                }
+
+                var environmentsVariables = buildConfiguration.EnvironmentVariables.Matrix.Count > 0
+                    ? buildConfiguration.EnvironmentVariables.Matrix.ToArray()
+                    : new IReadOnlyCollection<Variable>[] { null };
+                var configurations = buildConfiguration.Configurations.Count > 0
+                    ? buildConfiguration.Configurations.ToArray()
+                    : new string[] { null };
+                var platforms = buildConfiguration.Platforms.Count > 0
+                    ? buildConfiguration.Platforms.ToArray()
+                    : new string[] { null };
+                var oses = buildConfiguration.OperatingSystems.Count > 0
+                    ? buildConfiguration.OperatingSystems.ToArray()
+                    : new string[] { null };
+
+                jobs = (
+                        from environmentVariables in environmentsVariables
+                        from configuration in configurations
+                        from platform in platforms
+                        from os in oses
+                        select new MatrixJob(os, environmentVariables, configuration, platform))
+                    .ToArray();
+
+                return jobs;
+            }
+        }
 
         public Engine(
             EngineConfiguration engineConfiguration,
@@ -33,78 +69,91 @@ namespace LocalAppVeyor.Engine.Pipeline
             this.engineConfiguration = engineConfiguration;
         }
 
-        public bool Start()
+        public JobExecutionResult ExecuteJob(MatrixJob job)
         {
             var executionContext = new ExecutionContext(
+                job,
                 buildConfiguration,
                 engineConfiguration.Outputter,
                 engineConfiguration.RepositoryDirectoryPath,
                 !string.IsNullOrEmpty(buildConfiguration.CloneFolder) ? buildConfiguration.CloneFolder : @"C:\Projects\LocalAppVeyorTempClone");
 
-            var environmentsVariables = buildConfiguration.EnvironmentVariables.Matrix.Count > 0
-                ? buildConfiguration.EnvironmentVariables.Matrix.ToArray()
-                : new IReadOnlyCollection<Variable>[] { null };
-            var configurations = buildConfiguration.Configurations.Count > 0
-                ? buildConfiguration.Configurations.ToArray()
-                : new string[] { null };
-            var platforms = buildConfiguration.Platforms.Count > 0
-                ? buildConfiguration.Platforms.ToArray()
-                : new string[] { null };
-            var oses = buildConfiguration.OperatingSystems.Count > 0
-                ? buildConfiguration.OperatingSystems.ToArray()
-                : new string[] { null };
-
-            // lets get inside the matrix
-            foreach (var environmentVariables in environmentsVariables)
-            foreach (var configuration in configurations)
-            foreach (var platform in platforms)
-            foreach (var os in oses)
+            try
             {
-                // Update context with new build state
-                executionContext.CurrentJob = new MatrixJob(environmentVariables, configuration, platform, os);
-
-                try
-                {
-                    ExecuteBuild(executionContext);
-                }
-                catch (Exception e)
-                {
-                    executionContext.Outputter.WriteError($"Unhandled exception: {e.Message}");
-
-                    var eventArgs = new UnhandledStepExceptionEventArgs(e);
-                    UnhandledStepExceptionReceived?.Invoke(this, eventArgs);
-                                
-                    // someone handled this exception and chose to continue
-                    if (eventArgs.ContinueExecution)
-                    {
-                        executionContext.Outputter.WriteWarning("Continuing executing after recovering from exception...");
-                    }
-                    // fast_finish is set on configuration
-                    else if (buildConfiguration.Matrix.IsFastFinish)
-                    {
-                        goto FastFinish;
-                    }
-                    // otherwise just continue to next build from matrix
-                    else
-                    {
-                        break;
-                    }
-                }
+                return ExecuteBuildPipeline(executionContext)
+                    ? JobExecutionResult.CreateSuccess(job)
+                    : JobExecutionResult.CreateFailure(job);
             }
-
-            engineConfiguration.Outputter.Write("Build execution finished.");
-            return true;
-
-            FastFinish:
+            catch (SolutionNotFoundException)
             {
-                return false;
+                return JobExecutionResult.CreateSolutionNotFound(job);
+            }
+            catch (Exception e)
+            {
+                return JobExecutionResult.CreateUnhandledException(job, e);
             }
         }
 
-        private void ExecuteBuild(ExecutionContext executionContext)
+        public JobExecutionResult ExecuteJob(int jobIndex)
+        {
+            if (jobIndex < 0 || jobIndex >= Jobs.Length)
+            {
+                return JobExecutionResult.CreateJobNotFound();
+            }
+
+            return ExecuteJob(Jobs[jobIndex]);
+        }
+
+        public JobExecutionResult[] ExecuteAllJobs()
+        {
+            var results = new JobExecutionResult[Jobs.Length];
+
+            for (var i = 0; i < Jobs.Length; i++)
+            {
+                var job = Jobs[i];
+
+                var result = results[i] = ExecuteJob(job);
+
+                // if success, continue to next one 
+                if (result.ResultType == JobExecutionResultType.Success)
+                {
+                    continue;
+                }
+
+                // if solution was not found it's not worth the trouble of continuing on
+                // as the same will happen for remaining jobs, just return same result on all of them
+                if (result.ResultType == JobExecutionResultType.SolutionFileNotFound)
+                {
+                    return Jobs
+                        .Select(JobExecutionResult.CreateSolutionNotFound)
+                        .ToArray();
+                }
+
+                // Something happened. If fast_finish is disabled we continue
+                if (!buildConfiguration.Matrix.IsFastFinish)
+                {
+                    continue;
+                }
+
+                // otherwise, mark remaining jobs as NotExecuted and leave build
+                for (++i; i < Jobs.Length; i++)
+                {
+                    results[i] = JobExecutionResult.CreateNotExecuted(Jobs[i]);
+                }
+
+                break;
+            }
+
+            return results;
+        }
+
+        private bool ExecuteBuildPipeline(ExecutionContext executionContext)
         {
             // initialize standard variables
-            ExecuteInternalStep(new InitStandardEnvironmentVariablesStep(), executionContext);
+            if (!new InitStandardEnvironmentVariablesStep().Execute(executionContext))
+            {
+                return false;
+            }
 
             // initialize environment variables (both common and build specific)
             foreach (
@@ -115,34 +164,52 @@ namespace LocalAppVeyor.Engine.Pipeline
             }
             
             // Init
-            ExecuteInternalStep(new InitStep(), executionContext);
+            if (!new InitStep(buildConfiguration.InitializationScript).Execute(executionContext))
+            {
+                return false;
+            }
 
             // Clone
-            ExecuteInternalStep(new CloneFolderStep(), executionContext);
+            if (!new CloneFolderStep().Execute(executionContext))
+            {
+                return false;
+            }
 
             // Install
-            ExecuteInternalStep(new InstallStep(), executionContext);
+            if (!new InstallStep(buildConfiguration.InstallScript).Execute(executionContext))
+            {
+                return false;
+            }
 
             // Before build
-            ExecuteInternalStep(new BeforeBuildStep(), executionContext);
+            if (new BeforeBuildStep(buildConfiguration.BeforeBuildScript).Execute(executionContext))
+            {
+                return false;
+            }
 
             // Build
             if (buildConfiguration.Build.IsAutomaticBuildOff)
             {
-                ExecuteInternalStep(new BuildScriptStep(), executionContext);
+                if (!new BuildScriptStep(buildConfiguration.BuildScript).Execute(executionContext))
+                {
+                    return false;
+                }
             }
             else
             {
-                ExecuteInternalStep(new BuildStep(), executionContext);
+                if (!new BuildStep().Execute(executionContext))
+                {
+                    return false;
+                }
             }
 
             // After Build
-            ExecuteInternalStep(new AfterBuildStep(), executionContext);
-        }
+            if (!new AfterBuildStep(buildConfiguration.AfterBuildScript).Execute(executionContext))
+            {
+                return false;
+            }
 
-        private void ExecuteInternalStep(InternalEngineStep step, ExecutionContext executionContext)
-        {
-            step.Execute(executionContext, UnhandledStepExceptionReceived);
+            return true;
         }
     }
 }

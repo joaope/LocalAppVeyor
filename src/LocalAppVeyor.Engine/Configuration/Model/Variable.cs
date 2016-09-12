@@ -1,8 +1,5 @@
-﻿using System.Diagnostics;
-
-namespace LocalAppVeyor.Engine.Configuration.Model
+﻿namespace LocalAppVeyor.Engine.Configuration.Model
 {
-    [DebuggerDisplay("Name = {Name}, Value = {Value}, IsSecure = {IsSecuredValue}")]
     public class Variable
     {
         public string Name { get; }    
@@ -16,6 +13,11 @@ namespace LocalAppVeyor.Engine.Configuration.Model
             Name = name;
             Value = value;
             IsSecuredValue = isSecuredValue;
+        }
+
+        public override string ToString()
+        {
+            return $"{Name}={Value}";
         }
     }
 }

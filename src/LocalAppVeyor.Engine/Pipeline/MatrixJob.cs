@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using LocalAppVeyor.Engine.Configuration.Model;
 
 namespace LocalAppVeyor.Engine.Pipeline
@@ -13,16 +14,66 @@ namespace LocalAppVeyor.Engine.Pipeline
 
         public IReadOnlyCollection<Variable> Variables { get; }
 
-        public MatrixJob(
+        private string name;
+
+        public string Name
+        {
+            get
+            {
+                if (name != null)
+                {
+                    return name;
+                }
+
+                if (string.IsNullOrEmpty(OperatingSystem) &&
+                    string.IsNullOrEmpty(Platform) &&
+                    string.IsNullOrEmpty(Configuration) &&
+                    Variables.Count == 0)
+                {
+                    return "Default Job";
+                }
+
+                var nameParts = new List<string>();
+
+                if (!string.IsNullOrEmpty(OperatingSystem))
+                {
+                    nameParts.Add($"OS: {OperatingSystem}");
+                }
+
+                if (Variables.Count > 0)
+                {
+                    nameParts.Add($"Environment: {string.Join(", ", Variables.Select(v => v.ToString()))}");
+                }
+
+                if (!string.IsNullOrEmpty(Configuration))
+                {
+                    nameParts.Add($"Configuration: {Configuration}");
+                }
+
+                if (!string.IsNullOrEmpty(Platform))
+                {
+                    nameParts.Add($"Platform: {Platform}");
+                }
+
+                return name = string.Join("; ", nameParts);
+            }
+        }
+
+        internal MatrixJob(
+            string operatingSystem,
             IReadOnlyCollection<Variable> variables,
             string configuration,
-            string platform,
-            string operatingSystem)
+            string platform)
         {
             OperatingSystem = operatingSystem;
             Platform = platform;
             Configuration = configuration;
             Variables = variables ?? new Variable[0];
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

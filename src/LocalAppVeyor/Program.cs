@@ -26,7 +26,37 @@ namespace LocalAppVeyor
 
             app.Command("build", conf =>
             {
-                conf.Description = "Executes appveyor.yml build script";
+                conf.Description = "Executes one or all build jobs on specified repository directory";
+
+                var repositoryPath = conf.Option(
+                    "--dir",
+                    "Repository directory where appveyor.yml is. If not specified, current directory is used",
+                    CommandOptionType.SingleValue);
+
+                var jobsIndexes = conf.Option(
+                    "--job",
+                    "Executes specified build jobs. Use 'jobs' command to list all available jobs.",
+                    CommandOptionType.MultipleValue);
+
+                conf.OnExecute(() =>
+                {
+                    conf.ShowRootCommandFullNameAndVersion();
+
+                    var engineConfiguration = TryGetEngineConfigurationOrTerminate(repositoryPath.Value());
+                    var buildConfiguration = TryGetBuildConfigurationOrTerminate(engineConfiguration.RepositoryDirectoryPath);
+
+                    var engine = new Engine.Pipeline.Engine(
+                        engineConfiguration,
+                        buildConfiguration);
+
+                    engine.ExecuteAllJobs(); // TODO: do something with jobs results
+                    return 0;
+                });
+            }, false);
+
+            app.Command("jobs", conf =>
+            {
+                conf.Description = "List all build jobs available to execution.";
 
                 var repositoryPath = conf.Option(
                     "--dir",
@@ -44,8 +74,16 @@ namespace LocalAppVeyor
                         engineConfiguration,
                         buildConfiguration);
 
-                    return engine.Start() ? 0 : 1;
+                    engineConfiguration.Outputter.Write("Available jobs:");
+                    for (var i = 0; i < engine.Jobs.Length; i++)
+                    {
+                        engineConfiguration.Outputter.Write(
+                            $"[{i}]: {engine.Jobs[i].Name}");
+                    }
+
+                    return 0;
                 });
+
             }, false);
 
             app.OnExecute(() =>
@@ -76,8 +114,7 @@ namespace LocalAppVeyor
             }
             catch (LocalAppVeyorException)
             {
-                PipelineOutputter.WriteError($"Error while parsing '{appVeyorYml}' file.");
-                PipelineOutputter.WriteError("Build aborted.");
+                PipelineOutputter.WriteError($"Error while parsing '{appVeyorYml}' file. Build aborted.");
                 Environment.Exit(1);
             }
 
@@ -94,15 +131,10 @@ namespace LocalAppVeyor
                     PipelineOutputter.WriteError($"Repository directory '{repositoryPath}' not found. Build aborted.");
                     Environment.Exit(1);
                 }
-                else
-                {
-                    PipelineOutputter.Write($"Using '{repositoryPath}' as the repository path.");
-                }
             }
             else
             {
                 repositoryPath = Directory.GetCurrentDirectory();
-                PipelineOutputter.Write($"Current directory '{repositoryPath}' will be used as repository path.");
             }
 
             return new EngineConfiguration(repositoryPath, PipelineOutputter);
