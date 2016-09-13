@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using LocalAppVeyor.Engine;
-using LocalAppVeyor.Engine.Configuration.Model;
+using LocalAppVeyor.Engine.Configuration;
 using LocalAppVeyor.Engine.Configuration.Reader;
 using Microsoft.Extensions.CommandLineUtils;
 

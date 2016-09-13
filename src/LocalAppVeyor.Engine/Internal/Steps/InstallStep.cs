@@ -1,4 +1,4 @@
-﻿using LocalAppVeyor.Engine.Configuration.Model;
+﻿using LocalAppVeyor.Engine.Configuration;
 
 namespace LocalAppVeyor.Engine.Internal.Steps
 {

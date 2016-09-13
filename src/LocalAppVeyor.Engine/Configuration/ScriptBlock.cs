@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LocalAppVeyor.Engine.Configuration.Model
+namespace LocalAppVeyor.Engine.Configuration
 {
     public class ScriptBlock : List<ScriptLine>
     {

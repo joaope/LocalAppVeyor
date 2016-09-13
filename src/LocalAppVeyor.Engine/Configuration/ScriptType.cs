@@ -1,4 +1,4 @@
-﻿namespace LocalAppVeyor.Engine.Configuration.Model
+﻿namespace LocalAppVeyor.Engine.Configuration
 {
     public enum ScriptType
     {

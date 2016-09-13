@@ -1,5 +1,5 @@
 ﻿using System;
-using LocalAppVeyor.Engine.Configuration.Model;
+using LocalAppVeyor.Engine.Configuration;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging;
 

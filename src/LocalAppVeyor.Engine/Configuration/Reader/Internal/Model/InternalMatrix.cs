@@ -1,5 +1,4 @@
-﻿using LocalAppVeyor.Engine.Configuration.Model;
-using YamlDotNet.Serialization;
+﻿using YamlDotNet.Serialization;
 
 namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
 {

@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using System.Linq;
-using LocalAppVeyor.Engine.Configuration.Model;
 
 namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
 {

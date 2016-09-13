@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LocalAppVeyor.Engine.Configuration.Model;
+using LocalAppVeyor.Engine.Configuration;
 using LocalAppVeyor.Engine.Configuration.Reader;
 using LocalAppVeyor.Engine.Internal;
 using LocalAppVeyor.Engine.Internal.KnownExceptions;

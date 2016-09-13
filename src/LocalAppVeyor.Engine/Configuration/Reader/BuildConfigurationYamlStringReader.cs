@@ -1,5 +1,4 @@
-﻿using LocalAppVeyor.Engine.Configuration.Model;
-using LocalAppVeyor.Engine.Configuration.Reader.Internal;
+﻿using LocalAppVeyor.Engine.Configuration.Reader.Internal;
 using LocalAppVeyor.Engine.Configuration.Reader.Internal.Model;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;

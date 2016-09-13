@@ -1,5 +1,4 @@
 ﻿using System;
-using LocalAppVeyor.Engine.Configuration.Model;
 
 namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
 {
