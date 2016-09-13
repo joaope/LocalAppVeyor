@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Security;
 
-namespace LocalAppVeyor.Engine.Pipeline.Internal.Steps
+namespace LocalAppVeyor.Engine.Internal.Steps
 {
     internal class InitStandardEnvironmentVariablesStep : IInternalEngineStep
     {

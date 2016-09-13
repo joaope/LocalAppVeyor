@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using LocalAppVeyor.Engine.Configuration.Model;
 using LocalAppVeyor.Engine.Configuration.Reader;
-using LocalAppVeyor.Engine.Pipeline.Internal;
-using LocalAppVeyor.Engine.Pipeline.Internal.KnownExceptions;
-using LocalAppVeyor.Engine.Pipeline.Internal.Steps;
+using LocalAppVeyor.Engine.Internal;
+using LocalAppVeyor.Engine.Internal.KnownExceptions;
+using LocalAppVeyor.Engine.Internal.Steps;
 
-namespace LocalAppVeyor.Engine.Pipeline
+namespace LocalAppVeyor.Engine
 {
     public sealed class JobStartingEventArgs : EventArgs
     {

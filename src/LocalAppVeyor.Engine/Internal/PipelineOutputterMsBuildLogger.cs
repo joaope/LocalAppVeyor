@@ -3,7 +3,7 @@ using LocalAppVeyor.Engine.Configuration.Model;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging;
 
-namespace LocalAppVeyor.Engine.Pipeline.Internal
+namespace LocalAppVeyor.Engine.Internal
 {
     internal class PipelineOutputterMsBuildLogger : ConsoleLogger
     {

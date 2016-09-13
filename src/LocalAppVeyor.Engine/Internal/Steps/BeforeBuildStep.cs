@@ -1,6 +1,6 @@
 ﻿using LocalAppVeyor.Engine.Configuration.Model;
 
-namespace LocalAppVeyor.Engine.Pipeline.Internal.Steps
+namespace LocalAppVeyor.Engine.Internal.Steps
 {
     internal sealed class BeforeBuildStep : ScriptBlockExecuterStep
     {

@@ -1,5 +1,5 @@
 ﻿using System;
-using LocalAppVeyor.Engine.Pipeline;
+using LocalAppVeyor.Engine;
 
 namespace LocalAppVeyor
 {

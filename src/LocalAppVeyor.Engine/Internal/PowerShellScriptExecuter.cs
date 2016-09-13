@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Management.Automation;
-using Debugger = System.Diagnostics.Debugger;
 
-namespace LocalAppVeyor.Engine.Pipeline.Internal
+namespace LocalAppVeyor.Engine.Internal
 {
     internal static class PowerShellScriptExecuter
     {

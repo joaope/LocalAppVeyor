@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "LocalAppVeyor": {
+      "commandName": "Project",
+      "commandLineArgs": "build --help"
+    }
+  }
+}

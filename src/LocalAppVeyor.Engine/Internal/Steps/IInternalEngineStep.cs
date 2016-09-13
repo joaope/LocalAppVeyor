@@ -1,4 +1,4 @@
-﻿namespace LocalAppVeyor.Engine.Pipeline.Internal.Steps
+﻿namespace LocalAppVeyor.Engine.Internal.Steps
 {
     internal interface IInternalEngineStep
     {

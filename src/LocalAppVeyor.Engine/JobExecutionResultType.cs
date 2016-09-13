@@ -1,4 +1,4 @@
-﻿namespace LocalAppVeyor.Engine.Pipeline
+﻿namespace LocalAppVeyor.Engine
 {
     public enum JobExecutionResultType
     {

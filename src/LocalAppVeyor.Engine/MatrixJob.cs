@@ -2,7 +2,7 @@
 using System.Linq;
 using LocalAppVeyor.Engine.Configuration.Model;
 
-namespace LocalAppVeyor.Engine.Pipeline
+namespace LocalAppVeyor.Engine
 {
     public sealed class MatrixJob
     {

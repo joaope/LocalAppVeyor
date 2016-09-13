@@ -5,7 +5,6 @@ using System.Linq;
 using LocalAppVeyor.Engine;
 using LocalAppVeyor.Engine.Configuration.Model;
 using LocalAppVeyor.Engine.Configuration.Reader;
-using LocalAppVeyor.Engine.Pipeline;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace LocalAppVeyor
@@ -61,7 +60,7 @@ namespace LocalAppVeyor
                     var engineConfiguration = TryGetEngineConfigurationOrTerminate(repositoryPath.Value());
                     var buildConfiguration = TryGetBuildConfigurationOrTerminate(engineConfiguration.RepositoryDirectoryPath);
 
-                    var engine = new Engine.Pipeline.Engine(
+                    var engine = new Engine.Engine(
                         engineConfiguration,
                         buildConfiguration);
 
@@ -142,7 +141,7 @@ namespace LocalAppVeyor
             var buildConfiguration =
                 TryGetBuildConfigurationOrTerminate(engineConfiguration.RepositoryDirectoryPath);
 
-            var engine = new Engine.Pipeline.Engine(
+            var engine = new Engine.Engine(
                 engineConfiguration,
                 buildConfiguration);
 

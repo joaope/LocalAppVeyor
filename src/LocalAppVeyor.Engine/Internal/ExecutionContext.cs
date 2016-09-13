@@ -1,7 +1,7 @@
 ﻿using System;
 using LocalAppVeyor.Engine.Configuration.Model;
 
-namespace LocalAppVeyor.Engine.Pipeline.Internal
+namespace LocalAppVeyor.Engine.Internal
 {
     internal sealed class ExecutionContext
     {
