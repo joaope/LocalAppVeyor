@@ -20,7 +20,7 @@ namespace LocalAppVeyor
             {
                 Name = "LocalAppVeyor",
                 FullName = "LocalAppVeyor",
-                Description = "LocalAppVeyor allows one to run an appveyor.yml build script locally."
+                Description = "LocalAppVeyor allows one to run an appveyor.yml build script locally"
             };
 
             app.HelpOption("-?|-h|--help");
@@ -28,16 +28,17 @@ namespace LocalAppVeyor
 
             app.Command("build", conf =>
             {
-                conf.Description = "Executes one or all build jobs on specified repository directory";
+                conf.Description = "Executes appveyor.yml's build jobs from specified repository directory";
+                conf.HelpOption("-?|-h|--help");
 
                 var repositoryPath = conf.Option(
-                    "--dir",
-                    "Repository directory where appveyor.yml is. If not specified, current directory is used",
+                    "-d|--dir",
+                    "Local repository directory where appveyor.yml sits. If not specified current directory is used",
                     CommandOptionType.SingleValue);
 
                 var jobsIndexes = conf.Option(
-                    "--job",
-                    "Executes specified build jobs. Use 'jobs' command to list all available jobs.",
+                    "-j|--job",
+                    "Job to build. You can specify multiple jobs. Use 'jobs' command to list them all",
                     CommandOptionType.MultipleValue);
 
                 conf.OnExecute(() => ExecuteBuildCommand(conf, repositoryPath, jobsIndexes));
@@ -45,11 +46,12 @@ namespace LocalAppVeyor
 
             app.Command("jobs", conf =>
             {
-                conf.Description = "List all build jobs available to execution.";
+                conf.Description = "List all build jobs available to execution";
+                conf.HelpOption("-?|-h|--help");
 
                 var repositoryPath = conf.Option(
-                    "--dir",
-                    "Repository directory where appveyor.yml is. If not specified, current directory is used",
+                    "-d|--dir",
+                    "Local repository directory where appveyor.yml sits. If not specified current directory is used",
                     CommandOptionType.SingleValue);
 
                 conf.OnExecute(() =>
