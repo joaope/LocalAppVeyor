@@ -149,10 +149,10 @@ namespace LocalAppVeyor.Engine
             {
                 var job = Jobs[i];
 
-                var result = results[i] = ExecuteJob(job);
+                results[i] = ExecuteJob(job);
 
                 // if success, continue to next one 
-                if (result.ResultType == JobExecutionResultType.Success)
+                if (results[i].ResultType == JobExecutionResultType.Success)
                 {
                     continue;
                 }
