@@ -68,7 +68,7 @@ of the build pipeline. For example, things like deployment or packaging have lit
 | after_build | :white_check_mark: | |
 | before_test | :red_circle: | (_support to be added_) |
 | test | :red_circle: | (_support to be added_) |
-| test_script | :large_blue_circle: | It always tries to execute the script if exists, no matter if other test options are specified |
+| test_script | :large_blue_circle: | It will always execute if it exists, no matter if other tests options are specified. |
 | after_test | :red_circle: | (_support to be added_) |
 | on_success | :white_check_mark: | |
 | on_failure | :white_check_mark: | |
