@@ -191,14 +191,6 @@ namespace LocalAppVeyor.Engine.Pipeline
             {
                 return false;
             }
-
-            // initialize environment variables (both common and build specific)
-            foreach (
-                var variable
-                in buildConfiguration.EnvironmentVariables.CommonVariables.Concat(executionContext.CurrentJob.Variables))
-            {
-                Environment.SetEnvironmentVariable(variable.Name, variable.Value);
-            }
             
             // Init
             if (!new InitStep(buildConfiguration.InitializationScript).Execute(executionContext))

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security;
 
 namespace LocalAppVeyor.Engine.Pipeline.Internal.Steps
@@ -23,6 +24,13 @@ namespace LocalAppVeyor.Engine.Pipeline.Internal.Steps
                 if (!string.IsNullOrEmpty(executionContext.CurrentJob.Platform))
                 {
                     Environment.SetEnvironmentVariable("PLATFORM", executionContext.CurrentJob.Platform);
+                }
+
+                foreach (
+                    var variable
+                    in executionContext.BuildConfiguration.EnvironmentVariables.CommonVariables.Concat(executionContext.CurrentJob.Variables))
+                {
+                    Environment.SetEnvironmentVariable(variable.Name, variable.Value);
                 }
             }
             catch (SecurityException)
