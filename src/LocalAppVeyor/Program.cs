@@ -82,7 +82,6 @@ namespace LocalAppVeyor
             });
 
             app.Execute(args);
-            Console.Read();
         }
 
         private static BuildConfiguration TryGetBuildConfigurationOrTerminate(string repositoryPath)

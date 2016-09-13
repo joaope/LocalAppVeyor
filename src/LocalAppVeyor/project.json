@@ -3,7 +3,7 @@
     "authors": [ "joaope" ],
     "copyright": "joaope 2016",
     "title": "LocalAppVeyor",
-    "description": "Run your AppVeyor build, locally.",
+    "description": "Run your AppVeyor builds, locally.",
     "buildOptions": {
         "warningsAsErrors": false,
         "platform": "anycpu",
@@ -16,7 +16,7 @@
     },
     "packOptions": {
         "owners": [ "joaope" ],
-        "summary": "Run your AppVeyor build, locally.",
+        "summary": "Run your AppVeyor builds, locally.",
         "tags": [ "console", "appveyor", "local", "build", "api" ],
         "repository": {
             "type": "git",
