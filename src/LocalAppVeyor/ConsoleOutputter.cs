@@ -7,12 +7,12 @@ namespace LocalAppVeyor
     {
         public void SetColor(ConsoleColor color)
         {
-            System.Console.ForegroundColor = TransformColor(color, System.Console.BackgroundColor);
+            Console.ForegroundColor = TransformColor(color, Console.BackgroundColor);
         }
 
         public void ResetColor()
         {
-            System.Console.ResetColor();
+            Console.ResetColor();
         }
 
         private static ConsoleColor TransformColor(
@@ -31,27 +31,27 @@ namespace LocalAppVeyor
 
         public void Write(string message)
         {
-            System.Console.WriteLine($"{message ?? "<null>"}");
+            Console.WriteLine($"{message ?? "<null>"}");
         }
 
         public void WriteSuccess(string successMessage)
         {
             SetColor(ConsoleColor.Green);
-            System.Console.WriteLine($"{successMessage ?? "<null>"}");
+            Console.WriteLine($"{successMessage ?? "<null>"}");
             ResetColor();
         }
 
         public void WriteWarning(string warningMessage)
         {
             SetColor(ConsoleColor.Yellow);
-            System.Console.WriteLine($"{warningMessage ?? "<null>"}");
+            Console.WriteLine($"{warningMessage ?? "<null>"}");
             ResetColor();
         }
 
         public void WriteError(string errorMessage)
         {
             SetColor(ConsoleColor.Red);
-            System.Console.WriteLine($"{errorMessage ?? "<null>"}");
+            Console.WriteLine($"{errorMessage ?? "<null>"}");
             ResetColor();
         }
     }
