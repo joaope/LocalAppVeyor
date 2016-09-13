@@ -28,7 +28,7 @@ Commands:
 Use "LocalAppVeyor [command] --help" for more information about a command.
 ```
 
-### - `build` command
+### • `build` command
 This is the main console command which allows one to execute all or a smaller set of jobs from the 
 [build matrix](https://www.appveyor.com/docs/build-configuration/#build-matrix). `--job` command should be followed by a integer
 corresponding to job index as listed on `jobs` command
@@ -41,7 +41,7 @@ Options:
   -j|--job      Job to build. You can specify multiple jobs. Use 'jobs' command to list all jobs
 ```
 
-### - `jobs` command
+### • `jobs` command
 ```
 Usage: LocalAppVeyor jobs [options]
 
