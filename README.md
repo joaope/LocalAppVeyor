@@ -53,7 +53,7 @@ Options:
 ## Supported build steps
 Due to LocalAppVeyor's nature only a subset of [AppVeyor build steps](https://www.appveyor.com/docs/build-configuration/#build-pipeline)
 are supported. Some of them might get some support later in time, after consideration, but others most likely won't ever be part 
-of the build pipeline. For example, things like deployment or packaging have little to do with a local build execution.
+of the build pipeline.
 
 | Step        | Support           | Notes  |
 | ------------- |:-------------:| ----- |
