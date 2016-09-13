@@ -99,7 +99,7 @@ namespace LocalAppVeyor
 
             try
             {
-                configuration = new BuildConfigurationYamlReader(appVeyorYml)
+                configuration = new BuildConfigurationYamlFileReader(appVeyorYml)
                     .GetBuildConfiguration();
             }
             catch (LocalAppVeyorException)
