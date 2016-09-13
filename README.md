@@ -60,6 +60,7 @@ of the build pipeline. For example, things like deployment or packaging have lit
 | init_env | :white_check_mark: | Internal step where all job environment variables are initialized. As for the [standard AppVeyor variables](https://www.appveyor.com/docs/environment-variables/) these are the ones supported: `APPVEYOR`, `CI`, `APPVEYOR_BUILD_FOLDER`, `PLATFORM` and `CONFIGURATION` |
 | init | :white_check_mark: | |
 | clone | :white_check_mark: | Tries first to clone to specified `clone_folder`, if any; otherwise it will use `C:\Projects\LocalAppVeyorTempClone`. From this step on all scripts will be executed as the clone folder being the working directory. |
+| matrix | :large_blue_circle: | `fast_finish` is the only working option. Support for `allow_failures` to be added. |
 | before_build | :white_check_mark: | |
 | build | :white_check_mark: | |
 | build_script | :white_check_mark: | |
