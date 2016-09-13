@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using LocalAppVeyor.Engine;
 using LocalAppVeyor.Engine.Configuration.Model;
 using LocalAppVeyor.Engine.Configuration.Reader;
@@ -38,20 +40,7 @@ namespace LocalAppVeyor
                     "Executes specified build jobs. Use 'jobs' command to list all available jobs.",
                     CommandOptionType.MultipleValue);
 
-                conf.OnExecute(() =>
-                {
-                    conf.ShowRootCommandFullNameAndVersion();
-
-                    var engineConfiguration = TryGetEngineConfigurationOrTerminate(repositoryPath.Value());
-                    var buildConfiguration = TryGetBuildConfigurationOrTerminate(engineConfiguration.RepositoryDirectoryPath);
-
-                    var engine = new Engine.Pipeline.Engine(
-                        engineConfiguration,
-                        buildConfiguration);
-
-                    engine.ExecuteAllJobs(); // TODO: do something with jobs results
-                    return 0;
-                });
+                conf.OnExecute(() => ExecuteBuildCommand(conf, repositoryPath, jobsIndexes));
             }, false);
 
             app.Command("jobs", conf =>
@@ -93,6 +82,7 @@ namespace LocalAppVeyor
             });
 
             app.Execute(args);
+            Console.Read();
         }
 
         private static BuildConfiguration TryGetBuildConfigurationOrTerminate(string repositoryPath)
@@ -139,6 +129,90 @@ namespace LocalAppVeyor
 
             return new EngineConfiguration(repositoryPath, PipelineOutputter);
         }
-        
+
+        public static int ExecuteBuildCommand(
+            CommandLineApplication app,
+            CommandOption repositoryPathOption,
+            CommandOption jobsOption)
+        {
+            app.ShowRootCommandFullNameAndVersion();
+
+            var engineConfiguration = TryGetEngineConfigurationOrTerminate(repositoryPathOption.Value());
+            var buildConfiguration =
+                TryGetBuildConfigurationOrTerminate(engineConfiguration.RepositoryDirectoryPath);
+
+            var engine = new Engine.Pipeline.Engine(
+                engineConfiguration,
+                buildConfiguration);
+
+            engine.JobStarting += (sender, args) =>
+            {
+                PipelineOutputter.Write($"Starting '{args.Job.Name}'...");
+            };
+
+            engine.JobEnded += (sender, args) =>
+            {
+                switch (args.ExecutionResult.ResultType)
+                {
+                    case JobExecutionResultType.Success:
+                        PipelineOutputter.WriteSuccess($"Job '{args.Job.Name}' successfully executed.");
+                        break;
+                    case JobExecutionResultType.Failure:
+                        PipelineOutputter.WriteError($"Job '{args.Job.Name}' failed.");
+                        break;
+                    case JobExecutionResultType.NotExecuted:
+                        PipelineOutputter.WriteError($"Job '{args.Job.Name}' will not be executed.");
+                        break;
+                    case JobExecutionResultType.JobNotFound:
+                        PipelineOutputter.WriteError("Specified job index not found. Use 'jobs' command to list available jobs.");
+                        break;
+                    case JobExecutionResultType.SolutionFileNotFound:
+                        PipelineOutputter.WriteError("Solution was not found.");
+                        break;
+                    case JobExecutionResultType.UnhandledException:
+                        PipelineOutputter.WriteError($"Unhandled exception while executing '{args.Job.Name}': " +
+                                                     $"{args.ExecutionResult.UnhandledException.Message}");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                if (args.ExecutionResult.IsNotExecutingRemainingJobs)
+                {
+                    PipelineOutputter.WriteWarning("Remaining jobs will not execute.");
+                }
+            };
+
+            int[] jobs;
+
+            try
+            {
+                jobs = jobsOption
+                    .Values
+                    .Select(int.Parse)
+                    .ToArray();
+            }
+            catch (Exception)
+            {
+                PipelineOutputter.WriteError("Job option receives a integer as input. Use 'jobs' command to list all available jobs.");
+                return 1;
+            }
+
+            var jobsResults = new List<JobExecutionResult>();
+
+            if (jobs.Length == 0)
+            {
+                jobsResults = engine.ExecuteAllJobs().ToList();
+            }
+            else
+            {
+                foreach (var jobIndex in jobs)
+                {
+                    jobsResults.Add(engine.ExecuteJob(jobIndex));
+                }
+            }
+
+            return 0;
+        }
     }
 }

@@ -9,8 +9,35 @@ using LocalAppVeyor.Engine.Pipeline.Internal.Steps;
 
 namespace LocalAppVeyor.Engine.Pipeline
 {
+    public sealed class JobStartingEventArgs : EventArgs
+    {
+        public MatrixJob Job { get; }
+
+        public JobStartingEventArgs(MatrixJob job)
+        {
+            Job = job;
+        }  
+    }
+
+    public sealed class JobEndedEventArgs : EventArgs
+    {
+        public MatrixJob Job { get; }
+
+        public JobExecutionResult ExecutionResult { get; set; }
+
+        public JobEndedEventArgs(MatrixJob job, JobExecutionResult executionResult)
+        {
+            Job = job;
+            ExecutionResult = executionResult;
+        }
+    }
+
     public sealed class Engine
     {
+        public event EventHandler<JobStartingEventArgs> JobStarting = delegate { };
+
+        public event EventHandler<JobEndedEventArgs> JobEnded = delegate { };
+
         private readonly BuildConfiguration buildConfiguration;
 
         private readonly EngineConfiguration engineConfiguration;
@@ -69,8 +96,22 @@ namespace LocalAppVeyor.Engine.Pipeline
             this.engineConfiguration = engineConfiguration;
         }
 
+        public JobExecutionResult ExecuteJob(int jobIndex)
+        {
+            if (jobIndex < 0 || jobIndex >= Jobs.Length)
+            {
+                var result = JobExecutionResult.CreateJobNotFound();
+                JobEnded?.Invoke(this, new JobEndedEventArgs(null, result));
+                return result;
+            }
+
+            return ExecuteJob(Jobs[jobIndex]);
+        }
+
         public JobExecutionResult ExecuteJob(MatrixJob job)
         {
+            JobStarting?.Invoke(this, new JobStartingEventArgs(job));
+
             var executionContext = new ExecutionContext(
                 job,
                 buildConfiguration,
@@ -78,30 +119,26 @@ namespace LocalAppVeyor.Engine.Pipeline
                 engineConfiguration.RepositoryDirectoryPath,
                 !string.IsNullOrEmpty(buildConfiguration.CloneFolder) ? buildConfiguration.CloneFolder : @"C:\Projects\LocalAppVeyorTempClone");
 
+            JobExecutionResult executionResult;
+
             try
             {
-                return ExecuteBuildPipeline(executionContext)
+                executionResult = ExecuteBuildPipeline(executionContext)
                     ? JobExecutionResult.CreateSuccess(job)
                     : JobExecutionResult.CreateFailure(job);
             }
             catch (SolutionNotFoundException)
             {
-                return JobExecutionResult.CreateSolutionNotFound(job);
+                executionResult = JobExecutionResult.CreateSolutionNotFound(job);
             }
             catch (Exception e)
             {
-                return JobExecutionResult.CreateUnhandledException(job, e);
-            }
-        }
-
-        public JobExecutionResult ExecuteJob(int jobIndex)
-        {
-            if (jobIndex < 0 || jobIndex >= Jobs.Length)
-            {
-                return JobExecutionResult.CreateJobNotFound();
+                executionResult = JobExecutionResult.CreateUnhandledException(job, e);
             }
 
-            return ExecuteJob(Jobs[jobIndex]);
+            JobEnded?.Invoke(this, new JobEndedEventArgs(job, executionResult));
+
+            return executionResult;
         }
 
         public JobExecutionResult[] ExecuteAllJobs()

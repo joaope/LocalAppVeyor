@@ -8,6 +8,10 @@ namespace LocalAppVeyor.Engine.Pipeline
 
         public JobExecutionResultType ResultType { get; private set; }
 
+        public bool IsSuccessfulExecution => ResultType == JobExecutionResultType.Success;
+
+        public bool IsNotExecutingRemainingJobs => ResultType == JobExecutionResultType.SolutionFileNotFound;
+
         public Exception UnhandledException { get; private set; }
         
         private JobExecutionResult ()
