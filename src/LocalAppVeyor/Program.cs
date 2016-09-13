@@ -176,11 +176,6 @@ namespace LocalAppVeyor
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-
-                if (args.ExecutionResult.IsNotExecutingRemainingJobs)
-                {
-                    PipelineOutputter.WriteWarning("Remaining jobs will not execute.");
-                }
             };
 
             int[] jobs;

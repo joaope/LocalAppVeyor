@@ -157,28 +157,16 @@ namespace LocalAppVeyor.Engine
                     continue;
                 }
 
-                // if solution was not found it's not worth the trouble of continuing on
-                // as the same will happen for remaining jobs, just return same result on all of them
-                if (result.ResultType == JobExecutionResultType.SolutionFileNotFound)
+                // if fast_finish is on mark remaining jobs as NotExecuted and leave build
+                if (buildConfiguration.Matrix.IsFastFinish)
                 {
-                    return Jobs
-                        .Select(JobExecutionResult.CreateSolutionNotFound)
-                        .ToArray();
-                }
+                    for (++i; i < Jobs.Length; i++)
+                    {
+                        results[i] = JobExecutionResult.CreateNotExecuted(Jobs[i]);
+                    }
 
-                // Something happened. If fast_finish is disabled we continue
-                if (!buildConfiguration.Matrix.IsFastFinish)
-                {
-                    continue;
+                    break;
                 }
-
-                // otherwise, mark remaining jobs as NotExecuted and leave build
-                for (++i; i < Jobs.Length; i++)
-                {
-                    results[i] = JobExecutionResult.CreateNotExecuted(Jobs[i]);
-                }
-
-                break;
             }
 
             return results;
