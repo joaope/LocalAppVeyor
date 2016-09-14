@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using LocalAppVeyor.Engine.Internal.KnownExceptions;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
 
@@ -28,7 +31,12 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 
             if (string.IsNullOrEmpty(slnProjFile))
             {
-                slnProjFile = GetProjectOrSolutionFileRecursively();
+                slnProjFile = GetProjectOrSolutionFileRecursively(executionContext);
+
+                if (string.IsNullOrEmpty(slnProjFile))
+                {
+                    throw new SolutionNotFoundException();
+                }
             }
 
             // MSBuild
@@ -53,8 +61,7 @@ namespace LocalAppVeyor.Engine.Internal.Steps
                     new PipelineOutputterMsBuildLogger(
                         executionContext.BuildConfiguration.Build.Verbosity, 
                         executionContext.Outputter)
-                },
-                
+                }
             };
 
             var buildResult = BuildManager.DefaultBuildManager.Build(buildParameters, buildRequest);
@@ -62,9 +69,22 @@ namespace LocalAppVeyor.Engine.Internal.Steps
             return buildResult.OverallResult == BuildResultCode.Success;
         }
 
-        private string GetProjectOrSolutionFileRecursively()
+        private string GetProjectOrSolutionFileRecursively(ExecutionContext executionContext)
         {
-            return "";
+            // first tries .sln file
+            var possibleHit = Directory
+                .EnumerateFiles(executionContext.CloneDirectory, "*.sln")
+                .FirstOrDefault(f => f.EndsWith("*.sln", StringComparison.OrdinalIgnoreCase));
+
+            if (!string.IsNullOrEmpty(possibleHit))
+            {
+                return possibleHit;
+            }
+
+            // finally tries .csproj files
+            return Directory
+                .EnumerateFiles(executionContext.CloneDirectory, "*.csproj")
+                .FirstOrDefault(f => f.EndsWith("*.csproj", StringComparison.OrdinalIgnoreCase));
         }
     }
 }
