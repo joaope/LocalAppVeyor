@@ -31,7 +31,7 @@ after_build:
 
 
 test_script:
-  - dotnet test tests\LocalAppVeyor.Engine.UnitTests\project.json --configuration %configuration% --framework %framework%
+  - dotnet test tests\LocalAppVeyor.Engine.UnitTests\project.json --configuration %configuration%
 
 
 artifacts:
