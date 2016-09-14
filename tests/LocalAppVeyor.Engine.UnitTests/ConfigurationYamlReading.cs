@@ -1,4 +1,7 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using FluentAssertions;
+using LocalAppVeyor.Engine.Configuration;
 using LocalAppVeyor.Engine.Configuration.Reader;
 using Xunit;
 
@@ -24,35 +27,26 @@ environment:
 
             var conf = new BuildConfigurationYamlStringReader(yaml).GetBuildConfiguration();
 
-            conf.EnvironmentVariables.Should().NotBeNull();
-            conf.EnvironmentVariables.CommonVariables.Should().HaveCount(2);
-
-            conf.EnvironmentVariables.CommonVariables[0].Name.Should().Be("common_var1");
-            conf.EnvironmentVariables.CommonVariables[0].Value.Should().Be("common_value1");
-            conf.EnvironmentVariables.CommonVariables[0].IsSecuredValue.Should().BeFalse();
-
-            conf.EnvironmentVariables.CommonVariables[1].Name.Should().Be("common_var2");
-            conf.EnvironmentVariables.CommonVariables[1].Value.Should().Be("common_value2_secured");
-            conf.EnvironmentVariables.CommonVariables[1].IsSecuredValue.Should().BeTrue();
-
-            conf.EnvironmentVariables.Matrix.Should().NotBeNull();
-            conf.EnvironmentVariables.Matrix.Should().HaveCount(2);
-
-            conf.EnvironmentVariables.Matrix[0].Should().HaveCount(2);
-            conf.EnvironmentVariables.Matrix[0][0].Name.Should().Be("db");
-            conf.EnvironmentVariables.Matrix[0][0].Value.Should().Be("mysql");
-            conf.EnvironmentVariables.Matrix[0][0].IsSecuredValue.Should().BeFalse();
-            conf.EnvironmentVariables.Matrix[0][1].Name.Should().Be("password");
-            conf.EnvironmentVariables.Matrix[0][1].Value.Should().Be("mysql_password");
-            conf.EnvironmentVariables.Matrix[0][1].IsSecuredValue.Should().BeFalse();
-
-            conf.EnvironmentVariables.Matrix[1].Should().HaveCount(2);
-            conf.EnvironmentVariables.Matrix[1][0].Name.Should().Be("db");
-            conf.EnvironmentVariables.Matrix[1][0].Value.Should().Be("sqlserver");
-            conf.EnvironmentVariables.Matrix[1][0].IsSecuredValue.Should().BeFalse();
-            conf.EnvironmentVariables.Matrix[1][1].Name.Should().Be("password");
-            conf.EnvironmentVariables.Matrix[1][1].Value.Should().Be("sqlserver_secured_password");
-            conf.EnvironmentVariables.Matrix[1][1].IsSecuredValue.Should().BeTrue();
+            conf.EnvironmentVariables.ShouldBeEquivalentTo(
+                new EnvironmentVariables(
+                    new List<Variable>
+                    {
+                        new Variable("common_var1", "common_value1", false),
+                        new Variable("common_var2", "common_value2_secured", true)
+                    },
+                    new List<ReadOnlyCollection<Variable>>
+                    {
+                        new ReadOnlyCollection<Variable>(new List<Variable>
+                        {
+                            new Variable("db", "mysql", false),
+                            new Variable("password", "mysql_password", false)
+                        }),
+                        new ReadOnlyCollection<Variable>(new List<Variable>
+                        {
+                            new Variable("db", "sqlserver", false),
+                            new Variable("password", "sqlserver_secured_password", true)
+                        })
+                    }));
         }
 
         [Fact]
