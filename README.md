@@ -59,13 +59,12 @@ of the build pipeline.
 
 | Step \ Option  | Support           | Notes  |
 | ------------- |:-------------:| ----- |
-| init_env | :white_check_mark: | Internal step where all job environment variables are initialized. As for the [standard AppVeyor variables](https://www.appveyor.com/docs/environment-variables/) these are the ones supported: `APPVEYOR`, `CI`, `APPVEYOR_BUILD_FOLDER`, `PLATFORM` and `CONFIGURATION` |
-| init | :white_check_mark: | |
-| clone | :white_check_mark: | Tries first to clone to specified `clone_folder`, if any; otherwise it will use `C:\Projects\LocalAppVeyorTempClone`. From this step on all scripts will be executed as the clone folder being the working directory. |
-| environment | :white_check_mark: | |
+| environment | :white_check_mark: | As for the [standard AppVeyor variables](https://www.appveyor.com/docs/environment-variables/) these are the ones supported: `APPVEYOR`, `CI`, `APPVEYOR_BUILD_FOLDER`, `PLATFORM` and `CONFIGURATION` |
 | configuration | :white_check_mark: | |
 | platform | :white_check_mark: | |
 | os | :white_check_mark: | Relatively undocumented option but it exists apparently. It's usually a single value so it serves nothing other than to build the matrix job name. |
+| init | :white_check_mark: | |
+| clone | :white_check_mark: | Tries first to clone to specified `clone_folder`, if any; otherwise it will use `C:\Projects\LocalAppVeyorTempClone`. From this step on all scripts will be executed as the clone folder being the working directory. |
 | matrix | :large_blue_circle: | `fast_finish` is the only working option. Support for `allow_failures` to be added. |
 | install | :white_check_mark: | |
 | assembly_info | :red_circle: | |
