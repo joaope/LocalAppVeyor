@@ -71,10 +71,10 @@ of the build pipeline.
 | build | :white_check_mark: | |
 | build_script | :white_check_mark: | |
 | after_build | :white_check_mark: | |
-| before_test | :red_circle: | (_support to be added_) |
-| test | :red_circle: | (_support to be added_) |
+| before_test | :red_circle: | |
+| test | :red_circle: | |
 | test_script | :large_blue_circle: | It will always execute if it exists, no matter if other tests options are specified. |
-| after_test | :red_circle: | (_support to be added_) |
+| after_test | :red_circle: | |
 | on_success | :white_check_mark: | |
 | on_failure | :white_check_mark: | |
 | on_finish | :white_check_mark: | |
