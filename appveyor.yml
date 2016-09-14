@@ -2,12 +2,6 @@ init:
   - git config --global core.autocrlf true
 
 
-environment:
-  matrix:
-    - framework: net451
-    - framework: netstandard16
-
-
 configuration:
   - debug
   - release
@@ -21,8 +15,8 @@ before_build:
   - dotnet restore
 
 build_script:
-  - dotnet build src\LocalAppVeyor.Engine\project.json --configuration %configuration% --framework %framework%
-  - dotnet build src\LocalAppVeyor\project.json --configuration %configuration% --framework %framework%
+  - dotnet build src\LocalAppVeyor.Engine\project.json --configuration %configuration%
+  - dotnet build src\LocalAppVeyor\project.json --configuration %configuration%
 
 
 after_build:
