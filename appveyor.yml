@@ -1,3 +1,6 @@
+version: 0.5.0-alpha+appveyor.{build}
+
+
 init:
   - git config --global core.autocrlf true
 
