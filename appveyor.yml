@@ -19,9 +19,11 @@ build_script:
   - dotnet build src\LocalAppVeyor.Engine\project.json --configuration %configuration% --framework %framework%
   - dotnet build src\LocalAppVeyor\project.json --configuration %configuration% --framework %framework%
 
-after_script:
+
+after_build:
   - dotnet build src\LocalAppVeyor.Engine\project.json --configuration %configuration% --output out_engine
   - dotnet build src\LocalAppVeyor\project.json --configuration %configuration% --output out_console
+
 
 test_script:
   - dotnet test tests\LocalAppVeyor.Engine.UnitTests\project.json --configuration %configuration% --framework %framework%
