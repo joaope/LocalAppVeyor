@@ -1,11 +1,11 @@
 {
-    "version": "0.5.0",
+    "version": "0.5.0-alpha",
     "authors": [ "joaope" ],
     "copyright": "joaope 2016",
     "title": "LocalAppVeyor",
     "description": "Run your AppVeyor builds, locally.",
     "buildOptions": {
-        "warningsAsErrors": false,
+        "warningsAsErrors": true,
         "platform": "anycpu",
         "languageVersion": "csharp6",
         "debugType": "portable",
@@ -34,7 +34,7 @@
     },
 
     "dependencies": {
-        "LocalAppVeyor.Engine": "0.5.0"
+        "LocalAppVeyor.Engine": "0.5.0-alpha"
     },
 
     "frameworks": {

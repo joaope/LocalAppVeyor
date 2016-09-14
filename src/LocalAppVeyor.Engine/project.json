@@ -1,11 +1,11 @@
 {
-    "version": "0.5.0",
+    "version": "0.5.0-alpha",
     "authors": [ "joaope" ],
     "copyright": "joaope 2016",
     "title": "LocalAppVeyor.Engine",
     "description": "Allows one to execute AppVeyor build pipeline programatically, for a given local repository and configuration.",
     "buildOptions": {
-        "warningsAsErrors": false,
+        "warningsAsErrors": true,
         "platform": "anycpu",
         "languageVersion": "csharp6",
         "debugType": "portable"

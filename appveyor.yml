@@ -1,0 +1,46 @@
+init:
+  - git config --global core.autocrlf true
+
+
+before_build:
+  - dotnet restore
+
+environment:
+  matrix:
+    - framework: net451
+    - framework: netstandard16
+
+configuration:
+  - debug
+  - release
+
+
+build_script:
+  - dotnet build src\LocalAppVeyor.Engine\project.json --configuration %configuration% --framework %framework%
+  - dotnet build src\LocalAppVeyor\project.json --configuration %configuration% --framework %framework%
+
+after_script:
+  - dotnet build src\LocalAppVeyor.Engine\project.json --configuration %configuration% --output out_engine
+  - dotnet build src\LocalAppVeyor\project.json --configuration %configuration% --output out_console
+
+test_script:
+  - dotnet test tests\LocalAppVeyor.Engine.UnitTests\project.json --configuration %configuration% --framework %framework%
+
+
+artifacts:
+  - path: out_engine\*.nupkg
+    name: engine_packages
+  - path: out_console\*.nupkg
+    name: console_packages
+
+
+deploy:
+  - provider: NuGet
+    api_key: 
+      secure: sQplMyrjV8N58rccFtWBFZcsjJy6iHKKP9DbSxRAds10jrfshfM+JorTBMyN8wOs
+    on:
+      branch: master
+      appveyor_repo_tag: true
+      configuration: release
+    skip_symbols: true
+    artifact: console_packages
