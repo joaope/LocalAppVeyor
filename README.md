@@ -63,7 +63,7 @@ of the build pipeline.
 | environment | :white_check_mark: | |
 | configuration | :white_check_mark: | |
 | platform | :white_check_mark: | |
-| os | :white_check_mark: | |
+| os | :white_check_mark: | Relatively undocumented option but it exists apparently. It's usually a single value so it serves to nothing other than to build the matrix job name. |
 | matrix | :large_blue_circle: | `fast_finish` is the only working option. Support for `allow_failures` to be added. |
 | before_build | :white_check_mark: | |
 | build | :white_check_mark: | |
