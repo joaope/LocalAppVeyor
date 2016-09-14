@@ -43,6 +43,9 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
         [YamlMember(Alias = "build_script")]
         public InternalScriptBlock BuildScript { get; set; }
 
+        [YamlMember(Alias = "test_script")]
+        public InternalScriptBlock TestScript { get; set; }
+
         public BuildConfiguration ToBuildConfiguration()
         {
             return new BuildConfiguration(
@@ -58,7 +61,8 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
                 Build?.ToBuild(),
                 BeforeBuildScript?.ToScriptBlock(),
                 BuildScript?.ToScriptBlock(),
-                AfterBuildScript?.ToScriptBlock());
+                AfterBuildScript?.ToScriptBlock(),
+                TestScript?.ToScriptBlock());
         }
     }
 }

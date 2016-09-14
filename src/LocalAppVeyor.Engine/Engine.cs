@@ -151,7 +151,7 @@ namespace LocalAppVeyor.Engine
 
                 results[i] = ExecuteJob(job);
 
-                // if success, continue to next one 
+                // if success, continue on to next one 
                 if (results[i].ResultType == JobExecutionResultType.Success)
                 {
                     continue;
@@ -222,6 +222,12 @@ namespace LocalAppVeyor.Engine
 
             // After Build
             if (!new AfterBuildStep(buildConfiguration.AfterBuildScript).Execute(executionContext))
+            {
+                return false;
+            }
+
+            // Test script
+            if (!new TestScriptStep(buildConfiguration.TestScript).Execute(executionContext))
             {
                 return false;
             }
