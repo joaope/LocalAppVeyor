@@ -8,19 +8,19 @@ namespace LocalAppVeyor.Engine.Configuration
     {
         public ReadOnlyCollection<Variable> CommonVariables { get; }
 
-        public ReadOnlyCollection<IReadOnlyCollection<Variable>> Matrix { get; }
+        public ReadOnlyCollection<ReadOnlyCollection<Variable>> Matrix { get; }
 
         public EnvironmentVariables()
-            : this(new Variable[0], new List<IReadOnlyCollection<Variable>>())
+            : this(new Variable[0], new List<ReadOnlyCollection<Variable>>())
         {
         }
 
         public EnvironmentVariables(
             IEnumerable<Variable> commonVariables,
-            IEnumerable<IReadOnlyCollection<Variable>> matrixVariables)
+            IEnumerable<ReadOnlyCollection<Variable>> matrixVariables)
         {
             CommonVariables = new ReadOnlyCollection<Variable>(commonVariables.ToList());
-            Matrix = new ReadOnlyCollection<IReadOnlyCollection<Variable>>(matrixVariables.ToList());
+            Matrix = new ReadOnlyCollection<ReadOnlyCollection<Variable>>(matrixVariables.ToList());
         }
     }
 }
