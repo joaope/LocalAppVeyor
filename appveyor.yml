@@ -2,20 +2,23 @@ init:
   - git config --global core.autocrlf true
 
 
-before_build:
-  - dotnet restore
-
 environment:
   matrix:
     - framework: net451
     - framework: netstandard16
 
+
 configuration:
   - debug
   - release
 
+
 install:
-  - nuget sources add -Name PowerShellMyGet - Source https://powershell.myget.org/F/powershell-core/api/v3/index.json
+  - nuget sources add -Name PowerShellMyGet -Source https://powershell.myget.org/F/powershell-core/api/v3/index.json
+
+
+ before_build:
+  - dotnet restore
 
 build_script:
   - dotnet build src\LocalAppVeyor.Engine\project.json --configuration %configuration% --framework %framework%
