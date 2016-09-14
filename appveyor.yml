@@ -14,6 +14,8 @@ configuration:
   - debug
   - release
 
+install:
+  - nuget sources add -Name PowerShellMyGet - Source https://powershell.myget.org/F/powershell-core/api/v3/index.json
 
 build_script:
   - dotnet build src\LocalAppVeyor.Engine\project.json --configuration %configuration% --framework %framework%
