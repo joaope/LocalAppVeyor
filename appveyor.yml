@@ -17,7 +17,7 @@ install:
   - nuget sources add -Name PowerShellMyGet -Source https://powershell.myget.org/F/powershell-core/api/v3/index.json
 
 
- before_build:
+before_build:
   - dotnet restore
 
 build_script:
