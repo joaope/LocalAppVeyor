@@ -55,7 +55,7 @@ Due to LocalAppVeyor's nature only a subset of [AppVeyor build steps](https://ww
 are supported. Some of them might get some support later in time, after consideration, but others most likely won't ever be part 
 of the build pipeline.
 
-:white_check_mark: Fully supported :large_blue_circle: Partially supported :red_circle: Not yet supported
+:white_check_mark: Fully supported &emsp; :large_blue_circle: Partially supported &emsp; :red_circle: Not yet supported
 
 | Step \ Option  | Support           | Notes  |
 | ------------- |:-------------:| ----- |
