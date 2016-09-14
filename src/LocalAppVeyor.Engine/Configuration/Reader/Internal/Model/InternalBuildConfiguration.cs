@@ -46,6 +46,15 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
         [YamlMember(Alias = "test_script")]
         public InternalScriptBlock TestScript { get; set; }
 
+        [YamlMember(Alias = "on_success")]
+        public InternalScriptBlock OnSuccessScript { get; set; }
+
+        [YamlMember(Alias = "on_failure")]
+        public InternalScriptBlock OnFailureScript { get; set; }
+
+        [YamlMember(Alias = "on_finish")]
+        public InternalScriptBlock OnFinishScript { get; set; }
+
         public BuildConfiguration ToBuildConfiguration()
         {
             return new BuildConfiguration(
@@ -62,7 +71,10 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
                 BeforeBuildScript?.ToScriptBlock(),
                 BuildScript?.ToScriptBlock(),
                 AfterBuildScript?.ToScriptBlock(),
-                TestScript?.ToScriptBlock());
+                TestScript?.ToScriptBlock(),
+                OnSuccessScript?.ToScriptBlock(),
+                OnFailureScript?.ToScriptBlock(),
+                OnFinishScript?.ToScriptBlock());
         }
     }
 }

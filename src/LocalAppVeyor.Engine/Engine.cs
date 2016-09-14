@@ -123,7 +123,15 @@ namespace LocalAppVeyor.Engine
 
             try
             {
-                executionResult = ExecuteBuildPipeline(executionContext)
+                var isSuccess = ExecuteBuildPipeline(executionContext);
+
+                // on_success / on_failure only happen here, after we know the build status
+                // they do intervene on build final status though
+                isSuccess = isSuccess
+                    ? new OnSuccessStep(buildConfiguration.OnSuccessScript).Execute(executionContext)
+                    : new OnFailureStep(buildConfiguration.OnFailureScript).Execute(executionContext);
+
+                return isSuccess
                     ? JobExecutionResult.CreateSuccess(job)
                     : JobExecutionResult.CreateFailure(job);
             }
@@ -134,6 +142,11 @@ namespace LocalAppVeyor.Engine
             catch (Exception e)
             {
                 executionResult = JobExecutionResult.CreateUnhandledException(job, e);
+            }
+            finally
+            {
+                // on_finish don't influence build final status so we just run it
+                new OnFinishStep(buildConfiguration.OnFinishScript).Execute(executionContext);
             }
 
             JobEnded?.Invoke(this, new JobEndedEventArgs(job, executionResult));

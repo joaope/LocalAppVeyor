@@ -36,8 +36,31 @@ namespace LocalAppVeyor.Engine.Configuration
 
         public ScriptBlock TestScript { get; }
 
+        public ScriptBlock OnSuccessScript { get; }
+
+        public ScriptBlock OnFailureScript { get; }
+
+        public ScriptBlock OnFinishScript { get; }
+
         public BuildConfiguration()
-            : this(null, null, null, null, new string[0], null, null, new string[0], new string[0], null, null, null, null, null)
+            : this(
+                  null, 
+                  null, 
+                  null, 
+                  null, 
+                  new string[0], 
+                  null, 
+                  null, 
+                  new string[0],
+                  new string[0], 
+                  null, 
+                  null, 
+                  null, 
+                  null,
+                  null,
+                  null,
+                  null,
+                  null)
         {
         }
 
@@ -55,7 +78,10 @@ namespace LocalAppVeyor.Engine.Configuration
             ScriptBlock beforeBuildScript,
             ScriptBlock buildScript,
             ScriptBlock afterBuildScript,
-            ScriptBlock testScript)
+            ScriptBlock testScript,
+            ScriptBlock onSuccess,
+            ScriptBlock onFailure,
+            ScriptBlock onFinish)
         {
             Version = version;
             InitializationScript = initializationScript ?? new ScriptBlock();
@@ -71,6 +97,9 @@ namespace LocalAppVeyor.Engine.Configuration
             BuildScript = buildScript ?? new ScriptBlock();
             AfterBuildScript = afterBuildScript ?? new ScriptBlock();
             TestScript = testScript ?? new ScriptBlock();
+            OnSuccessScript = onSuccess ?? new ScriptBlock();
+            OnFailureScript = onFailure ?? new ScriptBlock();
+            OnFinishScript = onFinish ?? new ScriptBlock();
         }
     }
 }
