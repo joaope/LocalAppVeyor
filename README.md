@@ -55,6 +55,8 @@ Due to LocalAppVeyor's nature only a subset of [AppVeyor build steps](https://ww
 are supported. Some of them might get some support later in time, after consideration, but others most likely won't ever be part 
 of the build pipeline.
 
+:white_check_mark: Fully supported :large_blue_circle: Partially supported :red_circle: Not yet supported
+
 | Step \ Option  | Support           | Notes  |
 | ------------- |:-------------:| ----- |
 | init_env | :white_check_mark: | Internal step where all job environment variables are initialized. As for the [standard AppVeyor variables](https://www.appveyor.com/docs/environment-variables/) these are the ones supported: `APPVEYOR`, `CI`, `APPVEYOR_BUILD_FOLDER`, `PLATFORM` and `CONFIGURATION` |
