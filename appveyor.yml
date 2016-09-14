@@ -26,8 +26,8 @@ build_script:
 
 
 after_build:
-  - dotnet build src\LocalAppVeyor.Engine\project.json --configuration %configuration% --output out_engine
-  - dotnet build src\LocalAppVeyor\project.json --configuration %configuration% --output out_console
+  - dotnet pack src\LocalAppVeyor.Engine\project.json --configuration %configuration% --output out_engine
+  - dotnet pack src\LocalAppVeyor\project.json --configuration %configuration% --output out_console
 
 
 test_script:
