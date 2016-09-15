@@ -3,7 +3,7 @@
 [![Nuget](https://img.shields.io/nuget/v/LocalAppVeyor.svg?maxAge=0)](https://www.nuget.org/packages/LocalAppVeyor/)
 
 Console application which brings _**appveyor.yml**_ to the center of your build process by making possible to execute 
-its builds jobs, locally.
+its build jobs, locally.
 
 ## How it works
 LocalAppVeyor tries to strictly follow same [build pipeline](https://www.appveyor.com/docs/build-configuration/#build-pipeline) 
