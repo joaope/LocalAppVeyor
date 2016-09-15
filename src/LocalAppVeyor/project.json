@@ -1,5 +1,5 @@
 {
-    "version": "0.5.0-alpha2",
+    "version": "0.5.0-alpha3",
     "authors": [ "joaope" ],
     "copyright": "joaope 2016",
     "title": "LocalAppVeyor",
@@ -34,7 +34,7 @@
     },
 
     "dependencies": {
-        "LocalAppVeyor.Engine": "0.5.0-alpha2",
+        "LocalAppVeyor.Engine": "0.5.0-alpha3",
         "Microsoft.Extensions.CommandLineUtils": "1.0.0"
     },
 

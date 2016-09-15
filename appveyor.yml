@@ -1,4 +1,4 @@
-version: 0.5.0-alpha2+appveyor.{build}
+version: 0.5.0-alpha3+appveyor.{build}
 
 
 init:
