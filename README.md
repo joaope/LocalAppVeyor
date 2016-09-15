@@ -82,6 +82,3 @@ of the build pipeline.
 | on_success | :white_check_mark: | |
 | on_failure | :white_check_mark: | |
 | on_finish | :white_check_mark: | |
-
-## Final notes
-- 
