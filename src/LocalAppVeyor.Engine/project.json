@@ -32,8 +32,7 @@
     "dependencies": {
         "YamlDotNet": "4.0.1-pre284",
         "Microsoft.Build": "14.3.0",
-        "System.Management.Automation": "1.0.0-alpha9",
-        "Microsoft.Extensions.CommandLineUtils": "1.0.0"
+        "System.Management.Automation": "1.0.0-alpha9"
     },
 
     "frameworks": {
