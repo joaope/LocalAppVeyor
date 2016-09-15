@@ -1,17 +1,17 @@
-# LocalAppVeyor <sub><sup>(for .NET Core and .NET Full Framework)</sub></sub>
+# LocalAppVeyor <sub><sup>(for .NET Core and .NET Framwework 4.5.1+)</sub></sub>
 [![Build status](https://ci.appveyor.com/api/projects/status/hpi2lwuhrr2qbhfm?svg=true)](https://ci.appveyor.com/project/joaope/localappveyor)
 [![Nuget](https://img.shields.io/nuget/v/LocalAppVeyor.svg?maxAge=0)](https://www.nuget.org/packages/LocalAppVeyor/)
 
-Console application which brings _appveyor.yml_ to the center of your build process by making possible to execute 
+Console application bringing _appveyor.yml_ to the center of your build process by making possible to execute 
 its builds jobs, locally.
 
 ## How it works
-LocalAppVeyor tries to strictly follow the same [build pipeline](https://www.appveyor.com/docs/build-configuration/#build-pipeline) 
-from [AppVeyor CI](https://appveyor.com) itself.
+LocalAppVeyor tries to strictly follow same [build pipeline](https://www.appveyor.com/docs/build-configuration/#build-pipeline) 
+as [AppVeyor CI](https://appveyor.com) itself.
 
 1. Grabs _appveyor.yml_'s build configuration from current (or specified) local repository folder.
-2. Reads the [supported build steps](#supported-build-steps) from it.
-3. Executes the [build pipeline](https://www.appveyor.com/docs/build-configuration/#build-pipeline) for each job (or specified ones)
+2. Reads [supported build steps](#supported-build-steps) from it.
+3. Executes [build pipeline](https://www.appveyor.com/docs/build-configuration/#build-pipeline) for each job (or specified ones)
 on the [build matrix](https://www.appveyor.com/docs/build-configuration/#build-matrix).
 
 Build engine tries to be the less intrusive as possible printing only what it comes from the build output.
