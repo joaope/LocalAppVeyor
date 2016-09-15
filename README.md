@@ -2,7 +2,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/hpi2lwuhrr2qbhfm?svg=true)](https://ci.appveyor.com/project/joaope/localappveyor)
 [![Nuget](https://img.shields.io/nuget/v/LocalAppVeyor.svg?maxAge=0)](https://www.nuget.org/packages/LocalAppVeyor/)
 
-Console application bringing _appveyor.yml_ to the center of your build process by making possible to execute 
+Console application which brings _appveyor.yml_ to the center of your build process by making possible to execute 
 its builds jobs, locally.
 
 ## How it works
