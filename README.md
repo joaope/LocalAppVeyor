@@ -1,4 +1,4 @@
-# LocalAppVeyor <sub>(for .NET Core and .NET Full Framework)</sub>
+# LocalAppVeyor <sub><sup>(for .NET Core and .NET Full Framework)</sub></sub>
 [![Build status](https://ci.appveyor.com/api/projects/status/hpi2lwuhrr2qbhfm?svg=true)](https://ci.appveyor.com/project/joaope/localappveyor)
 [![Nuget](https://img.shields.io/nuget/v/LocalAppVeyor.svg?maxAge=0)](https://www.nuget.org/packages/LocalAppVeyor/)
 
