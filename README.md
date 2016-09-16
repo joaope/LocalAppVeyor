@@ -1,7 +1,8 @@
 # LocalAppVeyor <sub><sup>(for .NET Core and .NET Framework 4.5.1+)</sub></sub>
-[![Build status](https://ci.appveyor.com/api/projects/status/hpi2lwuhrr2qbhfm?svg=true)](https://ci.appveyor.com/project/joaope/localappveyor)
-[![Build Status](https://travis-ci.org/joaope/LocalAppVeyor.svg?branch=master)](https://travis-ci.org/joaope/LocalAppVeyor)
-[![Nuget](https://img.shields.io/nuget/v/LocalAppVeyor.svg?maxAge=0)](https://www.nuget.org/packages/LocalAppVeyor/)
+
+| Windows | OS X / Linux  | Nuget  |
+| ------------- |:-------------:| ----- |
+|[![Build status](https://ci.appveyor.com/api/projects/status/hpi2lwuhrr2qbhfm?svg=true)](https://ci.appveyor.com/project/joaope/localappveyor)|[![Build Status](https://travis-ci.org/joaope/LocalAppVeyor.svg?branch=master)](https://travis-ci.org/joaope/LocalAppVeyor)|[![Nuget](https://img.shields.io/nuget/v/LocalAppVeyor.svg?maxAge=0)](https://www.nuget.org/packages/LocalAppVeyor/)|
 
 Console application which brings _**appveyor.yml**_ to the center of your build process by making possible to execute 
 its build jobs, locally.
@@ -68,7 +69,7 @@ of the build pipeline.
 | platform | :white_check_mark: | |
 | os | :white_check_mark: | Relatively undocumented option but it exists apparently. It's usually a single value so it serves nothing other than to build the matrix job name. |
 | init | :white_check_mark: | |
-| clone | :white_check_mark: | Tries first to clone to specified `clone_folder`, if any; otherwise it will use `C:\Projects\LocalAppVeyorTempClone`. From this step on all scripts will be executed as the clone folder being the working directory. |
+| clone_folder | :white_check_mark: | Tries first to clone to specified `clone_folder`, if any; otherwise it will use `C:\Projects\LocalAppVeyorTempClone`. From this step on all scripts will be executed as the clone folder being the working directory. |
 | matrix | :large_blue_circle: | `fast_finish` is the only working option. Support for `allow_failures` to be added. |
 | install | :white_check_mark: | |
 | assembly_info | :red_circle: | |
