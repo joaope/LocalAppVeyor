@@ -1,6 +1,6 @@
 language: csharp
 
-install:
+before_install:
   - git config --global core.autocrlf true
   - nuget sources add -Name PowerShellMyGet -Source https://powershell.myget.org/F/powershell-core/api/v3/index.json
 
