@@ -20,5 +20,5 @@ env:
 
 script:
   - dotnet restore
-  - dotnet build src\LocalAppVeyor.Engine\project.json --configuration %configuration%
-  - dotnet build src\LocalAppVeyor\project.json --configuration %configuration%
+  - dotnet build src/LocalAppVeyor.Engine/project.json --configuration %configuration%
+  - dotnet build src/LocalAppVeyor/project.json --configuration %configuration%
