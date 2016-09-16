@@ -4,7 +4,7 @@ before_install:
   - git config --global core.autocrlf true
 
 install:
-  - dotnet restore -source https://api.nuget.org/v3/index.json --source https://powershell.myget.org/F/powershell-core/api/v3/index.json
+  - dotnet restore --source https://api.nuget.org/v3/index.json --source https://powershell.myget.org/F/powershell-core/api/v3/index.json
 
 matrix:
   include:
