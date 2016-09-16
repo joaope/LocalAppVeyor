@@ -10,12 +10,8 @@ configuration:
   - release
 
 
-install:
-  - nuget sources add -Name PowerShellMyGet -Source https://powershell.myget.org/F/powershell-core/api/v3/index.json
-
-
 before_build:
-  - dotnet restore
+  - dotnet restore --source https://api.nuget.org/v3/index.json --source https://powershell.myget.org/F/powershell-core/api/v3/index.json
 
 build_script:
   - dotnet build src\LocalAppVeyor.Engine\project.json --configuration %configuration%
