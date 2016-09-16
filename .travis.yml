@@ -34,4 +34,4 @@ matrix:
 script:
   - dotnet build src/LocalAppVeyor.Engine/project.json --configuration %configuration%
   - dotnet build src/LocalAppVeyor/project.json --configuration %configuration%
-  - dotnet test tests\LocalAppVeyor.Engine.UnitTests\project.json --configuration %configuration%
+  - dotnet test tests/LocalAppVeyor.Engine.UnitTests/project.json --configuration %configuration%
