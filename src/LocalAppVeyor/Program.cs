@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using LocalAppVeyor.Engine;
 using LocalAppVeyor.Engine.Configuration;
 using LocalAppVeyor.Engine.Configuration.Reader;
@@ -22,8 +23,10 @@ namespace LocalAppVeyor
                 Description = "LocalAppVeyor allows one to run an appveyor.yml build script locally"
             };
 
+            var versions = GetShortAndLongVersion();
+
             app.HelpOption("-?|-h|--help");
-            app.VersionOption("-v|--version", "0.5.0");
+            app.VersionOption("-v|--version", versions.Item1, versions.Item2);
 
             app.Command("build", conf =>
             {
@@ -83,6 +86,32 @@ namespace LocalAppVeyor
             });
 
             app.Execute(args);
+        }
+
+        private static Tuple<string, string> GetShortAndLongVersion()
+        {
+            Func<TypeInfo, string> getVersionFromTypeInfo = typeInfo =>
+            {
+                var infoVersion =
+                    typeInfo
+                    .Assembly
+                    .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                    .InformationalVersion;
+
+                if (string.IsNullOrEmpty(infoVersion))
+                {
+                    infoVersion = typeInfo.Assembly.GetName().Version.ToString();
+                }
+
+                return infoVersion;
+            };
+
+            var consoleVer = getVersionFromTypeInfo(typeof(Program).GetTypeInfo());
+            var engineVer = getVersionFromTypeInfo(typeof(Engine.Engine).GetTypeInfo());
+
+            return new Tuple<string, string>(
+                consoleVer,
+                $"{consoleVer} (engine: {engineVer})");
         }
 
         private static BuildConfiguration TryGetBuildConfigurationOrTerminate(string repositoryPath)
