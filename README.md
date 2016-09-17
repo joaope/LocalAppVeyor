@@ -64,6 +64,7 @@ of the build pipeline.
 
 | Step \ Option  | Support           | Notes  |
 | ------------- |:-------------:| ----- |
+| version | :white_check_mark: | `{build}` placeholder is replaced by `0`
 | environment | :white_check_mark: | As for the [standard AppVeyor variables](https://www.appveyor.com/docs/environment-variables/) these are the ones supported: `APPVEYOR`, `CI`, `APPVEYOR_BUILD_FOLDER`, `PLATFORM` and `CONFIGURATION` |
 | configuration | :white_check_mark: | |
 | platform | :white_check_mark: | |
