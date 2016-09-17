@@ -2,9 +2,9 @@
 {
     public class ScriptLine
     {
-        public ScriptType ScriptType { get; set; }
+        public ScriptType ScriptType { get; }
 
-        public string Script { get; set; }
+        public string Script { get; }
 
         public ScriptLine(ScriptType scriptType, string script)
         {
