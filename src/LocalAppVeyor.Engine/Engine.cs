@@ -9,29 +9,6 @@ using LocalAppVeyor.Engine.Internal.Steps;
 
 namespace LocalAppVeyor.Engine
 {
-    public sealed class JobStartingEventArgs : EventArgs
-    {
-        public MatrixJob Job { get; }
-
-        public JobStartingEventArgs(MatrixJob job)
-        {
-            Job = job;
-        }  
-    }
-
-    public sealed class JobEndedEventArgs : EventArgs
-    {
-        public MatrixJob Job { get; }
-
-        public JobExecutionResult ExecutionResult { get; set; }
-
-        public JobEndedEventArgs(MatrixJob job, JobExecutionResult executionResult)
-        {
-            Job = job;
-            ExecutionResult = executionResult;
-        }
-    }
-
     public sealed class Engine
     {
         public event EventHandler<JobStartingEventArgs> JobStarting = delegate { };
