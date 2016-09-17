@@ -18,6 +18,8 @@ namespace LocalAppVeyor.Engine.Configuration
 
         public ScriptBlock InstallScript { get; }
 
+        public AssemblyInfo AssemblyInfo { get; }
+
         public ReadOnlyCollection<string> OperatingSystems { get; }
 
         public EnvironmentVariables EnvironmentVariables { get; }
@@ -47,6 +49,7 @@ namespace LocalAppVeyor.Engine.Configuration
                   null, 
                   null, 
                   null, 
+                  null,
                   null, 
                   new string[0], 
                   null, 
@@ -68,7 +71,8 @@ namespace LocalAppVeyor.Engine.Configuration
             string version, 
             ScriptBlock initializationScript,
             string cloneFolder, 
-            ScriptBlock installScript, 
+            ScriptBlock installScript,
+            AssemblyInfo assemblyInfo,
             IEnumerable<string> operatingSystems,
             EnvironmentVariables environmentVariables,
             Matrix matrix,
@@ -87,6 +91,7 @@ namespace LocalAppVeyor.Engine.Configuration
             InitializationScript = initializationScript ?? new ScriptBlock();
             CloneFolder = cloneFolder;
             InstallScript = installScript ?? new ScriptBlock();
+            AssemblyInfo = assemblyInfo ?? new AssemblyInfo();
             OperatingSystems = new ReadOnlyCollection<string>(operatingSystems?.ToList() ?? new List<string>());
             EnvironmentVariables = environmentVariables ?? new EnvironmentVariables();
             Matrix = matrix ?? new Matrix();

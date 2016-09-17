@@ -25,6 +25,9 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
         [YamlMember(Alias = "install")]
         public InternalScriptBlock InstallScript { get; set; }
 
+        [YamlMember(Alias = "assembly_info")]
+        public InternalAssemblyVersion AssemblyVersion { get; set; }
+
         [YamlMember(Alias = "platform")]
         public InternalPlatforms Platforms { get; set; }
 
@@ -62,6 +65,7 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
                 InitializationScript?.ToScriptBlock(),
                 CloneFolder,
                 InstallScript?.ToScriptBlock(),
+                AssemblyVersion?.ToAssemblyInfo(),
                 OperatingSystems,
                 EnvironmentVariables?.ToEnvironmentVariables(),
                 Matrix?.ToMatrix(),
