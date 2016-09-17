@@ -65,7 +65,7 @@ of the build pipeline.
 | Step \ Option  | Support           | Notes  |
 | ------------- |:-------------:| ----- |
 | version | :white_check_mark: | `{build}` placeholder is replaced by `0`
-| environment | :white_check_mark: | As for the [standard AppVeyor variables](https://www.appveyor.com/docs/environment-variables/) these are the ones supported: `APPVEYOR`, `CI`, `APPVEYOR_BUILD_FOLDER`, `PPVEYOR_BUILD_NUMBER`, `PPVEYOR_BUILD_VERSION`, `PLATFORM` and `CONFIGURATION` |
+| environment | :white_check_mark: | As for the [standard AppVeyor variables](https://www.appveyor.com/docs/environment-variables/) these are the ones supported: `APPVEYOR`, `CI`, `APPVEYOR_BUILD_FOLDER`, `APPVEYOR_BUILD_NUMBER`, `APPVEYOR_BUILD_VERSION`, `PLATFORM` and `CONFIGURATION` |
 | configuration | :white_check_mark: | |
 | platform | :white_check_mark: | |
 | os | :white_check_mark: | Relatively undocumented option but it exists apparently. It's usually a single value so it serves nothing other than to build the matrix job name. |
