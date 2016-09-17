@@ -8,7 +8,13 @@ namespace LocalAppVeyor.Engine.Configuration
     {
         public static BuildConfiguration Default => new BuildConfiguration();
 
-        public string Version { get;}
+        private string version;
+
+        public string Version
+        {
+            get { return version; }
+            private set { version = value?.Replace("{build}","0"); }
+        }
 
         public ScriptBlock InitializationScript { get; }
 
