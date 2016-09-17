@@ -12,6 +12,8 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 
             try
             {
+                Environment.SetEnvironmentVariable("APPVEYOR_BUILD_NUMBER", "0");
+                Environment.SetEnvironmentVariable("APPVEYOR_BUILD_VERSION", executionContext.BuildConfiguration.Version);
                 Environment.SetEnvironmentVariable("APPVEYOR_BUILD_FOLDER", executionContext.CloneDirectory);
                 Environment.SetEnvironmentVariable("CI", "False");
                 Environment.SetEnvironmentVariable("APPVEYOR", "False");
