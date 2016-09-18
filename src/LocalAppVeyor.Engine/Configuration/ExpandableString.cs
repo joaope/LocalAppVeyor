@@ -9,6 +9,8 @@ namespace LocalAppVeyor.Engine.Configuration
 
         private readonly string internalStr;
 
+        public static ExpandableString Empty => new ExpandableString(string.Empty);
+
         public ExpandableString(string str)
         {
             internalStr = str;

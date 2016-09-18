@@ -4,13 +4,13 @@
     {
         public bool Patch { get; }
 
-        public string File { get; }
+        public ExpandableString File { get; }
 
-        public string AssemblyVersion { get; }
+        public ExpandableString AssemblyVersion { get; }
 
-        public string AssemblyFileVersion { get; }
+        public ExpandableString AssemblyFileVersion { get; }
 
-        public string AssemblyInformationalVersion { get; }
+        public ExpandableString AssemblyInformationalVersion { get; }
 
         public AssemblyInfo()
             : this(
@@ -24,10 +24,10 @@
         
         public AssemblyInfo(
             bool patch,
-            string file, 
-            string assemblyVersion, 
-            string assemblyFileVersion, 
-            string assemblyInformationalVersion)
+            ExpandableString file,
+            ExpandableString assemblyVersion,
+            ExpandableString assemblyFileVersion,
+            ExpandableString assemblyInformationalVersion)
         {
             Patch = patch;
             File = file;
