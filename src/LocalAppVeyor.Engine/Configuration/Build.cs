@@ -6,7 +6,7 @@
 
         public bool IsParallel { get; }
 
-        public string SolutionFile { get; }
+        public ExpandableString SolutionFile { get; }
         
         public BuildVerbosity Verbosity { get; }
 
@@ -18,7 +18,7 @@
         public Build(
             bool isAutomaticBuildOff,
             bool isParallel, 
-            string solutionFile, 
+            ExpandableString solutionFile, 
             BuildVerbosity verbosity)
         {
             IsAutomaticBuildOff = isAutomaticBuildOff;

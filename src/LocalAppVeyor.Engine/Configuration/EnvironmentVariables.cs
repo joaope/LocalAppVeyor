@@ -15,12 +15,22 @@ namespace LocalAppVeyor.Engine.Configuration
         {
         }
 
+        public EnvironmentVariables(IEnumerable<Variable> commonVariables)
+            : this(commonVariables, null)
+        {
+        }
+
+        public EnvironmentVariables(IEnumerable<ReadOnlyCollection<Variable>> matrixVariables)
+            : this(null, matrixVariables)
+        {
+        }
+
         public EnvironmentVariables(
             IEnumerable<Variable> commonVariables,
             IEnumerable<ReadOnlyCollection<Variable>> matrixVariables)
         {
-            CommonVariables = new ReadOnlyCollection<Variable>(commonVariables.ToList());
-            Matrix = new ReadOnlyCollection<ReadOnlyCollection<Variable>>(matrixVariables.ToList());
+            CommonVariables = new ReadOnlyCollection<Variable>(commonVariables?.ToList() ?? new List<Variable>());
+            Matrix = new ReadOnlyCollection<ReadOnlyCollection<Variable>>(matrixVariables?.ToList() ?? new List<ReadOnlyCollection<Variable>>());
         }
     }
 }
