@@ -7,18 +7,12 @@ namespace LocalAppVeyor.Engine.Configuration
     public class BuildConfiguration
     {
         public static BuildConfiguration Default => new BuildConfiguration();
-
-        private string version;
-
-        public string Version
-        {
-            get { return version; }
-            private set { version = value?.Replace("{build}","0"); }
-        }
+        
+        public ExpandableString Version { get; }
 
         public ScriptBlock InitializationScript { get; }
-
-        public string CloneFolder { get; }
+        
+        public ExpandableString CloneFolder { get; }
 
         public Matrix Matrix { get; }
 
@@ -71,9 +65,9 @@ namespace LocalAppVeyor.Engine.Configuration
         }
 
         public BuildConfiguration(
-            string version, 
+            ExpandableString version, 
             ScriptBlock initializationScript,
-            string cloneFolder, 
+            ExpandableString cloneFolder, 
             ScriptBlock installScript, 
             IEnumerable<string> operatingSystems,
             EnvironmentVariables environmentVariables,

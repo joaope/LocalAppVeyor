@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using FluentAssertions;
 using LocalAppVeyor.Engine.Configuration;
@@ -7,7 +8,7 @@ using Xunit;
 
 namespace LocalAppVeyor.Engine.UnitTests
 {
-    public class ConfigurationYamlReading
+    public class ConfigurationYamlReadingTests
     {
         [Fact]
         public void ShouldReadEnvironmentWithCommonAndMatrixVariables()
@@ -56,6 +57,28 @@ environment:
 
             conf.EnvironmentVariables.Should().NotBeNull();
             conf.EnvironmentVariables.CommonVariables.Should().BeEmpty();
+            conf.EnvironmentVariables.Matrix.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void ShouldExpandVariableValueWhenUsed()
+        {
+            Environment.SetEnvironmentVariable("ENV_VAR", "my env value");
+
+            const string yaml = @"
+environment:
+  common_var1: common_value1 $(ENV_VAR)
+";
+
+            var conf = new BuildConfigurationYamlStringReader(yaml).GetBuildConfiguration();
+
+            conf.EnvironmentVariables.ShouldBeEquivalentTo(
+                new EnvironmentVariables(
+                    new List<Variable>
+                    {
+                        new Variable("common_var1", "common_value1 $(ENV_VAR)", false)
+                    }));
+            conf.EnvironmentVariables.CommonVariables[0].Value.Should().Be("common_value1 my env value");
             conf.EnvironmentVariables.Matrix.Should().BeEmpty();
         }
     }

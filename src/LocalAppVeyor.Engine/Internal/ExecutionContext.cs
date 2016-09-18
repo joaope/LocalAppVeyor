@@ -9,7 +9,7 @@ namespace LocalAppVeyor.Engine.Internal
         
         public string RepositoryDirectory { get; }
 
-        public string CloneDirectory { get; }
+        public ExpandableString CloneDirectory { get; }
 
         public BuildConfiguration BuildConfiguration { get; }
 
@@ -20,7 +20,7 @@ namespace LocalAppVeyor.Engine.Internal
             BuildConfiguration buildConfiguration,
             IPipelineOutputter outputter,
             string repositoryDirectory,
-            string cloneDirectory)
+            ExpandableString cloneDirectory)
         {
             if (currentJob == null) throw new ArgumentNullException(nameof(currentJob));
             if (buildConfiguration == null) throw new ArgumentNullException(nameof(buildConfiguration));

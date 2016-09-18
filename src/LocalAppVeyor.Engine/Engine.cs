@@ -94,7 +94,9 @@ namespace LocalAppVeyor.Engine
                 buildConfiguration,
                 engineConfiguration.Outputter,
                 engineConfiguration.RepositoryDirectoryPath,
-                !string.IsNullOrEmpty(buildConfiguration.CloneFolder) ? buildConfiguration.CloneFolder : @"C:\Projects\LocalAppVeyorTempClone");
+                !string.IsNullOrEmpty(buildConfiguration.CloneFolder)
+                    ? buildConfiguration.CloneFolder
+                    : (ExpandableString) @"C:\Projects\LocalAppVeyorTempClone");
 
             JobExecutionResult executionResult;
 

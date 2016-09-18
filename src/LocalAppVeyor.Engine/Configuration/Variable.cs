@@ -6,7 +6,7 @@
 
         public bool IsSecuredValue { get; }
 
-        public string Value { get;  }
+        public ExpandableString Value { get; }
 
         public Variable(string name, string value, bool isSecuredValue)
         {
