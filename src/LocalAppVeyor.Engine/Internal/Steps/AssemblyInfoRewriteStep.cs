@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace LocalAppVeyor.Engine.Internal.Steps
 {
@@ -22,9 +23,28 @@ namespace LocalAppVeyor.Engine.Internal.Steps
                 executionContext.BuildConfiguration.AssemblyInfo.File, 
                 SearchOption.AllDirectories))
             {
+                if (!RewriteAssemblyInfoFile(executionContext, assemblyInfoFile))
+                {
+                    return false;
+                }
             }
 
             return true;
+        }
+
+        private bool RewriteAssemblyInfoFile(ExecutionContext executionContext, string filePath)
+        {
+            try
+            {
+
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                executionContext.Outputter.WriteError($"Error re-writing '{filePath}': {e.Message}.");
+                return false;
+            }
         }
     }
 }
