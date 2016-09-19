@@ -6,12 +6,6 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 {
     internal class AssemblyInfoRewriteStep : IInternalEngineStep
     {
-        private static readonly Regex AssemblyVersionPattern = new Regex(@"AssemblyVersion\("".+""\)", RegexOptions.Compiled);
-
-        private static readonly Regex AssemblyFileVersionPattern = new Regex(@"AssemblyFileVersion\("".+""\)", RegexOptions.Compiled);
-
-        private static readonly Regex AssemblyInformationalVersionPattern = new Regex(@"AssemblyInformationalVersion\("".+""\)", RegexOptions.Compiled);
-
         public bool Execute(ExecutionContext executionContext)
         {
             if (!executionContext.BuildConfiguration.AssemblyInfo.Patch)
@@ -51,27 +45,31 @@ namespace LocalAppVeyor.Engine.Internal.Steps
         {
             executionContext.Outputter.Write($"Re-writing '{filePath}'...");
 
+            var assemblyVersionPattern = new Regex(@"AssemblyVersion\("".+""\)");
+            var assemblyFileVersionPattern = new Regex(@"AssemblyFileVersion\("".+""\)");
+            var assemblyInformationalVersionPattern = new Regex(@"AssemblyInformationalVersion\("".+""\)");
+
             try
             {
                 var fileContent = File.ReadAllText(filePath);
 
                 if (!string.IsNullOrEmpty(executionContext.BuildConfiguration.AssemblyInfo.AssemblyVersion))
                 {
-                    fileContent = AssemblyVersionPattern.Replace(
+                    fileContent = assemblyVersionPattern.Replace(
                         fileContent,
                         $@"AssemblyVersion(""{executionContext.BuildConfiguration.AssemblyInfo.AssemblyVersion}"")");
                 }
 
                 if (!string.IsNullOrEmpty(executionContext.BuildConfiguration.AssemblyInfo.AssemblyFileVersion))
                 {
-                    fileContent = AssemblyFileVersionPattern.Replace(
+                    fileContent = assemblyFileVersionPattern.Replace(
                         fileContent,
                         $@"AssemblyFileVersion(""{executionContext.BuildConfiguration.AssemblyInfo.AssemblyFileVersion}"")");
                 }
 
                 if (!string.IsNullOrEmpty(executionContext.BuildConfiguration.AssemblyInfo.AssemblyInformationalVersion))
                 {
-                    fileContent = AssemblyInformationalVersionPattern.Replace(
+                    fileContent = assemblyInformationalVersionPattern.Replace(
                         fileContent,
                         $@"AssemblyInformationalVersion(""{executionContext.BuildConfiguration.AssemblyInfo.AssemblyInformationalVersion}"")");
                 }
