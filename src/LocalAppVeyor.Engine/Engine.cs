@@ -191,7 +191,7 @@ namespace LocalAppVeyor.Engine
             }
 
             // Before build
-            if (new BeforeBuildStep(buildConfiguration.BeforeBuildScript).Execute(executionContext))
+            if (!new BeforeBuildStep(buildConfiguration.BeforeBuildScript).Execute(executionContext))
             {
                 return false;
             }
