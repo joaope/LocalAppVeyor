@@ -21,19 +21,22 @@ namespace LocalAppVeyor.Engine.Internal.Steps
         {
             var platform = executionContext.CurrentJob.Platform;
             var configuration = executionContext.CurrentJob.Configuration;
-            string slnProjFile;
+            string slnProjFile = null;
 
             if (fileSystem.File.Exists(executionContext.BuildConfiguration.Build.SolutionFile))
             {
                 slnProjFile = executionContext.BuildConfiguration.Build.SolutionFile;
             }
-            else if (
+            else if (!string.IsNullOrEmpty(executionContext.BuildConfiguration.Build.SolutionFile))
+            {
+                if (
                 !fileSystem.File.Exists(
                     slnProjFile =
                         fileSystem.Path.Combine(executionContext.CloneDirectory,
                             executionContext.BuildConfiguration.Build.SolutionFile)))
-            {
-                slnProjFile = "";
+                {
+                    slnProjFile = null;
+                }
             }
 
             if (string.IsNullOrEmpty(slnProjFile))
