@@ -1,6 +1,6 @@
 using System;
-using System.IO;
 using System.Text.RegularExpressions;
+using LocalAppVeyor.Engine.IO;
 
 namespace LocalAppVeyor.Engine.Internal.Steps
 {
@@ -11,6 +11,13 @@ namespace LocalAppVeyor.Engine.Internal.Steps
         private static readonly Regex AssemblyFileVersionPattern = new Regex(@"AssemblyFileVersion\("".+""\)", RegexOptions.Compiled);
 
         private static readonly Regex AssemblyInformationalVersionPattern = new Regex(@"AssemblyInformationalVersion\("".+""\)", RegexOptions.Compiled);
+
+        private readonly FileSystem fileSystem;
+
+        public AssemblyInfoRewriteStep(FileSystem fileSystem)
+        {
+            this.fileSystem = fileSystem;
+        }
 
         public bool Execute(ExecutionContext executionContext)
         {
@@ -33,7 +40,7 @@ namespace LocalAppVeyor.Engine.Internal.Steps
                 return false;
             }
 
-            foreach (var assemblyInfoFile in Directory.EnumerateFiles(
+            foreach (var assemblyInfoFile in fileSystem.Directory.EnumerateFiles(
                 executionContext.CloneDirectory,
                 executionContext.BuildConfiguration.AssemblyInfo.File, 
                 SearchOption.AllDirectories))
@@ -47,13 +54,13 @@ namespace LocalAppVeyor.Engine.Internal.Steps
             return true;
         }
 
-        private static bool RewriteAssemblyInfoFile(ExecutionContext executionContext, string filePath)
+        private bool RewriteAssemblyInfoFile(ExecutionContext executionContext, string filePath)
         {
             executionContext.Outputter.Write($"Re-writing '{filePath}'...");
 
             try
             {
-                var fileContent = File.ReadAllText(filePath);
+                var fileContent = fileSystem.File.ReadAllText(filePath);
 
                 if (!string.IsNullOrEmpty(executionContext.BuildConfiguration.AssemblyInfo.AssemblyVersion))
                 {
@@ -76,7 +83,7 @@ namespace LocalAppVeyor.Engine.Internal.Steps
                         $@"AssemblyInformationalVersion(""{executionContext.BuildConfiguration.AssemblyInfo.AssemblyInformationalVersion}"")");
                 }
 
-                File.WriteAllText(filePath, fileContent);
+                fileSystem.File.WriteAllText(filePath, fileContent);
                 return true;
             }
             catch (Exception e)

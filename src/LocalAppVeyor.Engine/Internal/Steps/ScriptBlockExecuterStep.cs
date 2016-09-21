@@ -1,4 +1,5 @@
 ﻿using LocalAppVeyor.Engine.Configuration;
+using LocalAppVeyor.Engine.IO;
 
 namespace LocalAppVeyor.Engine.Internal.Steps
 {
@@ -6,8 +7,11 @@ namespace LocalAppVeyor.Engine.Internal.Steps
     {
         private readonly ScriptBlock scriptBlock;
 
-        protected ScriptBlockExecuterStep(ScriptBlock scriptBlock)
+        private readonly FileSystem fileSystem;
+
+        protected ScriptBlockExecuterStep(FileSystem fileSystem, ScriptBlock scriptBlock)
         {
+            this.fileSystem = fileSystem;
             this.scriptBlock = scriptBlock;
         }
 
@@ -35,9 +39,10 @@ namespace LocalAppVeyor.Engine.Internal.Steps
             return true;
         }
 
-        private static bool ExecuteBatchScript(ExecutionContext executionContext, string script)
+        private bool ExecuteBatchScript(ExecutionContext executionContext, string script)
         {
             return BatchScriptExecuter.Execute(
+                fileSystem,
                 executionContext.CloneDirectory,
                 script,
                 data =>
@@ -56,7 +61,7 @@ namespace LocalAppVeyor.Engine.Internal.Steps
                 });
         }
 
-        private static bool ExecutePowerShellScript(ExecutionContext executionContext, string script)
+        private bool ExecutePowerShellScript(ExecutionContext executionContext, string script)
         {
             return PowerShellScriptExecuter.Execute(
                 executionContext.CloneDirectory,

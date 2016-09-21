@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using LocalAppVeyor.Engine.IO;
 
 namespace LocalAppVeyor.Engine.Configuration.Reader
 {
@@ -9,25 +9,36 @@ namespace LocalAppVeyor.Engine.Configuration.Reader
 
         public string YamlFilePath { get; }
 
+        private readonly FileSystem fileSystem;
+
         public BuildConfigurationYamlFileReader(string yamlFilePathOrDirectory)
+            : this(FileSystem.Instance, yamlFilePathOrDirectory)
         {
-            if (string.IsNullOrEmpty(yamlFilePathOrDirectory))
-                throw new ArgumentNullException(nameof(yamlFilePathOrDirectory));
+        }
+
+        public BuildConfigurationYamlFileReader(
+            FileSystem fileSystem,
+            string yamlFilePathOrDirectory)
+        {
+            if (fileSystem == null) throw new ArgumentNullException(nameof(fileSystem));
+            if (string.IsNullOrEmpty(yamlFilePathOrDirectory)) throw new ArgumentNullException(nameof(yamlFilePathOrDirectory));
+
+            this.fileSystem = fileSystem;
 
             string yamlFile;
 
-            if (File.Exists(yamlFilePathOrDirectory))
+            if (fileSystem.File.Exists(yamlFilePathOrDirectory))
             {
                 YamlFilePath = yamlFilePathOrDirectory;
             }
-            else if (Directory.Exists(yamlFilePathOrDirectory) &&
-                     File.Exists(yamlFile = Path.Combine(yamlFilePathOrDirectory, AppVeyorBuildFileName)))
+            else if (fileSystem.Directory.Exists(yamlFilePathOrDirectory) &&
+                     fileSystem.File.Exists(yamlFile = fileSystem.Path.Combine(yamlFilePathOrDirectory, AppVeyorBuildFileName)))
             {
                 YamlFilePath = yamlFile;
             }
             else
             {
-                throw new FileNotFoundException($"'{AppVeyorBuildFileName}' file not found.", yamlFilePathOrDirectory);
+                throw new LocalAppVeyorException($"'{AppVeyorBuildFileName}' file not found.");
             }
         }
 
@@ -37,7 +48,7 @@ namespace LocalAppVeyor.Engine.Configuration.Reader
 
             try
             {
-                yaml = File.ReadAllText(YamlFilePath);
+                yaml = fileSystem.File.ReadAllText(YamlFilePath);
             }
             catch (Exception e)
             {

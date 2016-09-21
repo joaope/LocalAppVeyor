@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using LocalAppVeyor.Engine.Internal.KnownExceptions;
+using LocalAppVeyor.Engine.IO;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
 
@@ -10,20 +10,27 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 {
     internal class BuildStep : IInternalEngineStep
     {
+        private readonly FileSystem fileSystem;
+
+        public BuildStep(FileSystem fileSystem)
+        {
+            this.fileSystem = fileSystem;
+        }
+
         public bool Execute(ExecutionContext executionContext)
         {
             var platform = executionContext.CurrentJob.Platform;
             var configuration = executionContext.CurrentJob.Configuration;
             string slnProjFile;
 
-            if (File.Exists(executionContext.BuildConfiguration.Build.SolutionFile))
+            if (fileSystem.File.Exists(executionContext.BuildConfiguration.Build.SolutionFile))
             {
                 slnProjFile = executionContext.BuildConfiguration.Build.SolutionFile;
             }
             else if (
-                !File.Exists(
+                !fileSystem.File.Exists(
                     slnProjFile =
-                        Path.Combine(executionContext.CloneDirectory,
+                        fileSystem.Path.Combine(executionContext.CloneDirectory,
                             executionContext.BuildConfiguration.Build.SolutionFile)))
             {
                 slnProjFile = "";
@@ -72,7 +79,7 @@ namespace LocalAppVeyor.Engine.Internal.Steps
         private string GetProjectOrSolutionFileRecursively(ExecutionContext executionContext)
         {
             // first tries .sln file
-            var possibleHit = Directory
+            var possibleHit = fileSystem.Directory
                 .EnumerateFiles(executionContext.CloneDirectory, "*.sln")
                 .FirstOrDefault(f => f.EndsWith("*.sln", StringComparison.OrdinalIgnoreCase));
 
@@ -82,7 +89,8 @@ namespace LocalAppVeyor.Engine.Internal.Steps
             }
 
             // finally tries .csproj files
-            return Directory
+            return fileSystem
+                .Directory
                 .EnumerateFiles(executionContext.CloneDirectory, "*.csproj")
                 .FirstOrDefault(f => f.EndsWith("*.csproj", StringComparison.OrdinalIgnoreCase));
         }

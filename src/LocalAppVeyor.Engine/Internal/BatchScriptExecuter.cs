@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
+using LocalAppVeyor.Engine.IO;
 
 namespace LocalAppVeyor.Engine.Internal
 {
     internal static class BatchScriptExecuter
     {
         public static bool Execute(
+            FileSystem fileSystem,
             string workingDirectory,
             string script, 
             Action<string> onOutputDataReceived,
@@ -17,13 +18,8 @@ namespace LocalAppVeyor.Engine.Internal
                 return true;
             }
 
-            var batchFile = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid()}.bat");
-
-            using (var fileStream = new FileStream(batchFile, FileMode.Create, FileAccess.ReadWrite))
-            using (var writer = new StreamWriter(fileStream))
-            {
-                writer.Write(script);
-            }
+            var batchFile = fileSystem.Path.Combine(fileSystem.Path.GetTempPath(), $"{Guid.NewGuid()}.bat");
+            fileSystem.File.WriteAllText(batchFile, script);
 
             using (var process = Process.Start(new ProcessStartInfo("cmd.exe", $"/c {batchFile}")
             {
