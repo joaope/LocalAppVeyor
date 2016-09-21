@@ -11,7 +11,7 @@
         public BuildVerbosity Verbosity { get; }
 
         public Build()
-            : this(false, false, null, BuildVerbosity.Normal)
+            : this(true, false, null, BuildVerbosity.Normal)
         {
         }
 
