@@ -73,7 +73,7 @@ of the build pipeline.
 | clone_folder | :white_check_mark: | Tries first to clone to specified `clone_folder`, if any; otherwise it will use `C:\Projects\LocalAppVeyorTempClone`. From this step on all scripts will be executed as the clone folder being the working directory. |
 | matrix | :large_blue_circle: | `fast_finish` is the only working option. Support for `allow_failures` to be added. |
 | install | :white_check_mark: | |
-| assembly_info | :red_circle: | |
+| assembly_info | :white_check_mark: | |
 | before_build | :white_check_mark: | |
 | build | :white_check_mark: | |
 | build_script | :white_check_mark: | |
