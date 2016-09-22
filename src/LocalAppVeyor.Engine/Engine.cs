@@ -211,6 +211,12 @@ namespace LocalAppVeyor.Engine
                 return false;
             }
 
+            // AssemblyInfo rewrite
+            if (!new AssemblyInfoRewriteStep(fileSystem).Execute(executionContext))
+            {
+                return false;
+            }
+
             // Before build
             if (!new BeforeBuildStep(fileSystem, buildConfiguration.BeforeBuildScript).Execute(executionContext))
             {
