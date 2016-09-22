@@ -33,5 +33,7 @@ namespace LocalAppVeyor.Engine.IO
                     ? System.IO.SearchOption.AllDirectories
                     : System.IO.SearchOption.TopDirectoryOnly);
         }
+
+        public static DirectoryHandler Instance { get; } = new DirectoryHandler();
     }
 }

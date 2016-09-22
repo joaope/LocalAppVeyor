@@ -20,7 +20,7 @@ namespace LocalAppVeyor.Engine.UnitTests.Configuration
 assembly_info:
   patch: true
   file: AssemblyInfo.*
-  assembly_version: ""2.2.{ build}""
+  assembly_version: ""2.2.{build}""
   assembly_file_version: ""{version}""
   assembly_informational_version: ""{version}""
 ";
@@ -30,7 +30,7 @@ assembly_info:
             conf.AssemblyInfo.ShouldBeEquivalentTo(new AssemblyInfo(
                 true,
                 "AssemblyInfo.*",
-                "2.2.{ build}",
+                "2.2.{build}",
                 "{version}",
                 "{version}"));
         }

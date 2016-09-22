@@ -2,7 +2,7 @@
   "profiles": {
     "LocalAppVeyor": {
       "commandName": "Project",
-      "commandLineArgs": "build --help"
+      "commandLineArgs": "build --dir C:\\Users\\JoaoP\\Desktop\\LocalAppVeyor"
     }
   }
 }

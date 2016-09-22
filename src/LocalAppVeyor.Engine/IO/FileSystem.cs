@@ -8,11 +8,16 @@
 
         public virtual PathHandler Path { get; private set; }
 
-        public FileSystem()
+        public FileSystem(DirectoryHandler directory, FileHandler file, PathHandler path)
         {
-            Directory = new DirectoryHandler();
-            File = new FileHandler();
-            Path = new PathHandler();
+            Directory = directory;
+            File = file;
+            Path = path;
+        }
+
+        public FileSystem()
+            : this(DirectoryHandler.Instance, FileHandler.Instance, PathHandler.Instance)
+        {
         }
 
         public static FileSystem Instance { get; } = new FileSystem();

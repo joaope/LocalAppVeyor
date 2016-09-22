@@ -3,7 +3,7 @@ using LocalAppVeyor.Engine.Configuration;
 
 namespace LocalAppVeyor.Engine.Internal
 {
-    internal sealed class ExecutionContext
+    internal class ExecutionContext
     {
         public MatrixJob CurrentJob { get; }
         

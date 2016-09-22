@@ -4,7 +4,7 @@ using LocalAppVeyor.Engine.Configuration;
 
 namespace LocalAppVeyor.Engine
 {
-    public sealed class MatrixJob
+    public class MatrixJob
     {
         public string OperatingSystem { get; }
 

@@ -11,5 +11,7 @@
         {
             return System.IO.Path.GetTempPath();
         }
+
+        public static PathHandler Instance { get; } = new PathHandler();
     }
 }

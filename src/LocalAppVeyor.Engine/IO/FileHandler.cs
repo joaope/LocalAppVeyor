@@ -16,5 +16,7 @@
         {
             return System.IO.File.Exists(path);
         }
+
+        public static FileHandler Instance { get; } = new FileHandler();
     }
 }
