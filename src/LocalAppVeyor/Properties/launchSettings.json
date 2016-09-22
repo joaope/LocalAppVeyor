@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "LocalAppVeyor": {
-      "commandName": "Project",
-      "commandLineArgs": "build --dir C:\\Users\\JoaoP\\Desktop\\LocalAppVeyor"
-    }
-  }
-}
