@@ -6,7 +6,7 @@ namespace LocalAppVeyor.Engine
     {
         public MatrixJob Job { get; }
 
-        public JobExecutionResult ExecutionResult { get; set; }
+        public JobExecutionResult ExecutionResult { get; }
 
         public JobEndedEventArgs(MatrixJob job, JobExecutionResult executionResult)
         {

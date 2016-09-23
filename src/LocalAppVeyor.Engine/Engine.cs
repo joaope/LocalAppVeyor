@@ -132,16 +132,16 @@ namespace LocalAppVeyor.Engine
                     : new OnFailureStep(fileSystem, buildConfiguration.OnFailureScript).Execute(executionContext);
 
                 return isSuccess
-                    ? JobExecutionResult.CreateSuccess(job)
-                    : JobExecutionResult.CreateFailure(job);
+                    ? JobExecutionResult.CreateSuccess()
+                    : JobExecutionResult.CreateFailure();
             }
             catch (SolutionNotFoundException)
             {
-                executionResult = JobExecutionResult.CreateSolutionNotFound(job);
+                executionResult = JobExecutionResult.CreateSolutionNotFound();
             }
             catch (Exception e)
             {
-                executionResult = JobExecutionResult.CreateUnhandledException(job, e);
+                executionResult = JobExecutionResult.CreateUnhandledException(e);
             }
             finally
             {
@@ -165,7 +165,7 @@ namespace LocalAppVeyor.Engine
                 results[i] = ExecuteJob(job);
 
                 // if success, continue on to next one 
-                if (results[i].ResultType == JobExecutionResultType.Success)
+                if (results[i].IsSuccessfulExecution)
                 {
                     continue;
                 }
@@ -175,7 +175,7 @@ namespace LocalAppVeyor.Engine
                 {
                     for (++i; i < Jobs.Length; i++)
                     {
-                        results[i] = JobExecutionResult.CreateNotExecuted(Jobs[i]);
+                        results[i] = JobExecutionResult.CreateNotExecuted();
                     }
 
                     break;
