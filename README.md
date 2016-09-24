@@ -71,7 +71,7 @@ of the build pipeline.
 | os | :white_check_mark: | Relatively undocumented option but it exists apparently. It's usually a single value so it serves nothing other than to build the matrix job name. |
 | init | :white_check_mark: | |
 | clone_folder | :white_check_mark: | Tries first to clone to specified `clone_folder`, if any; otherwise it will use `C:\Projects\LocalAppVeyorTempClone`. From this step on all scripts will be executed as the clone folder being the working directory. |
-| matrix | :large_blue_circle: | `fast_finish` is the only working option. Support for `allow_failures` to be added. |
+| matrix | :white_check_mark: | |
 | install | :white_check_mark: | |
 | assembly_info | :white_check_mark: | |
 | before_build | :white_check_mark: | |

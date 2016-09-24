@@ -164,8 +164,9 @@ namespace LocalAppVeyor.Engine
 
                 results[i] = ExecuteJob(job);
 
-                // if success, continue on to next one 
-                if (results[i].IsSuccessfulExecution)
+                // if success, or job is on the allowed failures matrix, continue on to next one 
+                if (results[i].IsSuccessfulExecution ||
+                    buildConfiguration.Matrix.AllowedFailures.Any(a => a.AreConditionsMetForJob(job)))
                 {
                     continue;
                 }

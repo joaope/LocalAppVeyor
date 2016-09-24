@@ -1,6 +1,8 @@
-﻿namespace LocalAppVeyor.Engine.Configuration
+﻿using System;
+
+namespace LocalAppVeyor.Engine.Configuration
 {
-    public class Variable
+    public class Variable : IEquatable<Variable>
     {
         public string Name { get; }    
 
@@ -13,6 +15,18 @@
             Name = name;
             Value = value;
             IsSecuredValue = isSecuredValue;
+        }
+
+        public bool Equals(Variable other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            return Name == other.Name &&
+                   Value == other.Value &&
+                   IsSecuredValue == other.IsSecuredValue;
         }
 
         public override string ToString()

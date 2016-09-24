@@ -7,9 +7,12 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
         [YamlMember(Alias = "fast_finish")]
         public bool IsFastFinish { get; set; }
 
+        [YamlMember(Alias = "allow_failures")]
+        public AllowedFailuresCollection AllowedFailures { get; set; }
+
         public Matrix ToMatrix()
         {
-            return new Matrix(IsFastFinish);
+            return new Matrix(IsFastFinish, AllowedFailures);
         }
     }
 }

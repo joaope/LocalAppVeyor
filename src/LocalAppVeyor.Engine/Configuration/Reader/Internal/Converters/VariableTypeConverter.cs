@@ -4,7 +4,7 @@ using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
-namespace LocalAppVeyor.Engine.Configuration.Reader.Internal
+namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Converters
 {
     internal class VariableTypeConverter : IYamlTypeConverter
     {

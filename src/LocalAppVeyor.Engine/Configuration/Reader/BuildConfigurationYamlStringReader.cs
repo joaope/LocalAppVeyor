@@ -1,4 +1,5 @@
 ﻿using LocalAppVeyor.Engine.Configuration.Reader.Internal;
+using LocalAppVeyor.Engine.Configuration.Reader.Internal.Converters;
 using LocalAppVeyor.Engine.Configuration.Reader.Internal.Model;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
@@ -25,6 +26,7 @@ namespace LocalAppVeyor.Engine.Configuration.Reader
                 .IgnoreUnmatchedProperties()
                 .WithTypeConverter(new EnvironmentVariablesYamlTypeConverter())
                 .WithTypeConverter(new VariableTypeConverter())
+                .WithTypeConverter(new AllowedFailuresYamlTypeConverter())
                 .Build();
 
             try
