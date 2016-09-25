@@ -120,8 +120,15 @@ namespace LocalAppVeyor
 
             if (!File.Exists(appVeyorYml))
             {
-                PipelineOutputter.WriteError("AppVeyor.yml file not found on repository path. Build aborted.");
-                Environment.Exit(1);
+                PipelineOutputter.WriteError("AppVeyor.yml file not found on repository path. Trying '.appveyor.yml'...");
+
+                appVeyorYml = Path.Combine(repositoryPath, ".appveyor.yml");
+
+                if (!File.Exists(appVeyorYml))
+                {
+                    PipelineOutputter.WriteError("AppVeyor.yml file not found on repository path. Build aborted.");
+                    Environment.Exit(1);
+                }
             }
 
             BuildConfiguration configuration = null;
@@ -142,7 +149,6 @@ namespace LocalAppVeyor
 
         private static EngineConfiguration TryGetEngineConfigurationOrTerminate(string repositoryPath)
         {
-            // Try infer repository path if one is not provided
             if (!string.IsNullOrEmpty(repositoryPath))
             {
                 if (!Directory.Exists(repositoryPath))
