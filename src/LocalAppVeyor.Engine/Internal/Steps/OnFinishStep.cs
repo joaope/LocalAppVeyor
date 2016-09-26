@@ -5,8 +5,8 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 {
     internal sealed class OnFinishStep : ScriptBlockExecuterStep
     {
-        public OnFinishStep(FileSystem fileSystem, ScriptBlock scriptBlock)
-            : base(fileSystem, scriptBlock)
+        public OnFinishStep(FileSystem fileSystem, string workigDirectory, ScriptBlock scriptBlock)
+            : base(fileSystem, workigDirectory, scriptBlock)
         {
         }
     }

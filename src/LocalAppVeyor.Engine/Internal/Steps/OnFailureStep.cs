@@ -5,8 +5,8 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 {
     internal sealed class OnFailureStep : ScriptBlockExecuterStep
     {
-        public OnFailureStep(FileSystem fileSystem, ScriptBlock scriptBlock)
-            : base(fileSystem, scriptBlock)
+        public OnFailureStep(FileSystem fileSystem, string workigDirectory, ScriptBlock scriptBlock)
+            : base(fileSystem, workigDirectory, scriptBlock)
         {
         }
     }

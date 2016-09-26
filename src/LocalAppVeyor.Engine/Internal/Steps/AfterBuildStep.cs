@@ -5,8 +5,8 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 {
     internal sealed class AfterBuildStep : ScriptBlockExecuterStep
     {
-        public AfterBuildStep(FileSystem fileSystem, ScriptBlock scriptBlock) 
-            : base(fileSystem, scriptBlock)
+        public AfterBuildStep(FileSystem fileSystem, string workigDirectory, ScriptBlock scriptBlock) 
+            : base(fileSystem, workigDirectory, scriptBlock)
         {
         }
     }

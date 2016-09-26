@@ -128,8 +128,8 @@ namespace LocalAppVeyor.Engine
                 // on_success / on_failure only happen here, after we know the build status
                 // they do intervene on build final status though
                 isSuccess = isSuccess
-                    ? new OnSuccessStep(fileSystem, buildConfiguration.OnSuccessScript).Execute(executionContext)
-                    : new OnFailureStep(fileSystem, buildConfiguration.OnFailureScript).Execute(executionContext);
+                    ? new OnSuccessStep(fileSystem, executionContext.CloneDirectory, buildConfiguration.OnSuccessScript).Execute(executionContext)
+                    : new OnFailureStep(fileSystem, executionContext.CloneDirectory, buildConfiguration.OnFailureScript).Execute(executionContext);
 
                 return isSuccess
                     ? JobExecutionResult.CreateSuccess()
@@ -146,7 +146,7 @@ namespace LocalAppVeyor.Engine
             finally
             {
                 // on_finish don't influence build final status so we just run it
-                new OnFinishStep(fileSystem, buildConfiguration.OnFinishScript).Execute(executionContext);
+                new OnFinishStep(fileSystem, executionContext.CloneDirectory, buildConfiguration.OnFinishScript).Execute(executionContext);
             }
 
             JobEnded?.Invoke(this, new JobEndedEventArgs(job, executionResult));
@@ -195,7 +195,7 @@ namespace LocalAppVeyor.Engine
             }
             
             // Init
-            if (!new InitStep(fileSystem, buildConfiguration.InitializationScript).Execute(executionContext))
+            if (!new InitStep(fileSystem, executionContext.RepositoryDirectory, buildConfiguration.InitializationScript).Execute(executionContext))
             {
                 return false;
             }
@@ -207,7 +207,7 @@ namespace LocalAppVeyor.Engine
             }
 
             // Install
-            if (!new InstallStep(fileSystem, buildConfiguration.InstallScript).Execute(executionContext))
+            if (!new InstallStep(fileSystem, executionContext.CloneDirectory, buildConfiguration.InstallScript).Execute(executionContext))
             {
                 return false;
             }
@@ -219,7 +219,7 @@ namespace LocalAppVeyor.Engine
             }
 
             // Before build
-            if (!new BeforeBuildStep(fileSystem, buildConfiguration.BeforeBuildScript).Execute(executionContext))
+            if (!new BeforeBuildStep(fileSystem, executionContext.CloneDirectory, buildConfiguration.BeforeBuildScript).Execute(executionContext))
             {
                 return false;
             }
@@ -227,7 +227,7 @@ namespace LocalAppVeyor.Engine
             // Build
             if (buildConfiguration.Build.IsAutomaticBuildOff)
             {
-                if (!new BuildScriptStep(fileSystem, buildConfiguration.BuildScript).Execute(executionContext))
+                if (!new BuildScriptStep(fileSystem, executionContext.CloneDirectory, buildConfiguration.BuildScript).Execute(executionContext))
                 {
                     return false;
                 }
@@ -241,13 +241,13 @@ namespace LocalAppVeyor.Engine
             }
 
             // After Build
-            if (!new AfterBuildStep(fileSystem, buildConfiguration.AfterBuildScript).Execute(executionContext))
+            if (!new AfterBuildStep(fileSystem, executionContext.CloneDirectory, buildConfiguration.AfterBuildScript).Execute(executionContext))
             {
                 return false;
             }
 
             // Test script
-            if (!new TestScriptStep(fileSystem, buildConfiguration.TestScript).Execute(executionContext))
+            if (!new TestScriptStep(fileSystem, executionContext.CloneDirectory, buildConfiguration.TestScript).Execute(executionContext))
             {
                 return false;
             }

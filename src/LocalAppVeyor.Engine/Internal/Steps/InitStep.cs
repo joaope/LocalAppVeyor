@@ -5,8 +5,8 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 {
     internal class InitStep : ScriptBlockExecuterStep
     {
-        public InitStep(FileSystem fileSystem, ScriptBlock scriptBlock)
-            : base(fileSystem, scriptBlock)
+        public InitStep(FileSystem fileSystem, string workigDirectory, ScriptBlock scriptBlock)
+            : base(fileSystem, workigDirectory, scriptBlock)
         {
         }
     }
