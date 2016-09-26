@@ -1,4 +1,3 @@
-using System;
 using System.Text.RegularExpressions;
 using LocalAppVeyor.Engine.IO;
 
@@ -58,39 +57,32 @@ namespace LocalAppVeyor.Engine.Internal.Steps
         {
             executionContext.Outputter.Write($"Re-writing '{filePath}'...");
 
-            try
+            var fileContent = fileSystem.File.ReadAllText(filePath);
+
+            if (!string.IsNullOrEmpty(executionContext.BuildConfiguration.AssemblyInfo.AssemblyVersion))
             {
-                var fileContent = fileSystem.File.ReadAllText(filePath);
-
-                if (!string.IsNullOrEmpty(executionContext.BuildConfiguration.AssemblyInfo.AssemblyVersion))
-                {
-                    fileContent = AssemblyVersionPattern.Replace(
-                        fileContent,
-                        $@"AssemblyVersion(""{executionContext.BuildConfiguration.AssemblyInfo.AssemblyVersion}"")");
-                }
-
-                if (!string.IsNullOrEmpty(executionContext.BuildConfiguration.AssemblyInfo.AssemblyFileVersion))
-                {
-                    fileContent = AssemblyFileVersionPattern.Replace(
-                        fileContent,
-                        $@"AssemblyFileVersion(""{executionContext.BuildConfiguration.AssemblyInfo.AssemblyFileVersion}"")");
-                }
-
-                if (!string.IsNullOrEmpty(executionContext.BuildConfiguration.AssemblyInfo.AssemblyInformationalVersion))
-                {
-                    fileContent = AssemblyInformationalVersionPattern.Replace(
-                        fileContent,
-                        $@"AssemblyInformationalVersion(""{executionContext.BuildConfiguration.AssemblyInfo.AssemblyInformationalVersion}"")");
-                }
-
-                fileSystem.File.WriteAllText(filePath, fileContent);
-                return true;
+                fileContent = AssemblyVersionPattern.Replace(
+                    fileContent,
+                    $@"AssemblyVersion(""{executionContext.BuildConfiguration.AssemblyInfo.AssemblyVersion}"")");
             }
-            catch (Exception e)
+
+            if (!string.IsNullOrEmpty(executionContext.BuildConfiguration.AssemblyInfo.AssemblyFileVersion))
             {
-                executionContext.Outputter.WriteError($"Error re-writing '{filePath}': {e.Message}.");
-                return false;
+                fileContent = AssemblyFileVersionPattern.Replace(
+                    fileContent,
+                    $@"AssemblyFileVersion(""{executionContext.BuildConfiguration.AssemblyInfo.AssemblyFileVersion}"")");
             }
+
+            if (!string.IsNullOrEmpty(executionContext.BuildConfiguration.AssemblyInfo.AssemblyInformationalVersion))
+            {
+                fileContent = AssemblyInformationalVersionPattern.Replace(
+                    fileContent,
+                    $@"AssemblyInformationalVersion(""{executionContext.BuildConfiguration.AssemblyInfo.AssemblyInformationalVersion}"")");
+            }
+
+            fileSystem.File.WriteAllText(filePath, fileContent);
+
+            return true;
         }
     }
 }

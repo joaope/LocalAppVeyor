@@ -15,19 +15,10 @@ namespace LocalAppVeyor.Engine.Internal.Steps
         public bool Execute(ExecutionContext executionContext)
         {
             executionContext.Outputter.Write($"Cloning '{executionContext.RepositoryDirectory}' in to '{executionContext.CloneDirectory}'...");
+            Clone(executionContext.RepositoryDirectory, executionContext.CloneDirectory);
+            executionContext.Outputter.Write("Cloning finished.");
 
-            try
-            {
-                Clone(executionContext.RepositoryDirectory, executionContext.CloneDirectory);
-
-                executionContext.Outputter.Write("Cloning finished.");
-                return true;
-            }
-            catch (Exception e)
-            {
-                executionContext.Outputter.WriteError($"Error while cloning folder: {e.Message}");
-                return false;
-            }
+            return true;
         }
 
         private void Clone(string source, string destination)
