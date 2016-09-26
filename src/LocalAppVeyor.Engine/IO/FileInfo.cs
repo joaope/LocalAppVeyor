@@ -14,7 +14,11 @@
         public virtual FileInfo CopyTo(string destFileName, bool overwrite)
         {
             internalFileInfo.CopyTo(destFileName, overwrite);
-            return new FileInfo(destFileName);
+
+            var dest = new System.IO.FileInfo(destFileName);
+            dest.Attributes &= ~System.IO.FileAttributes.ReadOnly;
+
+            return new FileInfo(dest.FullName);
         }
 
         public virtual void Delete()
