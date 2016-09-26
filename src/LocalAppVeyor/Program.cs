@@ -6,6 +6,7 @@ using System.Reflection;
 using LocalAppVeyor.Engine;
 using LocalAppVeyor.Engine.Configuration;
 using LocalAppVeyor.Engine.Configuration.Reader;
+using LocalAppVeyor.Engine.IO;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace LocalAppVeyor
@@ -162,10 +163,10 @@ namespace LocalAppVeyor
                 repositoryPath = Directory.GetCurrentDirectory();
             }
 
-            return new EngineConfiguration(repositoryPath, PipelineOutputter);
+            return new EngineConfiguration(repositoryPath, PipelineOutputter, FileSystem.Default);
         }
 
-        public static int ExecuteBuildCommand(
+        private static int ExecuteBuildCommand(
             CommandLineApplication app,
             CommandOption repositoryPathOption,
             CommandOption jobsOption)
@@ -246,7 +247,7 @@ namespace LocalAppVeyor
             return 0;
         }
 
-        public static string ToFinalResultsString(this JobExecutionResultType jobResult)
+        private static string ToFinalResultsString(this JobExecutionResultType jobResult)
         {
             switch (jobResult)
             {
@@ -267,7 +268,7 @@ namespace LocalAppVeyor
             }
         }
 
-        public static void PrintFinalResults(List<JobExecutionResult> jobsResults)
+        private static void PrintFinalResults(List<JobExecutionResult> jobsResults)
         {
             if (jobsResults.Count == 0)
             {

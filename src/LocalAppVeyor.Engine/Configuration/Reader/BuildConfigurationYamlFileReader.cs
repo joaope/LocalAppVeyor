@@ -12,7 +12,7 @@ namespace LocalAppVeyor.Engine.Configuration.Reader
         private readonly FileSystem fileSystem;
 
         public BuildConfigurationYamlFileReader(string yamlFilePathOrDirectory)
-            : this(FileSystem.Instance, yamlFilePathOrDirectory)
+            : this(FileSystem.Default, yamlFilePathOrDirectory)
         {
         }
 

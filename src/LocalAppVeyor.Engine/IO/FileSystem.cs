@@ -20,6 +20,6 @@
         {
         }
 
-        public static FileSystem Instance { get; } = new FileSystem();
+        public static FileSystem Default { get; } = new FileSystem();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using LocalAppVeyor.Engine.IO;
 
 namespace LocalAppVeyor.Engine
 {
@@ -8,15 +9,20 @@ namespace LocalAppVeyor.Engine
 
         public IPipelineOutputter Outputter { get; }
 
+        public FileSystem FileSystem { get; }
+
         public EngineConfiguration(
             string repositoryDirectoryPath,
-            IPipelineOutputter outputter)
+            IPipelineOutputter outputter,
+            FileSystem fileSystem)
         {
-            if (repositoryDirectoryPath == null) throw new ArgumentNullException(nameof(repositoryDirectoryPath));
+            if (string.IsNullOrEmpty(repositoryDirectoryPath)) throw new ArgumentNullException(nameof(repositoryDirectoryPath));
             if (outputter == null) throw new ArgumentNullException(nameof(outputter));
+            if (fileSystem == null) throw new ArgumentNullException(nameof(fileSystem));
 
             RepositoryDirectoryPath = repositoryDirectoryPath;
             Outputter = outputter;
+            FileSystem = fileSystem;
         }
     }
 }
