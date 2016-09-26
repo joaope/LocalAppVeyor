@@ -10,7 +10,7 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace LocalAppVeyor
 {
-    public class Program
+    public static class Program
     {
         private static readonly IPipelineOutputter PipelineOutputter = new ConsoleOutputter();
 
@@ -120,13 +120,13 @@ namespace LocalAppVeyor
 
             if (!File.Exists(appVeyorYml))
             {
-                PipelineOutputter.WriteError("AppVeyor.yml file not found on repository path. Trying '.appveyor.yml'...");
+                PipelineOutputter.WriteError("appveyor.yml file not found on repository path. Trying '.appveyor.yml'...");
 
                 appVeyorYml = Path.Combine(repositoryPath, ".appveyor.yml");
 
                 if (!File.Exists(appVeyorYml))
                 {
-                    PipelineOutputter.WriteError("AppVeyor.yml file not found on repository path. Build aborted.");
+                    PipelineOutputter.WriteError(".appveyor.yml file not found on repository path. Build aborted.");
                     Environment.Exit(1);
                 }
             }
@@ -242,7 +242,47 @@ namespace LocalAppVeyor
                 }
             }
 
+            PrintFinalResults(jobsResults);
             return 0;
+        }
+
+        public static string ToFinalResultsString(this JobExecutionResultType jobResult)
+        {
+            switch (jobResult)
+            {
+                case JobExecutionResultType.Success:
+                    return "Succeeded";
+                case JobExecutionResultType.Failure:
+                    return "Failed";
+                case JobExecutionResultType.NotExecuted:
+                    return "Not executed";
+                case JobExecutionResultType.JobNotFound:
+                    return "Job not found";
+                case JobExecutionResultType.SolutionFileNotFound:
+                    return "No solution file";
+                case JobExecutionResultType.UnhandledException:
+                    return "Unhandled exception";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(jobResult), jobResult, null);
+            }
+        }
+
+        public static void PrintFinalResults(List<JobExecutionResult> jobsResults)
+        {
+            if (jobsResults.Count == 0)
+            {
+                PipelineOutputter.Write("Execution finished.");
+                return;
+            }
+
+            PipelineOutputter.Write("Execution finished:");
+
+            var groupedResults = jobsResults
+                .GroupBy(r => r.ResultType)
+                .Select(g => $"{g.Key.ToFinalResultsString()}: {g.Count()}");
+
+            PipelineOutputter.Write(
+                $"=== Execution Result: {string.Join(", ", groupedResults)} ===");
         }
     }
 }
