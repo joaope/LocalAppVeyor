@@ -59,7 +59,7 @@ namespace LocalAppVeyor.Engine
             }
         }
 
-        internal MatrixJob(
+        public MatrixJob(
             string operatingSystem,
             IReadOnlyCollection<Variable> variables,
             string configuration,
