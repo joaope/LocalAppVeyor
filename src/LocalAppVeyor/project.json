@@ -22,7 +22,8 @@
             "type": "git",
             "url": "https://github.com/joaope/LocalAppVeyor.git"
         },
-        "projectUrl": "https://github.com/joaope/LocalAppVeyor"
+        "projectUrl": "https://github.com/joaope/LocalAppVeyor",
+        "licenseUrl": "https://github.com/joaope/LocalAppVeyor/blob/master/LICENSE"
     },
     "configurations": {
         "Debug": {},
