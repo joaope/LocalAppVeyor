@@ -73,7 +73,7 @@ assembly_info:
             Environment.SetEnvironmentVariable("APPVEYOR_BUILD_VERSION", new ExpandableString("2.3.{build}"));
 
             var rewriteStep = new AssemblyInfoRewriteStep(
-                new FileSystem(mockedDirectoryHandler.Object, mockedFileHandler.Object,new Mock<PathHandler>().Object));
+                new FileSystem(mockedDirectoryHandler.Object, mockedFileHandler.Object, Mock.Of<PathHandler>()));
 
             var executionResult = rewriteStep.Execute(executionContext);
 

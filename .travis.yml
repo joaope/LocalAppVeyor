@@ -9,6 +9,7 @@ addons:
     - dotnet-dev-1.0.1
 
 before_install:
+  - dotnet --info
   - git config --global core.autocrlf true
 
 install:
