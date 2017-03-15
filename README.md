@@ -1,4 +1,4 @@
-# LocalAppVeyor <sub><sup>(for .NET Core and .NET Framework 4.5.1+)</sub></sub>
+# LocalAppVeyor <br><sub><sup>(.NET Core console application)</sub></sub>
 
 | Windows | OS X / Linux  | Nuget  |
 | ------------- |:-------------:| ----- |
