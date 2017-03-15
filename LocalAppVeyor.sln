@@ -1,23 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{90C2048F-14A3-4CB7-86DD-B96708B01507}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		.travis.yml = .travis.yml
 		appveyor.yml = appveyor.yml
-		global.json = global.json
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LocalAppVeyor", "src\LocalAppVeyor\LocalAppVeyor.xproj", "{5E441A50-09CC-4FE8-9B10-5A8D0FA0282D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalAppVeyor.Engine", "src\LocalAppVeyor.Engine\LocalAppVeyor.Engine.csproj", "{86203454-E52C-49B4-BEDB-0BE025EA1D87}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LocalAppVeyor.Engine", "src\LocalAppVeyor.Engine\LocalAppVeyor.Engine.xproj", "{86203454-E52C-49B4-BEDB-0BE025EA1D87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LocalAppVeyor", "src\LocalAppVeyor\LocalAppVeyor.csproj", "{9A050F7B-1A34-47FD-805D-C8A0FEE102D0}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "LocalAppVeyor.Engine.UnitTests", "tests\LocalAppVeyor.Engine.UnitTests\LocalAppVeyor.Engine.UnitTests.xproj", "{70BB6672-F3E6-4568-A309-21B201C006C6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalAppVeyor.Engine.UnitTests", "tests\LocalAppVeyor.Engine.UnitTests\LocalAppVeyor.Engine.UnitTests.csproj", "{9C8D6864-9557-45E5-BB69-4658C7B66775}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,18 +24,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5E441A50-09CC-4FE8-9B10-5A8D0FA0282D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5E441A50-09CC-4FE8-9B10-5A8D0FA0282D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5E441A50-09CC-4FE8-9B10-5A8D0FA0282D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5E441A50-09CC-4FE8-9B10-5A8D0FA0282D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{86203454-E52C-49B4-BEDB-0BE025EA1D87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{86203454-E52C-49B4-BEDB-0BE025EA1D87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86203454-E52C-49B4-BEDB-0BE025EA1D87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86203454-E52C-49B4-BEDB-0BE025EA1D87}.Release|Any CPU.Build.0 = Release|Any CPU
-		{70BB6672-F3E6-4568-A309-21B201C006C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{70BB6672-F3E6-4568-A309-21B201C006C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{70BB6672-F3E6-4568-A309-21B201C006C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{70BB6672-F3E6-4568-A309-21B201C006C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A050F7B-1A34-47FD-805D-C8A0FEE102D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A050F7B-1A34-47FD-805D-C8A0FEE102D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A050F7B-1A34-47FD-805D-C8A0FEE102D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A050F7B-1A34-47FD-805D-C8A0FEE102D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C8D6864-9557-45E5-BB69-4658C7B66775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C8D6864-9557-45E5-BB69-4658C7B66775}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C8D6864-9557-45E5-BB69-4658C7B66775}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C8D6864-9557-45E5-BB69-4658C7B66775}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
