@@ -6,7 +6,7 @@ addons:
     - sourceline: 'deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ trusty main'
       key_url: 'https://apt-mo.trafficmanager.net/keys/microsoft.asc'
     packages:
-    - dotnet-dev-1.1.0
+    - dotnet-dev-1.0.1
 
 before_install:
   - git config --global core.autocrlf true
@@ -20,23 +20,23 @@ matrix:
     - os: linux # Ubuntu 14.04
       dist: trusty
       sudo: required
-      dotnet: 1.1.0
+      dotnet: 1.0.1
       env: configuration=debug
     
     - os: linux # Ubuntu 14.04
       dist: trusty
       sudo: required
-      dotnet: 1.1.0
+      dotnet: 1.0.1
       env: configuration=release
 
     - os: osx # OSX 10.12
       osx_image: xcode8.2
-      dotnet: 1.1.0
+      dotnet: 1.0.1
       env: configuration=debug
     
     - os: osx # OSX 10.12
       osx_image: xcode8.2
-      dotnet: 1.1.0
+      dotnet: 1.0.1
       env: configuration=release
 
 script:
