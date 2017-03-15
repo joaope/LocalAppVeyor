@@ -21,25 +21,18 @@ matrix:
       dist: trusty
       sudo: required
       dotnet: 1.0.1
-      env: configuration=debug
-    
-    - os: linux # Ubuntu 14.04
-      dist: trusty
-      sudo: required
-      dotnet: 1.0.1
-      env: configuration=release
+      env:
+        - configuration=debug
+        - configuration=release
 
     - os: osx # OSX 10.12
       osx_image: xcode8.2
       dotnet: 1.0.1
-      env: configuration=debug
-    
-    - os: osx # OSX 10.12
-      osx_image: xcode8.2
-      dotnet: 1.0.1
-      env: configuration=release
+      env:
+        - configuration=debug
+        - configuration=release
 
 script:
-  - dotnet build src/LocalAppVeyor.Engine --configuration %configuration%
-  - dotnet build src/LocalAppVeyor --configuration %configuration%
-  - dotnet test tests/LocalAppVeyor.Engine.UnitTests/LocalAppVeyor.Engine.UnitTests.csproj --configuration %configuration%
+  - dotnet build src/LocalAppVeyor.Engine --configuration ${configuration}
+  - dotnet build src/LocalAppVeyor --configuration ${configuration}
+  - dotnet test tests/LocalAppVeyor.Engine.UnitTests/LocalAppVeyor.Engine.UnitTests.csproj --configuration ${configuration}
