@@ -1,38 +1,33 @@
-version: 0.5.0-alpha5+appveyor.{build}
+image: Visual Studio 2017
 
+version: 0.5.0-alpha5+appveyor.{build}
 
 init:
   - git config --global core.autocrlf true
-
 
 configuration:
   - debug
   - release
 
-
 before_build:
   - dotnet restore --source https://api.nuget.org/v3/index.json --source https://powershell.myget.org/F/powershell-core/api/v3/index.json
 
 build_script:
-  - dotnet build src\LocalAppVeyor.Engine\project.json --configuration %configuration%
-  - dotnet build src\LocalAppVeyor\project.json --configuration %configuration%
-
+  - dotnet build src\LocalAppVeyor.Engine --configuration %configuration%
+  - dotnet build src\LocalAppVeyor --configuration %configuration%
 
 after_build:
-  - dotnet pack src\LocalAppVeyor.Engine\project.json --configuration %configuration% --output out_engine
-  - dotnet pack src\LocalAppVeyor\project.json --configuration %configuration% --output out_console
-
+  - dotnet pack src\LocalAppVeyor.Engine --configuration %configuration% --output out_engine
+  - dotnet pack src\LocalAppVeyor --configuration %configuration% --output out_console
 
 test_script:
-  - dotnet test tests\LocalAppVeyor.Engine.UnitTests\project.json --configuration %configuration%
-
+  - dotnet test tests\LocalAppVeyor.Engine.UnitTests --configuration %configuration%
 
 artifacts:
   - path: out_engine\*.nupkg
     name: engine_packages
   - path: out_console\*.nupkg
     name: console_packages
-
 
 deploy:
   - provider: NuGet
