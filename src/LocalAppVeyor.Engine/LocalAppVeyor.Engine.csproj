@@ -6,7 +6,7 @@
     <AssemblyTitle>LocalAppVeyor.Engine</AssemblyTitle>
     <VersionPrefix>0.5.0-alpha5</VersionPrefix>
     <Authors>joaope</Authors>
-    <TargetFrameworks>netstandard1.6</TargetFrameworks>
+    <TargetFrameworks>netstandard1.6.1</TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <PlatformTarget>anycpu</PlatformTarget>
     <LangVersion>6</LangVersion>
@@ -19,7 +19,6 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/joaope/LocalAppVeyor.git</RepositoryUrl>
     <PackageTargetFallback>dotnet</PackageTargetFallback>
-    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
