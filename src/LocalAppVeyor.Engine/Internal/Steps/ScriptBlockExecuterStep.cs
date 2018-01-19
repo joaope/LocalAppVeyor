@@ -27,6 +27,7 @@ namespace LocalAppVeyor.Engine.Internal.Steps
             {
                 foreach (var scriptLine in scriptBlock)
                 {
+                    bool status;
                     if (string.IsNullOrEmpty(scriptLine.Script))
                     {
                         return true;
@@ -35,9 +36,18 @@ namespace LocalAppVeyor.Engine.Internal.Steps
                     switch (scriptLine.ScriptType)
                     {
                         case ScriptType.Batch:
-                            return ExecuteBatchScript(executionContext, scriptLine.Script);
+                            status = ExecuteBatchScript(executionContext, scriptLine.Script);
+                            break;
                         case ScriptType.PowerShell:
-                            return ExecutePowerShellScript(executionContext, scriptLine.Script);
+                            status = ExecutePowerShellScript(executionContext, scriptLine.Script);
+                            break;
+                        default:
+                            status = false;
+                            break;
+                    }
+                    if (!status)
+                    {
+                        return false;
                     }
                 }
             }
