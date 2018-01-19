@@ -25,9 +25,9 @@ test_script:
   - dotnet test tests\LocalAppVeyor.Engine.UnitTests\LocalAppVeyor.Engine.UnitTests.csproj --configuration %configuration%
 
 artifacts:
-  - path: out_engine\*.nupkg
+  - path: LocalAppVeyor.Engine\out_engine\*.nupkg
     name: engine_packages
-  - path: out_console\*.nupkg
+  - path: LocalAppVeyor\out_console\*.nupkg
     name: console_packages
 
 deploy:
