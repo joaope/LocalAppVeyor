@@ -1,12 +1,6 @@
 language: csharp
-
-addons:
-  apt:
-    sources:
-    - sourceline: 'deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ trusty main'
-      key_url: 'https://apt-mo.trafficmanager.net/keys/microsoft.asc'
-    packages:
-    - dotnet-dev-1.0.1
+mono: none
+dotnet: 1.0.1
 
 before_install:
   - dotnet --info
@@ -32,12 +26,12 @@ matrix:
       env: configuration=release
 
     - os: osx # OSX 10.12
-      osx_image: xcode8.2
+      osx_image: xcode8.3
       dotnet: 1.0.1
       env: configuration=debug
     
     - os: osx # OSX 10.12
-      osx_image: xcode8.2
+      osx_image: xcode8.3
       dotnet: 1.0.1
       env: configuration=release
 
