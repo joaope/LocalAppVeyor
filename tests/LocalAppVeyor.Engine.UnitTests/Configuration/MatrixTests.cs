@@ -27,7 +27,7 @@ matrix:
 
             var conf = new BuildConfigurationYamlStringReader(yaml).GetBuildConfiguration();
 
-            conf.Matrix.ShouldBeEquivalentTo(new Matrix(
+            conf.Matrix.Should().BeEquivalentTo(new Matrix(
                 false,
                 new[]
                 {
@@ -47,7 +47,7 @@ matrix:
 
             var conf = new BuildConfigurationYamlStringReader(yaml).GetBuildConfiguration();
 
-            conf.Matrix.ShouldBeEquivalentTo(new Matrix(
+            conf.Matrix.Should().BeEquivalentTo(new Matrix(
                 false,
                 new AllowedJobFailureConditions[0]));
 
@@ -60,7 +60,7 @@ matrix:
         {
             var conf = new BuildConfigurationYamlStringReader(string.Empty).GetBuildConfiguration();
 
-            conf.Matrix.ShouldBeEquivalentTo(new Matrix());
+            conf.Matrix.Should().BeEquivalentTo(new Matrix());
             conf.Matrix.IsFastFinish.Should().BeFalse();
             conf.Matrix.AllowedFailures.Should().BeEmpty();
         }
@@ -74,7 +74,7 @@ matrix:
 ";
             var conf = new BuildConfigurationYamlStringReader(yaml).GetBuildConfiguration();
 
-            conf.Matrix.ShouldBeEquivalentTo(new Matrix(
+            conf.Matrix.Should().BeEquivalentTo(new Matrix(
                 true,
                 new AllowedJobFailureConditions[0]));
             conf.Matrix.IsFastFinish.Should().BeTrue();

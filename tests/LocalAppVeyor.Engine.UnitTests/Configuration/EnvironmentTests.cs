@@ -34,7 +34,7 @@ environment:
 
             var conf = new BuildConfigurationYamlStringReader(yaml).GetBuildConfiguration();
 
-            conf.EnvironmentVariables.ShouldBeEquivalentTo(
+            conf.EnvironmentVariables.Should().BeEquivalentTo(
                 new EnvironmentVariables(
                     new List<Variable>
                     {
@@ -66,6 +66,7 @@ environment:
             conf.EnvironmentVariables.Matrix.Should().BeEmpty();
         }
 
+        [Fact]
         public void ShouldExpandVariableValueWhenUsed()
         {
             Environment.SetEnvironmentVariable("ENV_VAR", "my env value");
@@ -77,7 +78,7 @@ environment:
 
             var conf = new BuildConfigurationYamlStringReader(yaml).GetBuildConfiguration();
 
-            conf.EnvironmentVariables.ShouldBeEquivalentTo(
+            conf.EnvironmentVariables.Should().BeEquivalentTo(
                 new EnvironmentVariables(
                     new List<Variable>
                     {

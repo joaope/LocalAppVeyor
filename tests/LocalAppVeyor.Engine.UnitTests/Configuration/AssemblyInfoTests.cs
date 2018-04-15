@@ -27,7 +27,7 @@ assembly_info:
 
             var conf = new BuildConfigurationYamlStringReader(yaml).GetBuildConfiguration();
 
-            conf.AssemblyInfo.ShouldBeEquivalentTo(new AssemblyInfo(
+            conf.AssemblyInfo.Should().BeEquivalentTo(new AssemblyInfo(
                 true,
                 "AssemblyInfo.*",
                 "2.2.{build}",
@@ -40,8 +40,8 @@ assembly_info:
         {
             var conf = new BuildConfigurationYamlStringReader(string.Empty).GetBuildConfiguration();
 
-            conf.AssemblyInfo.ShouldBeEquivalentTo(new AssemblyInfo());
-            conf.AssemblyInfo.ShouldBeEquivalentTo(new AssemblyInfo(
+            conf.AssemblyInfo.Should().BeEquivalentTo(new AssemblyInfo());
+            conf.AssemblyInfo.Should().BeEquivalentTo(new AssemblyInfo(
                 false,
                 null,
                 null,

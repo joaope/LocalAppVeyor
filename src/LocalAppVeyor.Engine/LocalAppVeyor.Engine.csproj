@@ -6,7 +6,7 @@
     <AssemblyTitle>LocalAppVeyor.Engine</AssemblyTitle>
     <VersionPrefix>0.5.0-alpha5</VersionPrefix>
     <Authors>joaope</Authors>
-    <TargetFrameworks>netstandard1.6.1</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <PlatformTarget>anycpu</PlatformTarget>
     <LangVersion>6</LangVersion>
@@ -18,12 +18,11 @@
     <PackageLicenseUrl>https://github.com/joaope/LocalAppVeyor/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/joaope/LocalAppVeyor.git</RepositoryUrl>
-    <PackageTargetFallback>dotnet</PackageTargetFallback>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="YamlDotNet" Version="4.1.0" />
-    <PackageReference Include="Microsoft.Build" Version="15.1.548" />
+    <PackageReference Include="YamlDotNet" Version="4.3.1" />
+    <PackageReference Include="Microsoft.Build" Version="15.6.85" />
     <PackageReference Include="System.Management.Automation" Version="6.0.0-alpha17" />
     <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
