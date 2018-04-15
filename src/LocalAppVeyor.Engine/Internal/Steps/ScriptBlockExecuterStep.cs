@@ -27,11 +27,12 @@ namespace LocalAppVeyor.Engine.Internal.Steps
             {
                 foreach (var scriptLine in scriptBlock)
                 {
-                    bool status;
                     if (string.IsNullOrEmpty(scriptLine.Script))
                     {
-                        return true;
+                        continue;
                     }
+
+                    var status = true;
 
                     switch (scriptLine.ScriptType)
                     {
@@ -41,10 +42,8 @@ namespace LocalAppVeyor.Engine.Internal.Steps
                         case ScriptType.PowerShell:
                             status = ExecutePowerShellScript(executionContext, scriptLine.Script);
                             break;
-                        default:
-                            status = false;
-                            break;
                     }
+
                     if (!status)
                     {
                         return false;
