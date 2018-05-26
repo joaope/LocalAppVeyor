@@ -3,17 +3,16 @@
   <PropertyGroup>
     <Description>Run your AppVeyor builds, locally.</Description>
     <Copyright>joaope 2016</Copyright>
-    <AssemblyTitle>LocalAppVeyor</AssemblyTitle>
     <VersionPrefix>0.5.0-alpha6</VersionPrefix>
     <Authors>joaope</Authors>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <PlatformTarget>anycpu</PlatformTarget>
-    <LangVersion>6</LangVersion>
-    <DebugType>portable</DebugType>
-    <AssemblyName>LocalAppVeyor</AssemblyName>
+    <LangVersion>latest</LangVersion>
     <OutputType>Exe</OutputType>
-    <PackageId>LocalAppVeyor</PackageId>
+    <IsPackable>true</IsPackable>
+    <PackAsTool>true</PackAsTool>
+    <Product>localappveyor</Product>
+    <PackageId>localappveyor</PackageId>
     <PackageTags>console;appveyor;local;build;api</PackageTags>
     <PackageProjectUrl>https://github.com/joaope/LocalAppVeyor</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/joaope/LocalAppVeyor/blob/master/LICENSE</PackageLicenseUrl>

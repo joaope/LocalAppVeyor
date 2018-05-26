@@ -9,7 +9,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <PlatformTarget>anycpu</PlatformTarget>
-    <LangVersion>6</LangVersion>
+    <LangVersion>latest</LangVersion>
     <DebugType>portable</DebugType>
     <AssemblyName>LocalAppVeyor.Engine</AssemblyName>
     <PackageId>LocalAppVeyor.Engine</PackageId>
