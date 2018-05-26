@@ -23,8 +23,8 @@
 
   <ItemGroup>
     <PackageReference Include="YamlDotNet" Version="4.3.1" />
-    <PackageReference Include="Microsoft.Build" Version="15.6.85" />
-    <PackageReference Include="System.Management.Automation" Version="6.0.2" />
+    <PackageReference Include="Microsoft.Build" Version="15.7.179" />
+    <PackageReference Include="System.Management.Automation" Version="6.1.0-preview.2" />
     <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
