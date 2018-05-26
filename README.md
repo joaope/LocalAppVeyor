@@ -1,10 +1,8 @@
-# LocalAppVeyor <sub><sup>(.NET Core global tool)</sup></sub>
-
 | Windows | OS X / Linux  | Nuget  |
 | ------------- |:-------------:| ----- |
 |[![Build status](https://ci.appveyor.com/api/projects/status/hpi2lwuhrr2qbhfm?svg=true)](https://ci.appveyor.com/project/joaope/localappveyor)|[![Build Status](https://travis-ci.org/joaope/LocalAppVeyor.svg?branch=master)](https://travis-ci.org/joaope/LocalAppVeyor)|[![Nuget](https://img.shields.io/nuget/v/LocalAppVeyor.svg?maxAge=0)](https://www.nuget.org/packages/LocalAppVeyor/)|
 
-Console application which brings _**appveyor.yml**_ to the center of your build process by making possible to execute 
+.NET Core global tool which brings _**appveyor.yml**_ to the center of your build process by making possible to execute 
 its build jobs, locally.
 
 1. [How it works](#how-it-works)
