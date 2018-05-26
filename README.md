@@ -7,8 +7,6 @@
 Console application which brings _**appveyor.yml**_ to the center of your build process by making possible to execute 
 its build jobs, locally.
 
-## Let's get started
-
 1. [How it works](#how-it-works)
 2. [Install](#install)
 3. [Usage](#usage)
