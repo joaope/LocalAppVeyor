@@ -3,6 +3,7 @@ image: Visual Studio 2017
 version: 0.5.0-alpha6+appveyor.{build}
 
 init:
+  - choco install dotnetcore-sdk --pre
   - dotnet --info
   - git config --global core.autocrlf true
 
