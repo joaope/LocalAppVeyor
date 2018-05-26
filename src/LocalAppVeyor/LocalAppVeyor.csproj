@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Run your AppVeyor builds, locally.</Description>
     <Copyright>joaope 2016</Copyright>
-    <VersionPrefix>0.5.0-alpha6</VersionPrefix>
+    <VersionPrefix>0.5.0-alpha7</VersionPrefix>
     <Authors>joaope</Authors>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
