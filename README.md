@@ -1,4 +1,4 @@
-# LocalAppVeyor <sub><sup>(.NET Core console application)</sub></sub>
+# LocalAppVeyor <sub><sup>(.NET Core global tool)</sup></sub>
 
 | Windows | OS X / Linux  | Nuget  |
 | ------------- |:-------------:| ----- |
@@ -6,6 +6,15 @@
 
 Console application which brings _**appveyor.yml**_ to the center of your build process by making possible to execute 
 its build jobs, locally.
+
+## Let's get started
+
+1. [How it works](#how-it-works)
+2. [Install](#install)
+3. [Usage](#usage)
+   1. [```build``` command](#build-command)
+   2. [```jobs``` command](#jobs-command)
+4. [Supported build steps](#supported-build-steps)
 
 ## How it works
 LocalAppVeyor tries to strictly follow same [build pipeline](https://www.appveyor.com/docs/build-configuration/#build-pipeline) 
@@ -17,6 +26,20 @@ as [AppVeyor CI](https://appveyor.com) itself.
 on the [build matrix](https://www.appveyor.com/docs/build-configuration/#build-matrix).
 
 Build engine tries to be the less intrusive as possible printing only what it comes from the build output.
+
+## Install
+
+Install LocalAppVeyor as a [.NET Core CLI](https://docs.microsoft.com/en-us/dotnet/core/tools/?tabs=netcore2x) global tool using the following command:
+```console
+dotnet tool install -g localappveyor
+```
+You have it now available on your command line:
+
+```console
+localappveyor --help
+```
+
+<sup>*Note: to use CLI tool command you must have [.NET Core 2.1](https://github.com/aspnet/Home/wiki/2.1.0-Early-Access-Downloads) or higher.*</sup>
 
 ## Usage
 ```
