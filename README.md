@@ -12,8 +12,8 @@ its build jobs, locally.
 1. [How it works](#how-it-works)
 2. [Install](#install)
 3. [Usage](#usage)
-   1. [```build``` command](#build-command)
-   2. [```jobs``` command](#jobs-command)
+   1. [```build``` command](#-build-command)
+   2. [```jobs``` command](#-jobs-command)
 4. [Supported build steps](#supported-build-steps)
 
 ## How it works
