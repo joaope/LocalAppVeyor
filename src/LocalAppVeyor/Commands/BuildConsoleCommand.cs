@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using LocalAppVeyor.Engine;
 using LocalAppVeyor.Engine.Configuration;
 using LocalAppVeyor.Engine.Configuration.Reader;
@@ -25,29 +26,21 @@ namespace LocalAppVeyor.Commands
         {
         }
 
-        protected override IEnumerable<CommandOption> GetCommandOptions()
+        protected override void SetUpAdditionalCommandOptions(CommandLineApplication app)
         {
-            repositoryPathOption = new CommandOption("-d|--dir", CommandOptionType.SingleValue)
-            {
-                Description = "Local repository directory where appveyor.yml sits. If not specified current directory is used"
-            };
+            repositoryPathOption = app.Option(
+                "-d|--dir",
+                "Local repository directory where appveyor.yml sits. If not specified current directory is used",
+                CommandOptionType.SingleValue);
 
-            jobsIndexesOption = new CommandOption("-j|--job", CommandOptionType.MultipleValue)
-            {
-                Description = "Job to build. You can specify multiple jobs. Use 'jobs' command to list them all"
-            };
-
-            return new[]
-            {
-                repositoryPathOption,
-                jobsIndexesOption
-            };
+             jobsIndexesOption = app.Option(
+                "-j|--job",
+                "Job to build. You can specify multiple jobs. Use 'jobs' command to list them all",
+                CommandOptionType.MultipleValue);
         }
 
-        protected override int OnExecute(CommandLineApplication app)
+        protected override Task<int> OnExecute(CommandLineApplication app)
         {
-            app.ShowRootCommandFullNameAndVersion();
-
             var engineConfiguration = TryGetEngineConfigurationOrTerminate(repositoryPathOption.Value());
             var buildConfiguration = TryGetBuildConfigurationOrTerminate(engineConfiguration.RepositoryDirectoryPath);
 
@@ -100,7 +93,7 @@ namespace LocalAppVeyor.Commands
             catch (Exception)
             {
                 Outputter.WriteError("Job option receives a integer as input. Use 'jobs' command to list all available jobs.");
-                return 1;
+                return Task.FromResult(1);
             }
 
             var jobsResults = new List<JobExecutionResult>();
@@ -118,7 +111,7 @@ namespace LocalAppVeyor.Commands
             }
 
             PrintFinalResults(jobsResults);
-            return 0;
+            return Task.FromResult(0);
         }
 
         private static string ToFinalResultsString(JobExecutionResultType jobResult)

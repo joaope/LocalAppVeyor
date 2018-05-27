@@ -1,0 +1,19 @@
+{
+  "profiles": {
+    "LocalAppVeyor": {
+      "commandName": "Project"
+    },
+    "LocalAppVeyor (jobs)": {
+      "commandName": "Project",
+      "commandLineArgs": "jobs"
+    },
+    "LocalAppVeyor (build)": {
+      "commandName": "Project",
+      "commandLineArgs": "build"
+    },
+    "LocalAppVeyor (lint)": {
+      "commandName": "Project",
+      "commandLineArgs": "lint --token APITOKEN"
+    }
+  }
+}

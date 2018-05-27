@@ -10,6 +10,7 @@ its build jobs, locally.
 3. [Usage](#usage)
    1. [```build``` command](#-build-command)
    2. [```jobs``` command](#-jobs-command)
+   3. [```lint``` command](#-lint-command)
 4. [Supported build steps](#supported-build-steps)
 
 ## How it works
@@ -53,9 +54,11 @@ Use "LocalAppVeyor [command] --help" for more information about a command.
 ```
 
 ### • `build` command
+
 This is the main console command which allows one to execute all or a smaller set of jobs from the 
 [build matrix](https://www.appveyor.com/docs/build-configuration/#build-matrix). `--job` command should be followed by a integer
 corresponding to job index as listed on `jobs` command
+
 ```
 Usage: LocalAppVeyor build [options]
 
@@ -66,11 +69,27 @@ Options:
 ```
 
 ### • `jobs` command
+
+Lists all available jobs on the specified appveyor YAML configuration file build matrix.
+
 ```
 Usage: LocalAppVeyor jobs [options]
 
 Options:
   -?|-h|--help  Show help information
+  -d|--dir      Local repository directory where appveyor.yml sits. If not specified current directory is used
+```
+
+### • `lint` command
+
+Validates appveyor.yml YAML configuration. It requires an active internet connection as it uses AppVeyor web API for a real and up to date validation.
+
+```
+Usage: LocalAppVeyor lint [options]
+
+Options:
+  -?|-h|--help  Show help information
+  -t|--token    [Required] Your AppVeyor account API token. You can find it here: https://ci.appveyor.com/api-token
   -d|--dir      Local repository directory where appveyor.yml sits. If not specified current directory is used
 ```
 

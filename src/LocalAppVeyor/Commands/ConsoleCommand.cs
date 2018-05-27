@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Threading.Tasks;
 using LocalAppVeyor.Engine;
 using Microsoft.Extensions.CommandLineUtils;
 
@@ -22,16 +22,15 @@ namespace LocalAppVeyor.Commands
             app.Description = Description;
             app.HelpOption("-?|-h|--help");
 
-            foreach (var commandOption in GetCommandOptions())
-            {
-                app.Option(commandOption.Template, commandOption.Description, commandOption.OptionType);
-            }
+            SetUpAdditionalCommandOptions(app);
 
             app.OnExecute(() => OnExecute(app));
         }
 
-        protected abstract IEnumerable<CommandOption> GetCommandOptions();
+        protected virtual void SetUpAdditionalCommandOptions(CommandLineApplication app)
+        {
+        }
 
-        protected abstract int OnExecute(CommandLineApplication app);
+        protected abstract Task<int> OnExecute(CommandLineApplication app);
     }
 }

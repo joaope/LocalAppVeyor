@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using LocalAppVeyor.Commands;
 using LocalAppVeyor.Engine;
 using Microsoft.Extensions.CommandLineUtils;
@@ -12,6 +13,8 @@ namespace LocalAppVeyor
         private static readonly BuildConsoleCommand BuildCommand = new BuildConsoleCommand(PipelineOutputter);
 
         private static readonly JobsConsoleCommand JobsCommand = new JobsConsoleCommand(PipelineOutputter);
+
+        private static readonly LintConsoleCommand LintCommand = new LintConsoleCommand(PipelineOutputter);
 
         public static void Main(string[] args)
         {
@@ -29,6 +32,7 @@ namespace LocalAppVeyor
 
             app.Command(BuildCommand.Name, conf => { BuildCommand.SetUp(conf); }, false);
             app.Command(JobsCommand.Name, conf => { JobsCommand.SetUp(conf); }, false);
+            app.Command(LintCommand.Name, conf => { LintCommand.SetUp(conf); }, false);
 
             app.OnExecute(() =>
             {
@@ -37,6 +41,7 @@ namespace LocalAppVeyor
             });
 
             app.Execute(args);
+            Console.ReadKey();
         }
 
         private static (string, string) GetShortAndLongVersion()

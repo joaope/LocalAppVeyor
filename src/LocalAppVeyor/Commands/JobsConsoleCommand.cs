@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using LocalAppVeyor.Engine;
 using LocalAppVeyor.Engine.Configuration;
 using LocalAppVeyor.Engine.Configuration.Reader;
@@ -22,20 +22,16 @@ namespace LocalAppVeyor.Commands
         {
         }
 
-        protected override IEnumerable<CommandOption> GetCommandOptions()
+        protected override void SetUpAdditionalCommandOptions(CommandLineApplication app)
         {
-            repositoryPathOption = new CommandOption("-d|--dir", CommandOptionType.SingleValue)
-            {
-                Description = "Local repository directory where appveyor.yml sits. If not specified current directory is used"
-            };
-
-            return new[] {repositoryPathOption};
+            repositoryPathOption = app.Option(
+                "-d|--dir",
+                "Local repository directory where appveyor.yml sits. If not specified current directory is used",
+                CommandOptionType.SingleValue);
         }
 
-        protected override int OnExecute(CommandLineApplication app)
+        protected override Task<int> OnExecute(CommandLineApplication app)
         {
-            app.ShowRootCommandFullNameAndVersion();
-
             var engineConfiguration = TryGetEngineConfigurationOrTerminate(repositoryPathOption.Value());
             var buildConfiguration = TryGetBuildConfigurationOrTerminate(engineConfiguration.RepositoryDirectoryPath);
 
@@ -50,7 +46,7 @@ namespace LocalAppVeyor.Commands
                     $"[{i}]: {engine.Jobs[i].Name}");
             }
 
-            return 0;
+            return Task.FromResult(0);
         }
 
         private BuildConfiguration TryGetBuildConfigurationOrTerminate(string repositoryPathStr)
@@ -59,7 +55,7 @@ namespace LocalAppVeyor.Commands
 
             if (!File.Exists(appVeyorYml))
             {
-                Outputter.WriteError("appveyor.yml file not found on repository path. Trying '.appveyor.yml'...");
+                Outputter.Write("appveyor.yml file not found on repository path. Trying '.appveyor.yml'...");
 
                 appVeyorYml = Path.Combine(repositoryPathStr, ".appveyor.yml");
 
