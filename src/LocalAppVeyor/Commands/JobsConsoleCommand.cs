@@ -11,7 +11,7 @@ namespace LocalAppVeyor.Commands
 {
     internal class JobsConsoleCommand : ConsoleCommand
     {
-        private CommandOption repositoryPath;
+        private CommandOption repositoryPathOption;
 
         public override string Name => "jobs";
 
@@ -24,19 +24,19 @@ namespace LocalAppVeyor.Commands
 
         protected override IEnumerable<CommandOption> GetCommandOptions()
         {
-            repositoryPath = new CommandOption("-d|--dir", CommandOptionType.SingleValue)
+            repositoryPathOption = new CommandOption("-d|--dir", CommandOptionType.SingleValue)
             {
                 Description = "Local repository directory where appveyor.yml sits. If not specified current directory is used"
             };
 
-            return new[] {repositoryPath};
+            return new[] {repositoryPathOption};
         }
 
         protected override int OnExecute(CommandLineApplication app)
         {
             app.ShowRootCommandFullNameAndVersion();
 
-            var engineConfiguration = TryGetEngineConfigurationOrTerminate(repositoryPath.Value());
+            var engineConfiguration = TryGetEngineConfigurationOrTerminate(repositoryPathOption.Value());
             var buildConfiguration = TryGetBuildConfigurationOrTerminate(engineConfiguration.RepositoryDirectoryPath);
 
             var engine = new Engine.Engine(

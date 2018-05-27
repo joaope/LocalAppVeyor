@@ -16,9 +16,9 @@ namespace LocalAppVeyor.Commands
 
         protected override string Description => "Executes appveyor.yml's build jobs from specified repository directory";
 
-        private CommandOption repositoryPath;
+        private CommandOption repositoryPathOption;
 
-        private CommandOption jobsIndexes;
+        private CommandOption jobsIndexesOption;
 
         public BuildConsoleCommand(IPipelineOutputter outputter) 
             : base(outputter)
@@ -27,20 +27,20 @@ namespace LocalAppVeyor.Commands
 
         protected override IEnumerable<CommandOption> GetCommandOptions()
         {
-            repositoryPath = new CommandOption("-d|--dir", CommandOptionType.SingleValue)
+            repositoryPathOption = new CommandOption("-d|--dir", CommandOptionType.SingleValue)
             {
                 Description = "Local repository directory where appveyor.yml sits. If not specified current directory is used"
             };
 
-            jobsIndexes = new CommandOption("-j|--job", CommandOptionType.MultipleValue)
+            jobsIndexesOption = new CommandOption("-j|--job", CommandOptionType.MultipleValue)
             {
                 Description = "Job to build. You can specify multiple jobs. Use 'jobs' command to list them all"
             };
 
             return new[]
             {
-                repositoryPath,
-                jobsIndexes
+                repositoryPathOption,
+                jobsIndexesOption
             };
         }
 
@@ -48,7 +48,7 @@ namespace LocalAppVeyor.Commands
         {
             app.ShowRootCommandFullNameAndVersion();
 
-            var engineConfiguration = TryGetEngineConfigurationOrTerminate(repositoryPath.Value());
+            var engineConfiguration = TryGetEngineConfigurationOrTerminate(repositoryPathOption.Value());
             var buildConfiguration = TryGetBuildConfigurationOrTerminate(engineConfiguration.RepositoryDirectoryPath);
 
             var engine = new Engine.Engine(
@@ -92,7 +92,7 @@ namespace LocalAppVeyor.Commands
 
             try
             {
-                jobs = jobsIndexes
+                jobs = jobsIndexesOption
                     .Values
                     .Select(int.Parse)
                     .ToArray();
