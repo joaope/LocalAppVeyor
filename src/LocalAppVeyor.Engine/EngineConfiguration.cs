@@ -17,12 +17,10 @@ namespace LocalAppVeyor.Engine
             FileSystem fileSystem)
         {
             if (string.IsNullOrEmpty(repositoryDirectoryPath)) throw new ArgumentNullException(nameof(repositoryDirectoryPath));
-            if (outputter == null) throw new ArgumentNullException(nameof(outputter));
-            if (fileSystem == null) throw new ArgumentNullException(nameof(fileSystem));
 
             RepositoryDirectoryPath = repositoryDirectoryPath;
-            Outputter = outputter;
-            FileSystem = fileSystem;
+            Outputter = outputter ?? throw new ArgumentNullException(nameof(outputter));
+            FileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         }
     }
 }

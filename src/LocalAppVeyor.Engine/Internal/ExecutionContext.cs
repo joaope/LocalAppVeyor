@@ -22,15 +22,10 @@ namespace LocalAppVeyor.Engine.Internal
             string repositoryDirectory,
             ExpandableString cloneDirectory)
         {
-            if (currentJob == null) throw new ArgumentNullException(nameof(currentJob));
-            if (buildConfiguration == null) throw new ArgumentNullException(nameof(buildConfiguration));
-            if (outputter == null) throw new ArgumentNullException(nameof(outputter));
-            if (repositoryDirectory == null) throw new ArgumentNullException(nameof(repositoryDirectory));
-
-            CurrentJob = currentJob;
-            BuildConfiguration = buildConfiguration;
-            Outputter = outputter;
-            RepositoryDirectory = repositoryDirectory;
+            CurrentJob = currentJob ?? throw new ArgumentNullException(nameof(currentJob));
+            BuildConfiguration = buildConfiguration ?? throw new ArgumentNullException(nameof(buildConfiguration));
+            Outputter = outputter ?? throw new ArgumentNullException(nameof(outputter));
+            RepositoryDirectory = repositoryDirectory ?? throw new ArgumentNullException(nameof(repositoryDirectory));
             CloneDirectory = cloneDirectory;
         }
     }

@@ -66,11 +66,8 @@ namespace LocalAppVeyor.Engine
             EngineConfiguration engineConfiguration,
             BuildConfiguration buildConfiguration)
         {
-            if (engineConfiguration == null) throw new ArgumentNullException(nameof(engineConfiguration));
-            if (buildConfiguration == null) throw new ArgumentNullException(nameof(buildConfiguration));
-
-            this.buildConfiguration = buildConfiguration;
-            this.engineConfiguration = engineConfiguration;
+            this.buildConfiguration = buildConfiguration ?? throw new ArgumentNullException(nameof(buildConfiguration));
+            this.engineConfiguration = engineConfiguration ?? throw new ArgumentNullException(nameof(engineConfiguration));
         }
 
         public JobExecutionResult ExecuteJob(int jobIndex)

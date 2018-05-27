@@ -20,10 +20,9 @@ namespace LocalAppVeyor.Engine.Configuration.Reader
             FileSystem fileSystem,
             string yamlFilePathOrDirectory)
         {
-            if (fileSystem == null) throw new ArgumentNullException(nameof(fileSystem));
             if (string.IsNullOrEmpty(yamlFilePathOrDirectory)) throw new ArgumentNullException(nameof(yamlFilePathOrDirectory));
 
-            this.fileSystem = fileSystem;
+            this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 
             string yamlFile;
 

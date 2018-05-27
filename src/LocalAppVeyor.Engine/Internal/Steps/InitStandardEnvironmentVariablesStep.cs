@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Security;
 
 namespace LocalAppVeyor.Engine.Internal.Steps
 {
