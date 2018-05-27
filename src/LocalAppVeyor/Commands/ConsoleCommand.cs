@@ -2,7 +2,7 @@
 using LocalAppVeyor.Engine;
 using Microsoft.Extensions.CommandLineUtils;
 
-namespace LocalAppVeyor
+namespace LocalAppVeyor.Commands
 {
     internal abstract class ConsoleCommand
     {

@@ -7,7 +7,7 @@ using LocalAppVeyor.Engine.Configuration.Reader;
 using LocalAppVeyor.Engine.IO;
 using Microsoft.Extensions.CommandLineUtils;
 
-namespace LocalAppVeyor
+namespace LocalAppVeyor.Commands
 {
     internal class JobsConsoleCommand : ConsoleCommand
     {
