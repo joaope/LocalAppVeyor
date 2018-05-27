@@ -3,7 +3,7 @@ using LocalAppVeyor.Engine;
 
 namespace LocalAppVeyor
 {
-    public class ConsoleOutputter : IPipelineOutputter
+    internal sealed class ConsoleOutputter : IPipelineOutputter
     {
         public void SetColor(ConsoleColor color)
         {
