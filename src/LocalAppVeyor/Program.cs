@@ -25,10 +25,10 @@ namespace LocalAppVeyor
                 Description = "LocalAppVeyor allows one to run an appveyor.yml build script locally"
             };
 
-            var versions = GetShortAndLongVersion();
+            var (shortFormVersion, longFormVersion) = GetShortAndLongVersion();
 
             app.HelpOption("-?|-h|--help");
-            app.VersionOption("-v|--version", versions.Item1, versions.Item2);
+            app.VersionOption("-v|--version", shortFormVersion, longFormVersion);
 
             app.Command(BuildCommand.Name, conf => { BuildCommand.SetUp(conf); }, false);
             app.Command(JobsCommand.Name, conf => { JobsCommand.SetUp(conf); }, false);
@@ -41,12 +41,11 @@ namespace LocalAppVeyor
             });
 
             app.Execute(args);
-            Console.ReadKey();
         }
 
-        private static (string, string) GetShortAndLongVersion()
+        private static (string ShortFormVersion, string LongFormVersion) GetShortAndLongVersion()
         {
-            string GetVersionFromTypeInfo(TypeInfo typeInfo)
+            string GetVersionFromTypeInfo(Type typeInfo)
             {
                 var infoVersion = typeInfo.Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
                     .InformationalVersion;
