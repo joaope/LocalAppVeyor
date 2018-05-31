@@ -61,7 +61,7 @@ namespace LocalAppVeyor.Commands
 
                 if (!File.Exists(appVeyorYml))
                 {
-                    Outputter.WriteError(".appveyor.yml file not found on repository path. Build aborted.");
+                    Outputter.WriteError(".appveyor.yml file not found on repository path.");
                     Environment.Exit(1);
                 }
             }
@@ -75,7 +75,7 @@ namespace LocalAppVeyor.Commands
             }
             catch (LocalAppVeyorException)
             {
-                Outputter.WriteError($"Error while parsing '{appVeyorYml}' file. Build aborted.");
+                Outputter.WriteError($"Error while parsing '{appVeyorYml}' file.");
                 Environment.Exit(1);
             }
 
@@ -88,7 +88,7 @@ namespace LocalAppVeyor.Commands
             {
                 if (!Directory.Exists(repositoryPath))
                 {
-                    Outputter.WriteError($"Repository directory '{repositoryPath}' not found. Build aborted.");
+                    Outputter.WriteError($"Repository directory '{repositoryPath}' not found.");
                     Environment.Exit(1);
                 }
             }
