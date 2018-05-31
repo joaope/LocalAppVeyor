@@ -36,7 +36,24 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Converters
 
                 if (scalar != null)
                 {
-                    if (scalar.Value == "matrix")
+                    if (scalar.Value == "global")
+                    {
+                        // discard "global" value itself
+                        parser.Expect<Scalar>();
+
+                        // read global variables (common to all matrix items)
+                        parser.Expect<MappingStart>();
+
+                        do
+                        {
+                            env.InternalCommonVariables.Add(deserializer.Deserialize<InternalVariable>(parser));
+
+                        } while (!parser.Accept<MappingEnd>());
+
+                        parser.Expect<MappingEnd>();
+
+                    }
+                    else if (scalar.Value == "matrix")
                     {
                         // discard "matrix" value itself
                         parser.Expect<Scalar>();

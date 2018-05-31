@@ -1,6 +1,4 @@
-﻿using LocalAppVeyor.Engine.IO;
-using Moq;
-using Xunit.Abstractions;
+﻿using Xunit.Abstractions;
 
 namespace LocalAppVeyor.Engine.UnitTests
 {
@@ -12,10 +10,5 @@ namespace LocalAppVeyor.Engine.UnitTests
         {
             this.outputter = outputter;
         }
-
-        //protected static Mock<FileSystem> GetNewMockedFileSystem()
-        //{
-
-        //}
     }
 }

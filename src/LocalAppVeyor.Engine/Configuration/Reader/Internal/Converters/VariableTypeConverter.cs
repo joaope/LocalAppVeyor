@@ -32,7 +32,7 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Converters
                     return new InternalVariable(name, secureValue, true);
                 }
 
-                throw new YamlException("error parsing enrivonment variables");
+                throw new YamlException("error parsing environment variables");
             }
             
             return new InternalVariable(name, parser.Expect<Scalar>().Value, false);
