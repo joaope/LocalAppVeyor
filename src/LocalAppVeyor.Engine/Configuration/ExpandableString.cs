@@ -36,20 +36,14 @@ namespace LocalAppVeyor.Engine.Configuration
 
         public override bool Equals(object obj)
         {
-            if (obj == null)
+            switch (obj)
             {
-                return false;
-            }
-
-            var s = obj as string;
-            if (s != null)
-            {
-                return this == s;
-            }
-            
-            if (obj is ExpandableString)
-            {
-                return ((ExpandableString)obj).internalStr == internalStr;
+                case null:
+                    return false;
+                case string s:
+                    return this == s;
+                case ExpandableString expandableString:
+                    return expandableString.internalStr == internalStr;
             }
 
             return false;
