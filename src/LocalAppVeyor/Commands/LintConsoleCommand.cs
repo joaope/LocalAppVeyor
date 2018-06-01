@@ -13,6 +13,8 @@ namespace LocalAppVeyor.Commands
 {
     internal sealed class LintConsoleCommand : ConsoleCommand
     {
+        private const string TokenEnvironmentVariableName = "LOCALAPPVEYOR_API_TOKEN";
+
         private const string YmlValidationUrl = "https://ci.appveyor.com/api/projects/validate-yaml";
 
         private CommandOption repositoryPathOption;
@@ -32,7 +34,8 @@ namespace LocalAppVeyor.Commands
         {
             apiTokenOption = app.Option(
                 "-t|--token",
-                "[Required] Your AppVeyor account API token. You can find it here: https://ci.appveyor.com/api-token",
+                $"Your AppVeyor account API token. If not specified it tries to get it from {TokenEnvironmentVariableName} " +
+                "environment variable. You can find your API token here: https://ci.appveyor.com/api-token.",
                 CommandOptionType.SingleValue);
 
             repositoryPathOption = app.Option(
@@ -47,8 +50,16 @@ namespace LocalAppVeyor.Commands
 
             if (string.IsNullOrEmpty(apiToken))
             {
-                Outputter.WriteError("AppVeyor API token is required.");
-                Environment.Exit(1);
+                apiToken = Environment.GetEnvironmentVariable(
+                    TokenEnvironmentVariableName,
+                    EnvironmentVariableTarget.User);
+
+                if (string.IsNullOrEmpty(apiToken))
+                {
+                    Outputter.WriteError("AppVeyor API token is required. Either specify it using  --token " +
+                                         $"option or {TokenEnvironmentVariableName} environment variable.");
+                    Environment.Exit(1);
+                }
             }
 
             var repositoryPath = TryGetRepositoryDirectoryPathOrTerminate(repositoryPathOption.Value());
