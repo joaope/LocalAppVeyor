@@ -4,7 +4,7 @@
     <Description>Allows one to execute AppVeyor build pipeline programatically, for a given local repository and configuration.</Description>
     <Copyright>joaope 2016</Copyright>
     <AssemblyTitle>LocalAppVeyor.Engine</AssemblyTitle>
-    <VersionPrefix>0.5.0-alpha8</VersionPrefix>
+    <VersionPrefix>0.5.0-alpha9</VersionPrefix>
     <Authors>joaope</Authors>
     <TargetFramework>netstandard2.0</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
