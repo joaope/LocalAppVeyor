@@ -2,7 +2,7 @@
 using System.Reflection;
 using LocalAppVeyor.Commands;
 using LocalAppVeyor.Engine;
-using Microsoft.Extensions.CommandLineUtils;
+using McMaster.Extensions.CommandLineUtils;
 
 namespace LocalAppVeyor
 {

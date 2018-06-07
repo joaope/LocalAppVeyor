@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using LocalAppVeyor.Engine;
-using Microsoft.Extensions.CommandLineUtils;
+using McMaster.Extensions.CommandLineUtils;
 
 namespace LocalAppVeyor.Commands
 {

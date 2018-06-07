@@ -6,7 +6,7 @@ using System.Net.Http.Headers;
 using System.Security;
 using System.Threading.Tasks;
 using LocalAppVeyor.Engine;
-using Microsoft.Extensions.CommandLineUtils;
+using McMaster.Extensions.CommandLineUtils;
 using Newtonsoft.Json;
 
 namespace LocalAppVeyor.Commands
