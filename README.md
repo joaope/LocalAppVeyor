@@ -49,6 +49,7 @@ Options:
 Commands:
   build  Executes one or all build jobs on specified repository directory
   jobs   List all build jobs available to execution.
+  lint   Validates appveyor.yml YAML configuration. It requires internet connection.
 
 Use "LocalAppVeyor [command] --help" for more information about a command.
 ```
