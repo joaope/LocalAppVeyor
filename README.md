@@ -5,13 +5,13 @@ its build jobs, locally.
 | ------------- |:-------------:| ----- |
 |[![Build status](https://ci.appveyor.com/api/projects/status/hpi2lwuhrr2qbhfm?svg=true)](https://ci.appveyor.com/project/joaope/localappveyor)|[![Build Status](https://travis-ci.org/joaope/LocalAppVeyor.svg?branch=master)](https://travis-ci.org/joaope/LocalAppVeyor)|[![Nuget](https://img.shields.io/nuget/v/LocalAppVeyor.svg?maxAge=0)](https://www.nuget.org/packages/LocalAppVeyor/)|
 
-1. [How it works](#how-it-works)
-2. [Install](#install)
-3. [Usage](#usage)
-   1. [```build``` command](#-build-command)
-   2. [```jobs``` command](#-jobs-command)
-   3. [```lint``` command](#-lint-command)
-4. [Supported build steps](#supported-build-steps)
+* [How it works](#how-it-works)
+* [Install](#install)
+* [Usage](#usage)
+   * [```build``` command](#-build-command)
+   * [```jobs``` command](#-jobs-command)
+   * [```lint``` command](#-lint-command)
+* [Supported build steps](#supported-build-steps)
 
 ## How it works
 LocalAppVeyor tries to strictly follow same [build pipeline](https://www.appveyor.com/docs/build-configuration/#build-pipeline) 
