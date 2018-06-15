@@ -26,12 +26,12 @@ matrix:
 
     - os: osx # OSX 10.12
       osx_image: xcode8.3
-      dotnet: 2.1
+      dotnet: 2.1.300
       env: configuration=debug
     
     - os: osx # OSX 10.12
       osx_image: xcode8.3
-      dotnet: 2.1
+      dotnet: 2.1.300
       env: configuration=release
 
 script:
