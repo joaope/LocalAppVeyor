@@ -3,17 +3,11 @@ using FluentAssertions;
 using LocalAppVeyor.Engine.Configuration;
 using LocalAppVeyor.Engine.Configuration.Reader;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace LocalAppVeyor.Engine.UnitTests.Configuration
 {
-    public class ExpandableStringTests : BaseTestClass
+    public class ExpandableStringTests
     {
-        public ExpandableStringTests(ITestOutputHelper outputter) 
-            : base(outputter)
-        {
-        }
-
         [Fact]
         public void ExpandEnvironmentVariablesOnString()
         {

@@ -1,17 +1,11 @@
 ﻿using LocalAppVeyor.Engine.Configuration;
 using LocalAppVeyor.Engine.Configuration.Reader;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace LocalAppVeyor.Engine.UnitTests.Configuration
 {
-    public class BuildScriptTests : BaseTestClass
+    public class BuildScriptTests
     {
-        public BuildScriptTests(ITestOutputHelper outputter) 
-            : base(outputter)
-        {
-        }
-
         [Fact]
         public void ShouldReadBuildScriptAsAScriptBlockWithMultipleDifferentTypeScripts()
         {

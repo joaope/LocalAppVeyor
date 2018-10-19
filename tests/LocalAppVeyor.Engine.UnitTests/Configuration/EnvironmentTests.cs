@@ -5,17 +5,11 @@ using FluentAssertions;
 using LocalAppVeyor.Engine.Configuration;
 using LocalAppVeyor.Engine.Configuration.Reader;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace LocalAppVeyor.Engine.UnitTests.Configuration
 {
-    public class EnvironmentTests : BaseTestClass
+    public class EnvironmentTests
     {
-        public EnvironmentTests(ITestOutputHelper outputter)
-            : base(outputter)
-        {
-        }
-
         [Fact]
         public void ShouldReadEnvironmentWithCommonAndMatrixVariables()
         {

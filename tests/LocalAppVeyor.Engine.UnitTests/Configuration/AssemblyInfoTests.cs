@@ -2,17 +2,11 @@
 using LocalAppVeyor.Engine.Configuration;
 using LocalAppVeyor.Engine.Configuration.Reader;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace LocalAppVeyor.Engine.UnitTests.Configuration
 {
-    public class AssemblyInfoTests : BaseTestClass
+    public class AssemblyInfoTests
     {
-        public AssemblyInfoTests(ITestOutputHelper outputter) 
-            : base(outputter)
-        {
-        }
-
         [Fact]
         public void ShouldReadAssemblyInfoStep()
         {
