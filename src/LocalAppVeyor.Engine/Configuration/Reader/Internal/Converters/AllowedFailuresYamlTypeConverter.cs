@@ -9,7 +9,7 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Converters
 {
     internal class AllowedFailuresYamlTypeConverter : IYamlTypeConverter
     {
-        private readonly Deserializer deserializer;
+        private readonly IDeserializer deserializer;
 
         public AllowedFailuresYamlTypeConverter()
         {
