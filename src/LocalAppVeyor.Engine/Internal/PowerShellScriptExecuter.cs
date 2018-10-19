@@ -24,7 +24,7 @@ namespace LocalAppVeyor.Engine.Internal
 
                 powerShell.Streams.Error.DataAdded += (sender, args) =>
                 {
-                    onOutputDataReceived(powerShell.Streams.Error[args.Index].ErrorDetails.Message);
+                    onErrorDataReceived(powerShell.Streams.Error[args.Index].ErrorDetails.Message);
                     errorsOccured = true;
                 };
 
