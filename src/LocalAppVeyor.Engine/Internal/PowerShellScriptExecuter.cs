@@ -13,7 +13,7 @@ namespace LocalAppVeyor.Engine.Internal
         {
             using (var powerShell = PowerShell.Create())
             {
-                var errorsOccured = false;
+                var success = true;
 
                 powerShell.AddScript(script);
 
@@ -25,12 +25,12 @@ namespace LocalAppVeyor.Engine.Internal
                 powerShell.Streams.Error.DataAdded += (sender, args) =>
                 {
                     onErrorDataReceived(powerShell.Streams.Error[args.Index].ErrorDetails.Message);
-                    errorsOccured = true;
+                    success = false;
                 };
 
                 powerShell.Invoke();
 
-                return errorsOccured;
+                return success;
             }
         }
     }
