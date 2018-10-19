@@ -17,9 +17,9 @@ namespace LocalAppVeyor.Commands
 
         protected override string Description => "Executes appveyor.yml's build jobs from specified repository directory";
 
-        private CommandOption repositoryPathOption;
+        private CommandOption _repositoryPathOption;
 
-        private CommandOption jobsIndexesOption;
+        private CommandOption _jobsIndexesOption;
 
         public BuildConsoleCommand(IPipelineOutputter outputter) 
             : base(outputter)
@@ -28,12 +28,12 @@ namespace LocalAppVeyor.Commands
 
         protected override void SetUpAdditionalCommandOptions(CommandLineApplication app)
         {
-            repositoryPathOption = app.Option(
+            _repositoryPathOption = app.Option(
                 "-d|--dir",
                 "Local repository directory where appveyor.yml sits. If not specified current directory is used",
                 CommandOptionType.SingleValue);
 
-             jobsIndexesOption = app.Option(
+             _jobsIndexesOption = app.Option(
                 "-j|--job",
                 "Job to build. You can specify multiple jobs. Use 'jobs' command to list them all",
                 CommandOptionType.MultipleValue);
@@ -41,7 +41,7 @@ namespace LocalAppVeyor.Commands
 
         protected override Task<int> OnExecute(CommandLineApplication app)
         {
-            var engineConfiguration = TryGetEngineConfigurationOrTerminate(repositoryPathOption.Value());
+            var engineConfiguration = TryGetEngineConfigurationOrTerminate(_repositoryPathOption.Value());
             var buildConfiguration = TryGetBuildConfigurationOrTerminate(engineConfiguration.RepositoryDirectoryPath);
 
             var engine = new Engine.Engine(
@@ -85,7 +85,7 @@ namespace LocalAppVeyor.Commands
 
             try
             {
-                jobs = jobsIndexesOption
+                jobs = _jobsIndexesOption
                     .Values
                     .Select(int.Parse)
                     .ToArray();

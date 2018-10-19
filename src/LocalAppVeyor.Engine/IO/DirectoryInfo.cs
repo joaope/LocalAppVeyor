@@ -4,27 +4,27 @@ namespace LocalAppVeyor.Engine.IO
 {
     public class DirectoryInfo
     {
-        private readonly System.IO.DirectoryInfo internalDirectoryInfo;
+        private readonly System.IO.DirectoryInfo _internalDirectoryInfo;
 
-        public virtual bool Exists => internalDirectoryInfo.Exists;
+        public virtual bool Exists => _internalDirectoryInfo.Exists;
 
-        public virtual string Name => internalDirectoryInfo.Name;
+        public virtual string Name => _internalDirectoryInfo.Name;
 
-        public virtual string FullName => internalDirectoryInfo.FullName;
+        public virtual string FullName => _internalDirectoryInfo.FullName;
 
         public DirectoryInfo(string path)
         {
-            internalDirectoryInfo = new System.IO.DirectoryInfo(path);
+            _internalDirectoryInfo = new System.IO.DirectoryInfo(path);
         }
 
         public virtual void Delete(bool recursive)
         {
-            internalDirectoryInfo.Delete(recursive);
+            _internalDirectoryInfo.Delete(recursive);
         }
 
         public virtual FileInfo[] GetFiles()
         {
-            return internalDirectoryInfo
+            return _internalDirectoryInfo
                 .GetFiles()
                 .Select(f => new FileInfo(f.FullName))
                 .ToArray();
@@ -32,7 +32,7 @@ namespace LocalAppVeyor.Engine.IO
 
         public virtual DirectoryInfo[] GetDirectories()
         {
-            return internalDirectoryInfo
+            return _internalDirectoryInfo
                 .GetDirectories()
                 .Select(d => new DirectoryInfo(d.FullName))
                 .ToArray();
@@ -40,7 +40,7 @@ namespace LocalAppVeyor.Engine.IO
 
         public virtual DirectoryInfo CreateSubdirectory(string path)
         {
-            return new DirectoryInfo(internalDirectoryInfo.CreateSubdirectory(path).FullName);
+            return new DirectoryInfo(_internalDirectoryInfo.CreateSubdirectory(path).FullName);
         }
     }
 }

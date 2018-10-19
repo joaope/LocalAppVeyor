@@ -9,11 +9,11 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Converters
 {
     internal class AllowedFailuresYamlTypeConverter : IYamlTypeConverter
     {
-        private readonly IDeserializer deserializer;
+        private readonly IDeserializer _deserializer;
 
         public AllowedFailuresYamlTypeConverter()
         {
-            deserializer = new DeserializerBuilder()
+            _deserializer = new DeserializerBuilder()
                 .IgnoreUnmatchedProperties()
                 .WithTypeConverter(new VariableTypeConverter())
                 .Build();
@@ -43,7 +43,7 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Converters
 
                 do
                 {
-                    var possibleVar = deserializer.Deserialize<InternalVariable>(parser);
+                    var possibleVar = _deserializer.Deserialize<InternalVariable>(parser);
 
                     switch (possibleVar.Name)
                     {

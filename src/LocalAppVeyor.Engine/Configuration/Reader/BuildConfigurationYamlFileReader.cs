@@ -9,7 +9,7 @@ namespace LocalAppVeyor.Engine.Configuration.Reader
 
         public string YamlFilePath { get; }
 
-        private readonly FileSystem fileSystem;
+        private readonly FileSystem _fileSystem;
 
         public BuildConfigurationYamlFileReader(string yamlFilePathOrDirectory)
             : this(FileSystem.Default, yamlFilePathOrDirectory)
@@ -22,7 +22,7 @@ namespace LocalAppVeyor.Engine.Configuration.Reader
         {
             if (string.IsNullOrEmpty(yamlFilePathOrDirectory)) throw new ArgumentNullException(nameof(yamlFilePathOrDirectory));
 
-            this.fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+            this._fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 
             string yamlFile;
 
@@ -47,7 +47,7 @@ namespace LocalAppVeyor.Engine.Configuration.Reader
 
             try
             {
-                yaml = fileSystem.File.ReadAllText(YamlFilePath);
+                yaml = _fileSystem.File.ReadAllText(YamlFilePath);
             }
             catch (Exception e)
             {

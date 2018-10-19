@@ -2,18 +2,18 @@
 {
     public class FileInfo
     {
-        private readonly System.IO.FileInfo internalFileInfo;
+        private readonly System.IO.FileInfo _internalFileInfo;
 
         public FileInfo(string path)
         {
-            internalFileInfo = new System.IO.FileInfo(path);
+            _internalFileInfo = new System.IO.FileInfo(path);
         }
 
-        public virtual string Name => internalFileInfo.Name;
+        public virtual string Name => _internalFileInfo.Name;
 
         public virtual FileInfo CopyTo(string destFileName, bool overwrite)
         {
-            internalFileInfo.CopyTo(destFileName, overwrite);
+            _internalFileInfo.CopyTo(destFileName, overwrite);
 
             var dest = new System.IO.FileInfo(destFileName);
             dest.Attributes &= ~System.IO.FileAttributes.ReadOnly;
@@ -23,7 +23,7 @@
 
         public virtual void Delete()
         {
-            internalFileInfo.Delete();
+            _internalFileInfo.Delete();
         }
     }
 }

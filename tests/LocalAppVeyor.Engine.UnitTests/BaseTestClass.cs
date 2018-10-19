@@ -4,11 +4,11 @@ namespace LocalAppVeyor.Engine.UnitTests
 {
     public abstract class BaseTestClass
     {
-        private readonly ITestOutputHelper outputter;
+        private readonly ITestOutputHelper _outputter;
 
         protected BaseTestClass(ITestOutputHelper outputter)
         {
-            this.outputter = outputter;
+            this._outputter = outputter;
         }
     }
 }

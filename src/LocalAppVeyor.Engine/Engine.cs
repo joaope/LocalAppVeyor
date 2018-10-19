@@ -15,35 +15,35 @@ namespace LocalAppVeyor.Engine
 
         public event EventHandler<JobEndedEventArgs> JobEnded = delegate { };
 
-        private readonly BuildConfiguration buildConfiguration;
+        private readonly BuildConfiguration _buildConfiguration;
 
-        private readonly EngineConfiguration engineConfiguration;
+        private readonly EngineConfiguration _engineConfiguration;
 
-        private MatrixJob[] jobs;
+        private MatrixJob[] _jobs;
 
         public MatrixJob[] Jobs
         {
             get
             {
-                if (jobs != null)
+                if (_jobs != null)
                 {
-                    return jobs;
+                    return _jobs;
                 }
 
-                var environmentsVariables = buildConfiguration.EnvironmentVariables.Matrix.Count > 0
-                    ? buildConfiguration.EnvironmentVariables.Matrix.ToArray()
+                var environmentsVariables = _buildConfiguration.EnvironmentVariables.Matrix.Count > 0
+                    ? _buildConfiguration.EnvironmentVariables.Matrix.ToArray()
                     : new IReadOnlyCollection<Variable>[] { null };
-                var configurations = buildConfiguration.Configurations.Count > 0
-                    ? buildConfiguration.Configurations.ToArray()
+                var configurations = _buildConfiguration.Configurations.Count > 0
+                    ? _buildConfiguration.Configurations.ToArray()
                     : new string[] { null };
-                var platforms = buildConfiguration.Platforms.Count > 0
-                    ? buildConfiguration.Platforms.ToArray()
+                var platforms = _buildConfiguration.Platforms.Count > 0
+                    ? _buildConfiguration.Platforms.ToArray()
                     : new string[] { null };
-                var oses = buildConfiguration.OperatingSystems.Count > 0
-                    ? buildConfiguration.OperatingSystems.ToArray()
+                var oses = _buildConfiguration.OperatingSystems.Count > 0
+                    ? _buildConfiguration.OperatingSystems.ToArray()
                     : new string[] { null };
 
-                jobs = (
+                _jobs = (
                         from environmentVariables in environmentsVariables
                         from configuration in configurations
                         from platform in platforms
@@ -51,7 +51,7 @@ namespace LocalAppVeyor.Engine
                         select new MatrixJob(os, environmentVariables, configuration, platform))
                     .ToArray();
 
-                return jobs;
+                return _jobs;
             }
         }
 
@@ -66,8 +66,8 @@ namespace LocalAppVeyor.Engine
             EngineConfiguration engineConfiguration,
             BuildConfiguration buildConfiguration)
         {
-            this.buildConfiguration = buildConfiguration ?? throw new ArgumentNullException(nameof(buildConfiguration));
-            this.engineConfiguration = engineConfiguration ?? throw new ArgumentNullException(nameof(engineConfiguration));
+            this._buildConfiguration = buildConfiguration ?? throw new ArgumentNullException(nameof(buildConfiguration));
+            this._engineConfiguration = engineConfiguration ?? throw new ArgumentNullException(nameof(engineConfiguration));
         }
 
         public JobExecutionResult ExecuteJob(int jobIndex)
@@ -88,11 +88,11 @@ namespace LocalAppVeyor.Engine
 
             var executionContext = new ExecutionContext(
                 job,
-                buildConfiguration,
-                engineConfiguration.Outputter,
-                engineConfiguration.RepositoryDirectoryPath,
-                !string.IsNullOrEmpty(buildConfiguration.CloneFolder)
-                    ? buildConfiguration.CloneFolder
+                _buildConfiguration,
+                _engineConfiguration.Outputter,
+                _engineConfiguration.RepositoryDirectoryPath,
+                !string.IsNullOrEmpty(_buildConfiguration.CloneFolder)
+                    ? _buildConfiguration.CloneFolder
                     : new ExpandableString(@"C:\Projects\LocalAppVeyorTempClone"));
 
             JobExecutionResult executionResult;
@@ -104,8 +104,8 @@ namespace LocalAppVeyor.Engine
                 // on_success / on_failure only happen here, after we know the build status
                 // they do intervene on build final status though
                 isSuccess = isSuccess
-                    ? new OnSuccessStep(engineConfiguration.FileSystem, executionContext.CloneDirectory, buildConfiguration.OnSuccessScript).Execute(executionContext)
-                    : new OnFailureStep(engineConfiguration.FileSystem, executionContext.CloneDirectory, buildConfiguration.OnFailureScript).Execute(executionContext);
+                    ? new OnSuccessStep(_engineConfiguration.FileSystem, executionContext.CloneDirectory, _buildConfiguration.OnSuccessScript).Execute(executionContext)
+                    : new OnFailureStep(_engineConfiguration.FileSystem, executionContext.CloneDirectory, _buildConfiguration.OnFailureScript).Execute(executionContext);
 
                 return isSuccess
                     ? JobExecutionResult.CreateSuccess()
@@ -122,7 +122,7 @@ namespace LocalAppVeyor.Engine
             finally
             {
                 // on_finish don't influence build final status so we just run it
-                new OnFinishStep(engineConfiguration.FileSystem, executionContext.CloneDirectory, buildConfiguration.OnFinishScript).Execute(executionContext);
+                new OnFinishStep(_engineConfiguration.FileSystem, executionContext.CloneDirectory, _buildConfiguration.OnFinishScript).Execute(executionContext);
             }
 
             JobEnded?.Invoke(this, new JobEndedEventArgs(job, executionResult));
@@ -142,13 +142,13 @@ namespace LocalAppVeyor.Engine
 
                 // if success, or job is on the allowed failures matrix, continue on to next one 
                 if (results[i].IsSuccessfulExecution ||
-                    buildConfiguration.Matrix.AllowedFailures.Any(a => a.AreConditionsMetForJob(job)))
+                    _buildConfiguration.Matrix.AllowedFailures.Any(a => a.AreConditionsMetForJob(job)))
                 {
                     continue;
                 }
 
                 // if fast_finish is on mark remaining jobs as NotExecuted and leave build
-                if (buildConfiguration.Matrix.IsFastFinish)
+                if (_buildConfiguration.Matrix.IsFastFinish)
                 {
                     for (++i; i < Jobs.Length; i++)
                     {
@@ -171,59 +171,59 @@ namespace LocalAppVeyor.Engine
             }
             
             // Init
-            if (!new InitStep(engineConfiguration.FileSystem, executionContext.RepositoryDirectory, buildConfiguration.InitializationScript).Execute(executionContext))
+            if (!new InitStep(_engineConfiguration.FileSystem, executionContext.RepositoryDirectory, _buildConfiguration.InitializationScript).Execute(executionContext))
             {
                 return false;
             }
 
             // Clone
-            if (!new CloneFolderStep(engineConfiguration.FileSystem).Execute(executionContext))
+            if (!new CloneFolderStep(_engineConfiguration.FileSystem).Execute(executionContext))
             {
                 return false;
             }
 
             // Install
-            if (!new InstallStep(engineConfiguration.FileSystem, executionContext.CloneDirectory, buildConfiguration.InstallScript).Execute(executionContext))
+            if (!new InstallStep(_engineConfiguration.FileSystem, executionContext.CloneDirectory, _buildConfiguration.InstallScript).Execute(executionContext))
             {
                 return false;
             }
 
             // AssemblyInfo rewrite
-            if (!new AssemblyInfoRewriteStep(engineConfiguration.FileSystem).Execute(executionContext))
+            if (!new AssemblyInfoRewriteStep(_engineConfiguration.FileSystem).Execute(executionContext))
             {
                 return false;
             }
 
             // Before build
-            if (!new BeforeBuildStep(engineConfiguration.FileSystem, executionContext.CloneDirectory, buildConfiguration.BeforeBuildScript).Execute(executionContext))
+            if (!new BeforeBuildStep(_engineConfiguration.FileSystem, executionContext.CloneDirectory, _buildConfiguration.BeforeBuildScript).Execute(executionContext))
             {
                 return false;
             }
 
             // Build
-            if (buildConfiguration.Build.IsAutomaticBuildOff)
+            if (_buildConfiguration.Build.IsAutomaticBuildOff)
             {
-                if (!new BuildScriptStep(engineConfiguration.FileSystem, executionContext.CloneDirectory, buildConfiguration.BuildScript).Execute(executionContext))
+                if (!new BuildScriptStep(_engineConfiguration.FileSystem, executionContext.CloneDirectory, _buildConfiguration.BuildScript).Execute(executionContext))
                 {
                     return false;
                 }
             }
             else
             {
-                if (!new BuildStep(engineConfiguration.FileSystem).Execute(executionContext))
+                if (!new BuildStep(_engineConfiguration.FileSystem).Execute(executionContext))
                 {
                     return false;
                 }
             }
 
             // After Build
-            if (!new AfterBuildStep(engineConfiguration.FileSystem, executionContext.CloneDirectory, buildConfiguration.AfterBuildScript).Execute(executionContext))
+            if (!new AfterBuildStep(_engineConfiguration.FileSystem, executionContext.CloneDirectory, _buildConfiguration.AfterBuildScript).Execute(executionContext))
             {
                 return false;
             }
 
             // Test script
-            if (!new TestScriptStep(engineConfiguration.FileSystem, executionContext.CloneDirectory, buildConfiguration.TestScript).Execute(executionContext))
+            if (!new TestScriptStep(_engineConfiguration.FileSystem, executionContext.CloneDirectory, _buildConfiguration.TestScript).Execute(executionContext))
             {
                 return false;
             }

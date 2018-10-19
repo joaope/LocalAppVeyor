@@ -5,27 +5,27 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 {
     internal abstract class ScriptBlockExecuterStep : IInternalEngineStep
     {
-        private readonly ScriptBlock scriptBlock;
+        private readonly ScriptBlock _scriptBlock;
 
-        private readonly FileSystem fileSystem;
+        private readonly FileSystem _fileSystem;
 
-        private readonly string workingDirectory;
+        private readonly string _workingDirectory;
 
         protected ScriptBlockExecuterStep(
             FileSystem fileSystem, 
             string workingDirectory,
             ScriptBlock scriptBlock)
         {
-            this.fileSystem = fileSystem;
-            this.scriptBlock = scriptBlock;
-            this.workingDirectory = workingDirectory;
+            this._fileSystem = fileSystem;
+            this._scriptBlock = scriptBlock;
+            this._workingDirectory = workingDirectory;
         }
 
         public bool Execute(ExecutionContext executionContext)
         {
-            if (scriptBlock != null)
+            if (_scriptBlock != null)
             {
-                foreach (var scriptLine in scriptBlock)
+                foreach (var scriptLine in _scriptBlock)
                 {
                     if (string.IsNullOrEmpty(scriptLine.Script))
                     {
@@ -57,8 +57,8 @@ namespace LocalAppVeyor.Engine.Internal.Steps
         private bool ExecuteBatchScript(ExecutionContext executionContext, string script)
         {
             return BatchScriptExecuter.Execute(
-                fileSystem,
-                workingDirectory,
+                _fileSystem,
+                _workingDirectory,
                 script,
                 data =>
                 {
@@ -79,7 +79,7 @@ namespace LocalAppVeyor.Engine.Internal.Steps
         private bool ExecutePowerShellScript(ExecutionContext executionContext, string script)
         {
             return PowerShellScriptExecuter.Execute(
-                workingDirectory,
+                _workingDirectory,
                 script,
                 data =>
                 {

@@ -7,13 +7,13 @@ namespace LocalAppVeyor.Engine.Configuration
     {
         private static readonly Regex VarPattern = new Regex(@"\$\([\w-]+\)", RegexOptions.Compiled);
 
-        private readonly string internalStr;
+        private readonly string _internalStr;
 
         public static ExpandableString Empty => new ExpandableString(string.Empty);
 
         public ExpandableString(string str)
         {
-            internalStr = str;
+            _internalStr = str;
         }
 
         public static implicit operator ExpandableString(string str)
@@ -23,13 +23,13 @@ namespace LocalAppVeyor.Engine.Configuration
 
         public static implicit operator string(ExpandableString expandable)
         {
-            if (string.IsNullOrEmpty(expandable.internalStr))
+            if (string.IsNullOrEmpty(expandable._internalStr))
             {
-                return expandable.internalStr;
+                return expandable._internalStr;
             }
             
             return VarPattern
-                .Replace(expandable.internalStr, m => Environment.GetEnvironmentVariable(m.Value.Substring(2, m.Value.Length - 3)))
+                .Replace(expandable._internalStr, m => Environment.GetEnvironmentVariable(m.Value.Substring(2, m.Value.Length - 3)))
                 .Replace("{build}", "0")
                 .Replace("{version}", Environment.GetEnvironmentVariable("APPVEYOR_BUILD_VERSION"));
         }
@@ -43,7 +43,7 @@ namespace LocalAppVeyor.Engine.Configuration
                 case string s:
                     return this == s;
                 case ExpandableString expandableString:
-                    return expandableString.internalStr == internalStr;
+                    return expandableString._internalStr == _internalStr;
             }
 
             return false;
@@ -51,7 +51,7 @@ namespace LocalAppVeyor.Engine.Configuration
 
         public override int GetHashCode()
         {
-            return internalStr.GetHashCode();
+            return _internalStr.GetHashCode();
         }
 
         public override string ToString()

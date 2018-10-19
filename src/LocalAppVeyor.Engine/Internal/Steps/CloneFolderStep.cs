@@ -5,11 +5,11 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 {
     internal class CloneFolderStep : IInternalEngineStep
     {
-        private readonly FileSystem fileSystem;
+        private readonly FileSystem _fileSystem;
 
         public CloneFolderStep(FileSystem fileSystem)
         {
-            this.fileSystem = fileSystem;
+            this._fileSystem = fileSystem;
         }
 
         public bool Execute(ExecutionContext executionContext)
@@ -28,7 +28,7 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 
             if (!dirDestination.Exists)
             {
-                fileSystem.Directory.CreateDirectory(dirDestination.FullName);
+                _fileSystem.Directory.CreateDirectory(dirDestination.FullName);
             }
 
             // empty destination
@@ -50,7 +50,7 @@ namespace LocalAppVeyor.Engine.Internal.Steps
             // copy each file into destination
             foreach (var file in source.GetFiles())
             {
-                file.CopyTo(fileSystem.Path.Combine(destination.FullName, file.Name), true);
+                file.CopyTo(_fileSystem.Path.Combine(destination.FullName, file.Name), true);
             }
 
             // copy each subdirectory using recursion

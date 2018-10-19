@@ -14,15 +14,15 @@ namespace LocalAppVeyor.Engine
 
         public IReadOnlyCollection<Variable> Variables { get; }
 
-        private string name;
+        private string _name;
 
         public string Name
         {
             get
             {
-                if (name != null)
+                if (_name != null)
                 {
-                    return name;
+                    return _name;
                 }
 
                 if (string.IsNullOrEmpty(OperatingSystem) &&
@@ -55,7 +55,7 @@ namespace LocalAppVeyor.Engine
                     nameParts.Add($"Platform: {Platform}");
                 }
 
-                return name = string.Join("; ", nameParts);
+                return _name = string.Join("; ", nameParts);
             }
         }
 

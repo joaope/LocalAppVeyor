@@ -17,9 +17,9 @@ namespace LocalAppVeyor.Commands
 
         private const string YmlValidationUrl = "https://ci.appveyor.com/api/projects/validate-yaml";
 
-        private CommandOption repositoryPathOption;
+        private CommandOption _repositoryPathOption;
 
-        private CommandOption apiTokenOption;
+        private CommandOption _apiTokenOption;
 
         public override string Name => "lint";
 
@@ -32,13 +32,13 @@ namespace LocalAppVeyor.Commands
 
         protected override void SetUpAdditionalCommandOptions(CommandLineApplication app)
         {
-            apiTokenOption = app.Option(
+            _apiTokenOption = app.Option(
                 "-t|--token",
                 $"Your AppVeyor account API token. If not specified it tries to get it from {TokenEnvironmentVariableName} " +
                 "environment variable. You can find your API token here: https://ci.appveyor.com/api-token.",
                 CommandOptionType.SingleValue);
 
-            repositoryPathOption = app.Option(
+            _repositoryPathOption = app.Option(
                 "-d|--dir",
                 "Local repository directory where appveyor.yml sits. If not specified current directory is used",
                 CommandOptionType.SingleValue);
@@ -46,7 +46,7 @@ namespace LocalAppVeyor.Commands
 
         protected override async Task<int> OnExecute(CommandLineApplication app)
         {
-            var apiToken = apiTokenOption.Value();
+            var apiToken = _apiTokenOption.Value();
 
             if (string.IsNullOrEmpty(apiToken))
             {
@@ -62,7 +62,7 @@ namespace LocalAppVeyor.Commands
                 }
             }
 
-            var repositoryPath = TryGetRepositoryDirectoryPathOrTerminate(repositoryPathOption.Value());
+            var repositoryPath = TryGetRepositoryDirectoryPathOrTerminate(_repositoryPathOption.Value());
             var (yamlFilePath, ymlFileContent) = TryGetAppVeyorFileContentOrTerminate(repositoryPath);
 
             Outputter.Write($"Validating '{yamlFilePath}'...");
