@@ -8,17 +8,11 @@ using LocalAppVeyor.Engine.Internal.Steps;
 using LocalAppVeyor.Engine.IO;
 using Moq;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace LocalAppVeyor.Engine.UnitTests.Engine
 {
-    public class AssemblyInfoRewriteStepTests : BaseTestClass
+    public class AssemblyInfoRewriteStepTests
     {
-        public AssemblyInfoRewriteStepTests(ITestOutputHelper outputter)
-            : base(outputter)
-        {
-        }
-
         [Fact]
         public void AssemblyInfoReWriteShouldReplaceAllVersionAttributes()
         {
