@@ -28,7 +28,7 @@ Build engine tries to be the less intrusive as possible printing only what it co
 
 Install LocalAppVeyor as a [.NET Core CLI](https://docs.microsoft.com/en-us/dotnet/core/tools/?tabs=netcore2x) global tool using the following command:
 ```console
-dotnet tool install -g localappveyor --version 0.5.0-alpha10
+dotnet tool install -g localappveyor --version 0.5.0-alpha.10
 ```
 You have it now available on your command line:
 
