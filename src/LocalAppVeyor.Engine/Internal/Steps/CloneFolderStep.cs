@@ -9,7 +9,7 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 
         public CloneFolderStep(FileSystem fileSystem)
         {
-            this._fileSystem = fileSystem;
+            _fileSystem = fileSystem;
         }
 
         public bool Execute(ExecutionContext executionContext)

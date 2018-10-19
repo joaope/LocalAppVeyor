@@ -22,7 +22,7 @@ namespace LocalAppVeyor.Engine.Configuration.Reader
         {
             if (string.IsNullOrEmpty(yamlFilePathOrDirectory)) throw new ArgumentNullException(nameof(yamlFilePathOrDirectory));
 
-            this._fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
+            _fileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
 
             string yamlFile;
 

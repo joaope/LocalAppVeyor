@@ -14,7 +14,7 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 
         public BuildStep(FileSystem fileSystem)
         {
-            this._fileSystem = fileSystem;
+            _fileSystem = fileSystem;
         }
 
         public bool Execute(ExecutionContext executionContext)

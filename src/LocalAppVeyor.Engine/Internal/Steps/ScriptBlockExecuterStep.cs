@@ -16,9 +16,9 @@ namespace LocalAppVeyor.Engine.Internal.Steps
             string workingDirectory,
             ScriptBlock scriptBlock)
         {
-            this._fileSystem = fileSystem;
-            this._scriptBlock = scriptBlock;
-            this._workingDirectory = workingDirectory;
+            _fileSystem = fileSystem;
+            _scriptBlock = scriptBlock;
+            _workingDirectory = workingDirectory;
         }
 
         public bool Execute(ExecutionContext executionContext)

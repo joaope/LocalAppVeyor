@@ -8,7 +8,7 @@ namespace LocalAppVeyor.Engine.UnitTests
 
         protected BaseTestClass(ITestOutputHelper outputter)
         {
-            this._outputter = outputter;
+            _outputter = outputter;
         }
     }
 }
