@@ -11,7 +11,7 @@ configuration:
   - release
 
 before_build:
-  - dotnet restore --source https://api.nuget.org/v3/index.json --source https://powershell.myget.org/F/powershell-core/api/v3/index.json
+  - dotnet restore --source https://api.nuget.org/v3/index.json
 
 build_script:
   - dotnet build src\LocalAppVeyor.Engine --configuration %configuration%
