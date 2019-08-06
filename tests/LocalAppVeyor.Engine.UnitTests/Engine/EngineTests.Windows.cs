@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.IO.Abstractions;
 using LocalAppVeyor.Engine.Configuration;
+using LocalAppVeyor.Engine.UnitTests.TestUtilities;
 using Moq;
 using Xunit;
 using Xunit.Abstractions;
@@ -19,7 +20,7 @@ namespace LocalAppVeyor.Engine.UnitTests.Engine
             _engineConfiguration = new EngineConfiguration(Directory.GetCurrentDirectory(), _outputterMock.Object, new FileSystem());
         }
 
-        [Fact]
+        [WindowsOnlyFact]
         public void ShouldRunInitializationPowershellScript()
         {
             var buildConfiguration = new BuildConfiguration
@@ -36,7 +37,7 @@ namespace LocalAppVeyor.Engine.UnitTests.Engine
             Assert.True(jobResult.IsSuccessfulExecution);
         }
 
-        [Fact]
+        [WindowsOnlyFact]
         public void ShouldRunInitializationPowershellScriptWithMultipleLines()
         {
             var buildConfiguration = new BuildConfiguration
@@ -56,7 +57,7 @@ namespace LocalAppVeyor.Engine.UnitTests.Engine
             Assert.True(jobResult.IsSuccessfulExecution);
         }
 
-        [Fact]
+        [WindowsOnlyFact]
         public void ShouldRunInitializationBatchScript()
         {
             var buildConfiguration = new BuildConfiguration
@@ -74,7 +75,7 @@ namespace LocalAppVeyor.Engine.UnitTests.Engine
             Assert.True(jobResult.IsSuccessfulExecution);
         }
 
-        [Fact]
+        [WindowsOnlyFact]
         public void ShouldRunInitializationBatchScriptWithMultipleLines()
         {
             var buildConfiguration = new BuildConfiguration
@@ -94,7 +95,7 @@ namespace LocalAppVeyor.Engine.UnitTests.Engine
             Assert.True(jobResult.IsSuccessfulExecution);
         }
 
-        [Fact]
+        [WindowsOnlyFact]
         public void ShouldRunInitializationScriptWithMixedPowershellAndBatchScripts()
         {
             var buildConfiguration = new BuildConfiguration
@@ -124,7 +125,7 @@ namespace LocalAppVeyor.Engine.UnitTests.Engine
             Assert.True(jobResult.IsSuccessfulExecution);
         }
 
-        [Fact]
+        [WindowsOnlyFact]
         public void ShouldRunInitializationScriptPowershellBlockScript()
         {
             var buildConfiguration = new BuildConfiguration
