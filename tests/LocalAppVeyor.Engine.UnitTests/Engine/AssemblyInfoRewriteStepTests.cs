@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
-using FluentAssertions;
 using LocalAppVeyor.Engine.Configuration;
 using LocalAppVeyor.Engine.Configuration.Reader;
 using LocalAppVeyor.Engine.Internal;
@@ -59,11 +58,8 @@ assembly_info:
             var rewriteStep = new AssemblyInfoRewriteStep(fileSystem);
             var executionResult = rewriteStep.Execute(executionContext);
 
-            fileSystem.File
-                .ReadAllText(@"c:\clone\directory\AssemblyInfo.cs")
-                .Should()
-                .Be(rewrittenAssemblyInfoContent);
-            executionResult.Should().BeTrue();
+            Assert.True(executionResult);
+            Assert.Equal(rewrittenAssemblyInfoContent, fileSystem.File.ReadAllText(@"c:\clone\directory\AssemblyInfo.cs"));
         }
     }
 }
