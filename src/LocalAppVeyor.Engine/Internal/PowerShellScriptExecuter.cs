@@ -6,7 +6,6 @@ namespace LocalAppVeyor.Engine.Internal
     internal static class PowerShellScriptExecuter
     {
         public static bool Execute(
-            string workingDirectory,
             string script,
             Action<string> onOutputDataReceived,
             Action<string> onErrorDataReceived)

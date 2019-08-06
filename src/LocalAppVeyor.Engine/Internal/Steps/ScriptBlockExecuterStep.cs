@@ -42,6 +42,9 @@ namespace LocalAppVeyor.Engine.Internal.Steps
                         case ScriptType.PowerShell:
                             status = ExecutePowerShellScript(executionContext, scriptLine.Script);
                             break;
+                        case ScriptType.Bash:
+                            status = ExecuteBashScript(executionContext, scriptLine.Script);
+                            break;
                     }
 
                     if (!status)
@@ -76,10 +79,29 @@ namespace LocalAppVeyor.Engine.Internal.Steps
                 });
         }
 
-        private bool ExecutePowerShellScript(ExecutionContext executionContext, string script)
+        private static bool ExecutePowerShellScript(ExecutionContext executionContext, string script)
         {
             return PowerShellScriptExecuter.Execute(
-                _workingDirectory,
+                script,
+                data =>
+                {
+                    if (data != null)
+                    {
+                        executionContext.Outputter.Write(data);
+                    }
+                },
+                data =>
+                {
+                    if (data != null)
+                    {
+                        executionContext.Outputter.WriteError(data);
+                    }
+                });
+        }
+
+        private static bool ExecuteBashScript(ExecutionContext executionContext, string script)
+        {
+            return BashScriptExecuter.Execute(
                 script,
                 data =>
                 {

@@ -10,6 +10,9 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
         [YamlMember(Alias = "ps")]
         public string PowerShell { get; set; }
 
+        [YamlMember(Alias = "sh")]
+        public string Bash { get; set; }
+
         public static implicit operator InternalScriptLine(string scriptLine)
         {
             return new InternalScriptLine
@@ -20,9 +23,19 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
 
         public ScriptLine ToScriptLine()
         {
+            var scriptType = string.IsNullOrEmpty(PowerShell)
+                ? string.IsNullOrEmpty(Batch)
+                    ? ScriptType.Bash
+                    : ScriptType.Batch
+                : ScriptType.PowerShell;
+
             return new ScriptLine(
-                string.IsNullOrEmpty(PowerShell) ? ScriptType.Batch : ScriptType.PowerShell,
-                string.IsNullOrEmpty(PowerShell) ? Batch : PowerShell);
+                scriptType,
+                scriptType == ScriptType.PowerShell
+                    ? PowerShell
+                    : scriptType == ScriptType.Batch
+                        ? Batch
+                        : Bash);
         }
     }
 }
