@@ -13,13 +13,13 @@ matrix:
   include:
     
     - os: linux # Ubuntu 14.04
-      dist: trusty
+      dist: xenial
       sudo: required
       dotnet: 2.2.401
       env: configuration=debug
     
     - os: linux # Ubuntu 14.04
-      dist: trusty
+      dist: xenial
       sudo: required
       dotnet: 2.2.401
       env: configuration=release
