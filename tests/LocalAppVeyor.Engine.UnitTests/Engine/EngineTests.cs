@@ -111,6 +111,7 @@ namespace LocalAppVeyor.Engine.UnitTests.Engine
 
             var jobResult = new LocalAppVeyor.Engine.Engine(_engineConfiguration, buildConfiguration).ExecuteJob(0);
 
+            _outputHelper.WriteLine("UNHANDLED Current: " + Directory.GetCurrentDirectory());
             _outputHelper.WriteLine("UNHANDLED: " + jobResult?.UnhandledException?.Message);
 
             _outputterMock.Verify(outputter => outputter.Write(It.Is<string>(m => m == "This is 1 batch test")), Times.Once);
