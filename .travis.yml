@@ -1,6 +1,6 @@
 language: csharp
 mono: none
-dotnet: 2.1
+dotnet: 2.2.401
 
 before_install:
   - dotnet --info
@@ -15,23 +15,23 @@ matrix:
     - os: linux # Ubuntu 14.04
       dist: trusty
       sudo: required
-      dotnet: 2.1
+      dotnet: 2.2.401
       env: configuration=debug
     
     - os: linux # Ubuntu 14.04
       dist: trusty
       sudo: required
-      dotnet: 2.1
+      dotnet: 2.2.401
       env: configuration=release
 
     - os: osx # OSX 10.12
       osx_image: xcode8.3
-      dotnet: 2.1.300
+      dotnet: 2.2.401
       env: configuration=debug
     
     - os: osx # OSX 10.12
       osx_image: xcode8.3
-      dotnet: 2.1.300
+      dotnet: 2.2.401
       env: configuration=release
 
 script:
