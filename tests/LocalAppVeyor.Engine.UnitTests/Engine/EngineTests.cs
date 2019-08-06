@@ -111,6 +111,7 @@ namespace LocalAppVeyor.Engine.UnitTests.Engine
 
             var jobResult = new LocalAppVeyor.Engine.Engine(_engineConfiguration, buildConfiguration).ExecuteJob(0);
 
+            _outputHelper.WriteLine("UNHANDLED Current: " + File.Exists(Directory.GetCurrentDirectory()));
             _outputHelper.WriteLine("UNHANDLED Current: " + Directory.GetCurrentDirectory());
             _outputHelper.WriteLine("UNHANDLED: " + jobResult?.UnhandledException?.Message);
 
