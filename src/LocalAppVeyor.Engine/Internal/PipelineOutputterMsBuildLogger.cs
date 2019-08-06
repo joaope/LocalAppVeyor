@@ -1,7 +1,7 @@
 ﻿using System;
 using LocalAppVeyor.Engine.Configuration;
 using Microsoft.Build.Framework;
-using Microsoft.Build.Logging;
+using Microsoft.Build.Framework.Profiler.;
 
 namespace LocalAppVeyor.Engine.Internal
 {
