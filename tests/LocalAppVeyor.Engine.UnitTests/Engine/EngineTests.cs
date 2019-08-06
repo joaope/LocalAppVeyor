@@ -3,16 +3,19 @@ using System.IO.Abstractions;
 using LocalAppVeyor.Engine.Configuration;
 using Moq;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace LocalAppVeyor.Engine.UnitTests.Engine
 {
     public class EngineTests
     {
+        private readonly ITestOutputHelper _outputHelper;
         private readonly Mock<IPipelineOutputter> _outputterMock = new Mock<IPipelineOutputter>();
         private readonly EngineConfiguration _engineConfiguration;
 
-        public EngineTests()
+        public EngineTests(ITestOutputHelper outputHelper)
         {
+            _outputHelper = outputHelper;
             _engineConfiguration = new EngineConfiguration(Directory.GetCurrentDirectory(), _outputterMock.Object, new FileSystem());
         }
 
@@ -107,6 +110,8 @@ namespace LocalAppVeyor.Engine.UnitTests.Engine
             };
 
             var jobResult = new LocalAppVeyor.Engine.Engine(_engineConfiguration, buildConfiguration).ExecuteJob(0);
+
+            _outputHelper.WriteLine("UNHANDLED: " + jobResult?.UnhandledException?.Message);
 
             _outputterMock.Verify(outputter => outputter.Write(It.Is<string>(m => m == "This is 1 batch test")), Times.Once);
             _outputterMock.Verify(outputter => outputter.Write(It.Is<string>(m => m == "This is 1 powershell test")), Times.Once);
