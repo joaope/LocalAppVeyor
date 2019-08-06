@@ -18,7 +18,7 @@ namespace LocalAppVeyor.Engine.Internal
                 return true;
             }
 
-            var batchFile = fileSystem.Path.Combine(workingDirectory, $"{Guid.NewGuid()}.bat");
+            var batchFile = fileSystem.Path.Combine(fileSystem.Path.GetTempPath(), $"{Guid.NewGuid()}.bat");
             fileSystem.File.WriteAllText(batchFile, script);
 
             using (var process = Process.Start(new ProcessStartInfo("cmd.exe", $"/c {batchFile}")
@@ -26,7 +26,8 @@ namespace LocalAppVeyor.Engine.Internal
                 CreateNoWindow = true,
                 UseShellExecute = false,
                 RedirectStandardError = true,
-                RedirectStandardOutput = true
+                RedirectStandardOutput = true,
+                WorkingDirectory = workingDirectory
             }))
             {
                 process.OutputDataReceived += (s, e) =>
