@@ -23,9 +23,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.PowerShell.SDK" Version="6.1.2" />
+    <PackageReference Include="System.IO.Abstractions" Version="6.0.17" />
     <PackageReference Include="YamlDotNet" Version="6.1.2" />
     <PackageReference Include="Microsoft.Build" Version="15.9.20" />
-    <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
     <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />

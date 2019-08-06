@@ -1,5 +1,5 @@
-﻿using LocalAppVeyor.Engine.Configuration;
-using LocalAppVeyor.Engine.IO;
+﻿using System.IO.Abstractions;
+using LocalAppVeyor.Engine.Configuration;
 
 namespace LocalAppVeyor.Engine.Internal.Steps
 {
@@ -7,12 +7,12 @@ namespace LocalAppVeyor.Engine.Internal.Steps
     {
         private readonly ScriptBlock _scriptBlock;
 
-        private readonly FileSystem _fileSystem;
+        private readonly IFileSystem _fileSystem;
 
         private readonly string _workingDirectory;
 
         protected ScriptBlockExecuterStep(
-            FileSystem fileSystem, 
+            IFileSystem fileSystem, 
             string workingDirectory,
             ScriptBlock scriptBlock)
         {

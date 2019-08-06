@@ -1,5 +1,5 @@
 ﻿using System;
-using LocalAppVeyor.Engine.IO;
+using System.IO.Abstractions;
 
 namespace LocalAppVeyor.Engine.Configuration.Reader
 {
@@ -12,7 +12,7 @@ namespace LocalAppVeyor.Engine.Configuration.Reader
         private readonly FileSystem _fileSystem;
 
         public BuildConfigurationYamlFileReader(string yamlFilePathOrDirectory)
-            : this(FileSystem.Default, yamlFilePathOrDirectory)
+            : this(new FileSystem(), yamlFilePathOrDirectory)
         {
         }
 

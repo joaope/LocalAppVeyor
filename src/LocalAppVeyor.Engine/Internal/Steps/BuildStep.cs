@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Abstractions;
 using System.Linq;
 using LocalAppVeyor.Engine.Internal.KnownExceptions;
-using LocalAppVeyor.Engine.IO;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
 
@@ -10,9 +10,9 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 {
     internal class BuildStep : IInternalEngineStep
     {
-        private readonly FileSystem _fileSystem;
+        private readonly IFileSystem _fileSystem;
 
-        public BuildStep(FileSystem fileSystem)
+        public BuildStep(IFileSystem fileSystem)
         {
             _fileSystem = fileSystem;
         }

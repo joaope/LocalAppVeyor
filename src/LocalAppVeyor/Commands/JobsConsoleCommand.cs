@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.IO.Abstractions;
 using System.Threading.Tasks;
 using LocalAppVeyor.Engine;
 using LocalAppVeyor.Engine.Configuration;
 using LocalAppVeyor.Engine.Configuration.Reader;
-using LocalAppVeyor.Engine.IO;
 using McMaster.Extensions.CommandLineUtils;
 
 namespace LocalAppVeyor.Commands
@@ -97,7 +97,7 @@ namespace LocalAppVeyor.Commands
                 repositoryPath = Directory.GetCurrentDirectory();
             }
 
-            return new EngineConfiguration(repositoryPath, Outputter, FileSystem.Default);
+            return new EngineConfiguration(repositoryPath, Outputter, new FileSystem());
         }
     }
 }

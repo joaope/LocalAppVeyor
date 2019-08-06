@@ -1,13 +1,13 @@
-﻿using System;
-using LocalAppVeyor.Engine.IO;
+﻿using System.IO;
+using System.IO.Abstractions;
 
 namespace LocalAppVeyor.Engine.Internal.Steps
 {
     internal class CloneFolderStep : IInternalEngineStep
     {
-        private readonly FileSystem _fileSystem;
+        private readonly IFileSystem _fileSystem;
 
-        public CloneFolderStep(FileSystem fileSystem)
+        public CloneFolderStep(IFileSystem fileSystem)
         {
             _fileSystem = fileSystem;
         }

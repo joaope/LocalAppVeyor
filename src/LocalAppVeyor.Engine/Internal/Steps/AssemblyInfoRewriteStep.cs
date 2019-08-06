@@ -1,5 +1,6 @@
+using System.IO;
+using System.IO.Abstractions;
 using System.Text.RegularExpressions;
-using LocalAppVeyor.Engine.IO;
 
 namespace LocalAppVeyor.Engine.Internal.Steps
 {
@@ -11,9 +12,9 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 
         private static readonly Regex AssemblyInformationalVersionPattern = new Regex(@"AssemblyInformationalVersion\("".+""\)", RegexOptions.Compiled);
 
-        private readonly FileSystem _fileSystem;
+        private readonly IFileSystem _fileSystem;
 
-        public AssemblyInfoRewriteStep(FileSystem fileSystem)
+        public AssemblyInfoRewriteStep(IFileSystem fileSystem)
         {
             _fileSystem = fileSystem;
         }

@@ -1,6 +1,6 @@
 ﻿using System.IO;
+using System.IO.Abstractions;
 using LocalAppVeyor.Engine.Configuration;
-using LocalAppVeyor.Engine.IO;
 using Moq;
 using Xunit;
 
@@ -13,7 +13,7 @@ namespace LocalAppVeyor.Engine.UnitTests.Engine
 
         public EngineTests()
         {
-            _engineConfiguration = new EngineConfiguration(Directory.GetCurrentDirectory(), _outputterMock.Object, FileSystem.Default);
+            _engineConfiguration = new EngineConfiguration(Directory.GetCurrentDirectory(), _outputterMock.Object, new FileSystem());
         }
 
         [Fact]

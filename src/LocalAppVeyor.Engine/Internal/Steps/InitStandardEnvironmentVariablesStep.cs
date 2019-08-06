@@ -30,7 +30,7 @@ namespace LocalAppVeyor.Engine.Internal.Steps
                 in executionContext.BuildConfiguration.EnvironmentVariables.CommonVariables.Concat(executionContext.CurrentJob.Variables))
             {
                 Environment.SetEnvironmentVariable(variable.Name, variable.Value);
-                }
+            }
 
             executionContext.Outputter.Write("Environment variables initialized.");
 
