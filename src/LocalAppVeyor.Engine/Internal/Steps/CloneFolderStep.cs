@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.IO.Abstractions;
+﻿using System.IO.Abstractions;
 
 namespace LocalAppVeyor.Engine.Internal.Steps
 {
@@ -23,8 +22,8 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 
         private void Clone(string source, string destination)
         {
-            var dirSource = new DirectoryInfo(source);
-            var dirDestination = new DirectoryInfo(destination);
+            var dirSource = _fileSystem.DirectoryInfo.FromDirectoryName(source);
+            var dirDestination = _fileSystem.DirectoryInfo.FromDirectoryName(destination);
 
             if (!dirDestination.Exists)
             {
@@ -45,7 +44,7 @@ namespace LocalAppVeyor.Engine.Internal.Steps
             CopyAll(dirSource, dirDestination);
         }
 
-        private void CopyAll(DirectoryInfo source, DirectoryInfo destination)
+        private void CopyAll(IDirectoryInfo source, IDirectoryInfo destination)
         {
             // copy each file into destination
             foreach (var file in source.GetFiles())

@@ -1,5 +1,4 @@
-﻿using System.IO;
-using LocalAppVeyor.Engine.Configuration;
+﻿using LocalAppVeyor.Engine.Configuration;
 using LocalAppVeyor.Engine.UnitTests.TestUtilities;
 using Moq;
 using Xunit;
@@ -100,8 +99,8 @@ namespace LocalAppVeyor.Engine.UnitTests.Engine
 
             var jobResult = new LocalAppVeyor.Engine.Engine(_engineConfiguration, buildConfiguration).ExecuteJob(0);
 
-            _outputHelper.WriteLine("UNHANDLED Current: " + File.Exists(Directory.GetCurrentDirectory()));
-            _outputHelper.WriteLine("UNHANDLED Current: " + Directory.GetCurrentDirectory());
+            _outputHelper.WriteLine("UNHANDLED Current: " + _fileSystem.File.Exists(_fileSystem.Directory.GetCurrentDirectory()));
+            _outputHelper.WriteLine("UNHANDLED Current: " + _fileSystem.Directory.GetCurrentDirectory());
             _outputHelper.WriteLine("UNHANDLED: " + jobResult?.UnhandledException?.Message);
 
             _outputterMock.Verify(outputter => outputter.Write(It.Is<string>(m => m == "This is 1 bash test")), Times.Once);
