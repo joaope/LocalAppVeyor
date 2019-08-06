@@ -3,6 +3,7 @@
     public enum ScriptType
     {
         Batch,
-        PowerShell
+        PowerShell,
+        Bash
     }
 }
