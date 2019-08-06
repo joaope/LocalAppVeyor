@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Diagnostics;
-using LocalAppVeyor.Engine.IO;
+using System.IO.Abstractions;
 
 namespace LocalAppVeyor.Engine.Internal
 {
     internal static class BatchScriptExecuter
     {
         public static bool Execute(
-            FileSystem fileSystem,
+            IFileSystem fileSystem,
             string workingDirectory,
             string script, 
             Action<string> onOutputDataReceived,

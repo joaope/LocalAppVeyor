@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Abstractions.TestingHelpers;
 using FluentAssertions;
 using LocalAppVeyor.Engine.Configuration;
 using LocalAppVeyor.Engine.Configuration.Reader;
 using LocalAppVeyor.Engine.Internal;
 using LocalAppVeyor.Engine.Internal.Steps;
-using LocalAppVeyor.Engine.IO;
 using Moq;
 using Xunit;
 
@@ -42,6 +42,11 @@ assembly_info:
 [assembly: AssemblyInformationalVersion(""2.3.0"")]
 ";
 
+            var fileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
+            {
+                {@"c:\clone\directory\AssemblyInfo.cs", new MockFileData(originalAssemblyInfoContent)}
+            });
+
             var executionContext = new ExecutionContext(
                 new MatrixJob("os", new List<Variable>(), "conf", "platform"), 
                 new BuildConfigurationYamlStringReader(yaml).GetBuildConfiguration(),
@@ -49,36 +54,15 @@ assembly_info:
                 @"c:\repository\directory",
                 @"c:\clone\directory");
 
-            var mockedDirectoryHandler = new Mock<DirectoryHandler>();
-            var mockedFileHandler = new Mock<FileHandler>();
-
-            mockedDirectoryHandler
-                .Setup(
-                    d => d.EnumerateFiles(
-                        executionContext.CloneDirectory,
-                        executionContext.BuildConfiguration.AssemblyInfo.File, 
-                        SearchOption.AllDirectories))
-                .Returns(new List<string> { "AssemblyInfo.cs" });
-
-            mockedFileHandler
-                .Setup(f => f.ReadAllText("AssemblyInfo.cs"))
-                .Returns(originalAssemblyInfoContent);
-
             Environment.SetEnvironmentVariable("APPVEYOR_BUILD_VERSION", new ExpandableString("2.3.{build}"));
 
-            var rewriteStep = new AssemblyInfoRewriteStep(
-                new FileSystem(mockedDirectoryHandler.Object, mockedFileHandler.Object, Mock.Of<PathHandler>()));
-
+            var rewriteStep = new AssemblyInfoRewriteStep(fileSystem);
             var executionResult = rewriteStep.Execute(executionContext);
 
-            mockedFileHandler.Verify(
-                f => f.ReadAllText(It.Is<string>(s => s == "AssemblyInfo.cs")),
-                Times.Once);
-
-            mockedFileHandler.Verify(
-                f => f.WriteAllText(It.Is<string>(s => s == "AssemblyInfo.cs"), It.Is<string>(s => s == rewrittenAssemblyInfoContent)), 
-                Times.Once);
-
+            fileSystem.File
+                .ReadAllText(@"c:\clone\directory\AssemblyInfo.cs")
+                .Should()
+                .Be(rewrittenAssemblyInfoContent);
             executionResult.Should().BeTrue();
         }
     }

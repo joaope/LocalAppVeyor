@@ -1,11 +1,11 @@
-﻿using LocalAppVeyor.Engine.Configuration;
-using LocalAppVeyor.Engine.IO;
+﻿using System.IO.Abstractions;
+using LocalAppVeyor.Engine.Configuration;
 
 namespace LocalAppVeyor.Engine.Internal.Steps
 {
     internal class InitStep : ScriptBlockExecuterStep
     {
-        public InitStep(FileSystem fileSystem, string workigDirectory, ScriptBlock scriptBlock)
+        public InitStep(IFileSystem fileSystem, string workigDirectory, ScriptBlock scriptBlock)
             : base(fileSystem, workigDirectory, scriptBlock)
         {
         }
