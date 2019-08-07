@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.IO.Abstractions.TestingHelpers;
 using Xunit;
 
 namespace LocalAppVeyor.Engine.UnitTests.TestUtilities
@@ -7,7 +7,7 @@ namespace LocalAppVeyor.Engine.UnitTests.TestUtilities
     {
         public WindowsOnlyFactAttribute()
         {
-            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (!MockUnixSupport.IsWindowsPlatform())
             {
                 Skip = "Windows-only test";
             }

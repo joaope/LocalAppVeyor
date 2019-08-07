@@ -7,7 +7,7 @@ namespace LocalAppVeyor.Engine.UnitTests.Engine
 {
     public partial class EngineTests
     {
-        [LinuxOnlyFact]
+        [UnixOnlyFact]
         public void Linux_ShouldRunInitializationPowershellScript()
         {
             var buildConfiguration = new BuildConfiguration
@@ -24,7 +24,7 @@ namespace LocalAppVeyor.Engine.UnitTests.Engine
             Assert.True(jobResult.IsSuccessfulExecution);
         }
 
-        [LinuxOnlyFact]
+        [UnixOnlyFact]
         public void Linux_ShouldRunInitializationPowershellScriptWithMultipleLines()
         {
             var buildConfiguration = new BuildConfiguration
@@ -44,7 +44,7 @@ namespace LocalAppVeyor.Engine.UnitTests.Engine
             Assert.True(jobResult.IsSuccessfulExecution);
         }
 
-        [LinuxOnlyFact]
+        [UnixOnlyFact]
         public void Linux_ShouldRunInitializationBashScript()
         {
             var buildConfiguration = new BuildConfiguration
@@ -62,7 +62,7 @@ namespace LocalAppVeyor.Engine.UnitTests.Engine
             Assert.True(jobResult.IsSuccessfulExecution);
         }
 
-        [LinuxOnlyFact]
+        [UnixOnlyFact]
         public void Linux_ShouldRunInitializationBashScriptWithMultipleLines()
         {
             var buildConfiguration = new BuildConfiguration
@@ -82,7 +82,7 @@ namespace LocalAppVeyor.Engine.UnitTests.Engine
             Assert.True(jobResult.IsSuccessfulExecution);
         }
 
-        [LinuxOnlyFact]
+        [UnixOnlyFact]
         public void Linux_ShouldRunInitializationScriptWithMixedPowershellAndBashScripts()
         {
             var buildConfiguration = new BuildConfiguration
@@ -108,7 +108,7 @@ namespace LocalAppVeyor.Engine.UnitTests.Engine
             Assert.True(jobResult.IsSuccessfulExecution);
         }
 
-        [LinuxOnlyFact]
+        [UnixOnlyFact]
         public void Linux_ShouldRunInitializationScriptPowershellBlockScript()
         {
             var buildConfiguration = new BuildConfiguration
