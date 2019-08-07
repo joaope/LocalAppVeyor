@@ -41,17 +41,21 @@ assembly_info:
 [assembly: AssemblyInformationalVersion(""2.3.0"")]
 ";
 
-            var fileSystem = new MockFileSystem(new Dictionary<string, MockFileData>
-            {
-                {@"c:\clone\directory\AssemblyInfo.cs", new MockFileData(originalAssemblyInfoContent)}
-            });
-
+            var fileSystem = new MockFileSystem();
+            var cloneDirectory = fileSystem.Path.Combine(fileSystem.Path.GetTempPath(), fileSystem.Path.GetRandomFileName());
+            var repoDirectory = fileSystem.Path.Combine(fileSystem.Path.GetTempPath(), fileSystem.Path.GetRandomFileName());
+            var assemblyInfoFilename = fileSystem.Path.Combine(cloneDirectory, "AssemblyInfo.cs");
+            fileSystem.AddDirectory(repoDirectory);
+            fileSystem.AddDirectory(cloneDirectory);
+            fileSystem.AddFile(assemblyInfoFilename, new MockFileData(originalAssemblyInfoContent));
+            fileSystem.Directory.SetCurrentDirectory(repoDirectory);
+            
             var executionContext = new ExecutionContext(
                 new MatrixJob("os", new List<Variable>(), "conf", "platform"), 
                 new BuildConfigurationYamlStringReader(yaml).GetBuildConfiguration(),
                 new Mock<IPipelineOutputter>().Object,
-                @"c:\repository\directory",
-                @"c:\clone\directory");
+                repoDirectory,
+                cloneDirectory);
 
             Environment.SetEnvironmentVariable("APPVEYOR_BUILD_VERSION", new ExpandableString("2.3.{build}"));
 
@@ -59,7 +63,7 @@ assembly_info:
             var executionResult = rewriteStep.Execute(executionContext);
 
             Assert.True(executionResult);
-            Assert.Equal(rewrittenAssemblyInfoContent, fileSystem.File.ReadAllText(@"c:\clone\directory\AssemblyInfo.cs"));
+            Assert.Equal(rewrittenAssemblyInfoContent, fileSystem.File.ReadAllText(assemblyInfoFilename));
         }
     }
 }

@@ -99,10 +99,6 @@ namespace LocalAppVeyor.Engine.UnitTests.Engine
 
             var jobResult = new LocalAppVeyor.Engine.Engine(_engineConfiguration, buildConfiguration).ExecuteJob(0);
 
-            _outputHelper.WriteLine("UNHANDLED Current: " + _fileSystem.File.Exists(_fileSystem.Directory.GetCurrentDirectory()));
-            _outputHelper.WriteLine("UNHANDLED Current: " + _fileSystem.Directory.GetCurrentDirectory());
-            _outputHelper.WriteLine("UNHANDLED: " + jobResult?.UnhandledException?.Message);
-
             _outputterMock.Verify(outputter => outputter.Write(It.Is<string>(m => m == "This is 1 bash test")), Times.Once);
             _outputterMock.Verify(outputter => outputter.Write(It.Is<string>(m => m == "This is 1 powershell test")), Times.Once);
             _outputterMock.Verify(outputter => outputter.Write(It.Is<string>(m => m == "This is 2 bash test")), Times.Once);
