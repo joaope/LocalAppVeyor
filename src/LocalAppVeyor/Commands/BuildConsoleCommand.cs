@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
 using LocalAppVeyor.Engine;
@@ -201,7 +200,7 @@ namespace LocalAppVeyor.Commands
                 repositoryPath = Directory.GetCurrentDirectory();
             }
 
-            return new EngineConfiguration(repositoryPath, Outputter, new FileSystem());
+            return new EngineConfiguration(repositoryPath, Outputter);
         }
     }
 }
