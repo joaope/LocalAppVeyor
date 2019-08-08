@@ -22,5 +22,12 @@ namespace LocalAppVeyor.Engine
             Outputter = outputter ?? throw new ArgumentNullException(nameof(outputter));
             FileSystem = fileSystem ?? throw new ArgumentNullException(nameof(fileSystem));
         }
+
+        public EngineConfiguration(
+            string repositoryDirectoryPath,
+            IPipelineOutputter outputter)
+        : this(repositoryDirectoryPath, outputter, new FileSystem())
+        {
+        }
     }
 }
