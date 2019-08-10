@@ -32,6 +32,18 @@ namespace LocalAppVeyor.Engine.Internal.Steps
                         continue;
                     }
 
+                    if (scriptLine.ScriptType == ScriptType.Bash && Platform.IsWindow)
+                    {
+                        executionContext.Outputter.Write("Script line skipped - Bash (sh) scripts cannot be executed in Windows platforms.");
+                        continue;
+                    }
+
+                    if (scriptLine.ScriptType == ScriptType.Batch && Platform.IsUnix)
+                    {
+                        executionContext.Outputter.Write("Script line skipped - Batch (cmd) scripts cannot be executed in Unix platforms.");
+                        continue;
+                    }
+
                     var status = true;
 
                     switch (scriptLine.ScriptType)

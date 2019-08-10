@@ -1,4 +1,5 @@
-﻿using YamlDotNet.Serialization;
+﻿using LocalAppVeyor.Engine.Internal;
+using YamlDotNet.Serialization;
 
 namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
 {
@@ -15,6 +16,14 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
 
         public static implicit operator InternalScriptLine(string scriptLine)
         {
+            if (Platform.IsUnix)
+            {
+                return new InternalScriptLine
+                {
+                    Bash = scriptLine
+                };
+            }
+
             return new InternalScriptLine
             {
                 Batch = scriptLine
