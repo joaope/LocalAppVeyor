@@ -15,7 +15,7 @@
     <PackageId>LocalAppVeyor.Engine</PackageId>
     <PackageTags>console;appveyor;local;build;api</PackageTags>
     <PackageProjectUrl>https://github.com/joaope/LocalAppVeyor</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/joaope/LocalAppVeyor/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/joaope/LocalAppVeyor.git</RepositoryUrl>
     <NoWarn>NU1605</NoWarn>
