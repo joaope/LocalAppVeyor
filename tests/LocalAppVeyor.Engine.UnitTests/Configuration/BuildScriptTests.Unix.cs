@@ -66,7 +66,7 @@ build_script:
         {
             const string yaml = @"
 build_script:
-  - cmd: |-
+  - sh: |-
       echo --------------------------------------------------------------------------------
       echo Build tinyformat
       mkdir build
