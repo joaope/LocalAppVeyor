@@ -94,7 +94,7 @@ namespace LocalAppVeyor.Engine
                     : new ExpandableString(_engineConfiguration.FallbackCloneDirectoryPath),
                 _engineConfiguration.FileSystem);
 
-            var executionResult = new BuildPipelineExecuter(executionContext).Execute();
+            var executionResult = new BuildPipelineExecuter(executionContext, new string[0]).Execute();
 
             JobEnded?.Invoke(this, new JobEndedEventArgs(job, executionResult));
 

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using LocalAppVeyor.Engine.Internal.KnownExceptions;
 using LocalAppVeyor.Engine.Internal.Steps;
 
@@ -7,6 +9,7 @@ namespace LocalAppVeyor.Engine.Internal
     internal sealed class BuildPipelineExecuter
     {
         private readonly ExecutionContext _executionContext;
+        private readonly string[] _skipSteps;
 
         private readonly InitStandardEnvironmentVariablesStep _environmentStep;
         private readonly InitStep _initStep;
@@ -23,9 +26,12 @@ namespace LocalAppVeyor.Engine.Internal
         private readonly OnFailureStep _onFailureStep;
         private readonly OnFinishStep _onFinishStep;
 
-        public BuildPipelineExecuter(ExecutionContext executionContext)
+        public BuildPipelineExecuter(
+            ExecutionContext executionContext,
+            IEnumerable<string> skipSteps)
         {
             _executionContext = executionContext;
+            _skipSteps = skipSteps?.ToArray() ?? new string[0];
 
             _environmentStep = new InitStandardEnvironmentVariablesStep();
             _initStep = new InitStep(executionContext.RepositoryDirectory, executionContext.BuildConfiguration.InitializationScript);
@@ -54,8 +60,8 @@ namespace LocalAppVeyor.Engine.Internal
                 // on_success / on_failure only happens here, after we know the build status
                 // they do intervene on build final status though
                 isSuccess = isSuccess
-                    ? _onSuccessStep.Execute(_executionContext)
-                    : _onFailureStep.Execute(_executionContext);
+                    ? Execute(_onSuccessStep, _executionContext)
+                    : Execute(_onFailureStep, _executionContext);
 
                 return isSuccess
                     ? JobExecutionResult.CreateSuccess()
@@ -72,7 +78,7 @@ namespace LocalAppVeyor.Engine.Internal
             finally
             {
                 // on_finish don't influence build final status so we just run it
-                _onFinishStep.Execute(_executionContext);
+                Execute(_onFinishStep, _executionContext);
             }
 
             return executionResult;
@@ -80,33 +86,33 @@ namespace LocalAppVeyor.Engine.Internal
 
         private bool ExecuteBuildPipeline(ExecutionContext executionContext)
         {
-            if (!_environmentStep.Execute(executionContext))
+            if (!Execute(_environmentStep, executionContext))
             {
                 return false;
             }
 
-            if (!_initStep.Execute(executionContext))
+            if (!Execute(_initStep, executionContext))
             {
                 return false;
             }
 
-            if (!_cloneStep.Execute(executionContext))
+            if (!Execute(_cloneStep, executionContext))
             {
                 return false;
             }
 
-            if (!_installStep.Execute(executionContext))
+            if (!Execute(_installStep, executionContext))
             {
                 return false;
             }
 
-            if (!_assemblyInfoStep.Execute(executionContext))
+            if (!Execute(_assemblyInfoStep, executionContext))
             {
                 return false;
             }
 
             // Before build
-            if (!_beforeBuildStep.Execute(executionContext))
+            if (!Execute(_beforeBuildStep, executionContext))
             {
                 return false;
             }
@@ -114,32 +120,43 @@ namespace LocalAppVeyor.Engine.Internal
             // Build
             if (executionContext.BuildConfiguration.Build.IsAutomaticBuildOff)
             {
-                if (!_buildScriptStep.Execute(executionContext))
+                if (!Execute(_buildScriptStep, executionContext))
                 {
                     return false;
                 }
             }
             else
             {
-                if (!_buildStep.Execute(executionContext))
+                if (!Execute(_buildStep, executionContext))
                 {
                     return false;
                 }
             }
 
             // After Build
-            if (!_afterBuildStep.Execute(executionContext))
+            if (!Execute(_afterBuildStep, executionContext))
             {
                 return false;
             }
 
             // Test script
-            if (!_testScriptStep.Execute(executionContext))
+            if (!Execute(_testScriptStep, executionContext))
             {
                 return false;
             }
 
             return true;
+        }
+
+        private bool Execute(IEngineStep step, ExecutionContext executionContext)
+        {
+            if (_skipSteps.Contains(step.Name, StringComparer.InvariantCultureIgnoreCase))
+            {
+                executionContext.Outputter.Write($"Skipped '{step.Name}' step.");
+                return true;
+            }
+
+            return step.Execute(executionContext);
         }
     }
 }
