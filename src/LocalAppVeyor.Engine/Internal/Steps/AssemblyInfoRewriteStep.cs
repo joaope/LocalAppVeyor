@@ -1,5 +1,4 @@
 using System.IO;
-using System.IO.Abstractions;
 using System.Text.RegularExpressions;
 
 namespace LocalAppVeyor.Engine.Internal.Steps
@@ -11,13 +10,6 @@ namespace LocalAppVeyor.Engine.Internal.Steps
         private static readonly Regex AssemblyFileVersionPattern = new Regex(@"AssemblyFileVersion\("".+""\)", RegexOptions.Compiled);
 
         private static readonly Regex AssemblyInformationalVersionPattern = new Regex(@"AssemblyInformationalVersion\("".+""\)", RegexOptions.Compiled);
-
-        private readonly IFileSystem _fileSystem;
-
-        public AssemblyInfoRewriteStep(IFileSystem fileSystem)
-        {
-            _fileSystem = fileSystem;
-        }
 
         public bool Execute(ExecutionContext executionContext)
         {
@@ -40,7 +32,7 @@ namespace LocalAppVeyor.Engine.Internal.Steps
                 return false;
             }
 
-            foreach (var assemblyInfoFile in _fileSystem.Directory.EnumerateFiles(
+            foreach (var assemblyInfoFile in executionContext.FileSystem.Directory.EnumerateFiles(
                 executionContext.CloneDirectory,
                 executionContext.BuildConfiguration.AssemblyInfo.File, 
                 SearchOption.AllDirectories))
@@ -58,7 +50,7 @@ namespace LocalAppVeyor.Engine.Internal.Steps
         {
             executionContext.Outputter.Write($"Re-writing '{filePath}'...");
 
-            var fileContent = _fileSystem.File.ReadAllText(filePath);
+            var fileContent = executionContext.FileSystem.File.ReadAllText(filePath);
 
             if (!string.IsNullOrEmpty(executionContext.BuildConfiguration.AssemblyInfo.AssemblyVersion))
             {
@@ -81,7 +73,7 @@ namespace LocalAppVeyor.Engine.Internal.Steps
                     $@"AssemblyInformationalVersion(""{executionContext.BuildConfiguration.AssemblyInfo.AssemblyInformationalVersion}"")");
             }
 
-            _fileSystem.File.WriteAllText(filePath, fileContent);
+            executionContext.FileSystem.File.WriteAllText(filePath, fileContent);
 
             return true;
         }

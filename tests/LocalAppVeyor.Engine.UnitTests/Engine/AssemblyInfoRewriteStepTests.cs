@@ -55,11 +55,12 @@ assembly_info:
                 new BuildConfigurationYamlStringReader(yaml).GetBuildConfiguration(),
                 new Mock<IPipelineOutputter>().Object,
                 repoDirectory,
-                cloneDirectory);
+                cloneDirectory, 
+                fileSystem);
 
             Environment.SetEnvironmentVariable("APPVEYOR_BUILD_VERSION", new ExpandableString("2.3.{build}"));
 
-            var rewriteStep = new AssemblyInfoRewriteStep(fileSystem);
+            var rewriteStep = new AssemblyInfoRewriteStep();
             var executionResult = rewriteStep.Execute(executionContext);
 
             Assert.True(executionResult);

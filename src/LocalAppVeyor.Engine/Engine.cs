@@ -93,7 +93,8 @@ namespace LocalAppVeyor.Engine
                 _engineConfiguration.RepositoryDirectoryPath,
                 !string.IsNullOrEmpty(_buildConfiguration.CloneFolder)
                     ? _buildConfiguration.CloneFolder
-                    : new ExpandableString(_engineConfiguration.FallbackCloneDirectoryPath));
+                    : new ExpandableString(_engineConfiguration.FallbackCloneDirectoryPath),
+                _engineConfiguration.FileSystem);
 
             JobExecutionResult executionResult;
 
@@ -104,8 +105,8 @@ namespace LocalAppVeyor.Engine
                 // on_success / on_failure only happen here, after we know the build status
                 // they do intervene on build final status though
                 isSuccess = isSuccess
-                    ? new OnSuccessStep(_engineConfiguration.FileSystem, executionContext.CloneDirectory, _buildConfiguration.OnSuccessScript).Execute(executionContext)
-                    : new OnFailureStep(_engineConfiguration.FileSystem, executionContext.CloneDirectory, _buildConfiguration.OnFailureScript).Execute(executionContext);
+                    ? new OnSuccessStep(executionContext.CloneDirectory, _buildConfiguration.OnSuccessScript).Execute(executionContext)
+                    : new OnFailureStep(executionContext.CloneDirectory, _buildConfiguration.OnFailureScript).Execute(executionContext);
 
                 return isSuccess
                     ? JobExecutionResult.CreateSuccess()
@@ -122,7 +123,7 @@ namespace LocalAppVeyor.Engine
             finally
             {
                 // on_finish don't influence build final status so we just run it
-                new OnFinishStep(_engineConfiguration.FileSystem, executionContext.CloneDirectory, _buildConfiguration.OnFinishScript).Execute(executionContext);
+                new OnFinishStep(executionContext.CloneDirectory, _buildConfiguration.OnFinishScript).Execute(executionContext);
             }
 
             JobEnded?.Invoke(this, new JobEndedEventArgs(job, executionResult));
@@ -171,7 +172,7 @@ namespace LocalAppVeyor.Engine
             }
             
             // Init
-            if (!new InitStep(_engineConfiguration.FileSystem, executionContext.RepositoryDirectory, _buildConfiguration.InitializationScript).Execute(executionContext))
+            if (!new InitStep(executionContext.RepositoryDirectory, _buildConfiguration.InitializationScript).Execute(executionContext))
             {
                 return false;
             }
@@ -183,19 +184,19 @@ namespace LocalAppVeyor.Engine
             }
 
             // Install
-            if (!new InstallStep(_engineConfiguration.FileSystem, executionContext.CloneDirectory, _buildConfiguration.InstallScript).Execute(executionContext))
+            if (!new InstallStep(executionContext.CloneDirectory, _buildConfiguration.InstallScript).Execute(executionContext))
             {
                 return false;
             }
 
             // AssemblyInfo rewrite
-            if (!new AssemblyInfoRewriteStep(_engineConfiguration.FileSystem).Execute(executionContext))
+            if (!new AssemblyInfoRewriteStep().Execute(executionContext))
             {
                 return false;
             }
 
             // Before build
-            if (!new BeforeBuildStep(_engineConfiguration.FileSystem, executionContext.CloneDirectory, _buildConfiguration.BeforeBuildScript).Execute(executionContext))
+            if (!new BeforeBuildStep(executionContext.CloneDirectory, _buildConfiguration.BeforeBuildScript).Execute(executionContext))
             {
                 return false;
             }
@@ -203,27 +204,27 @@ namespace LocalAppVeyor.Engine
             // Build
             if (_buildConfiguration.Build.IsAutomaticBuildOff)
             {
-                if (!new BuildScriptStep(_engineConfiguration.FileSystem, executionContext.CloneDirectory, _buildConfiguration.BuildScript).Execute(executionContext))
+                if (!new BuildScriptStep(executionContext.CloneDirectory, _buildConfiguration.BuildScript).Execute(executionContext))
                 {
                     return false;
                 }
             }
             else
             {
-                if (!new BuildStep(_engineConfiguration.FileSystem).Execute(executionContext))
+                if (!new BuildStep().Execute(executionContext))
                 {
                     return false;
                 }
             }
 
             // After Build
-            if (!new AfterBuildStep(_engineConfiguration.FileSystem, executionContext.CloneDirectory, _buildConfiguration.AfterBuildScript).Execute(executionContext))
+            if (!new AfterBuildStep(executionContext.CloneDirectory, _buildConfiguration.AfterBuildScript).Execute(executionContext))
             {
                 return false;
             }
 
             // Test script
-            if (!new TestScriptStep(_engineConfiguration.FileSystem, executionContext.CloneDirectory, _buildConfiguration.TestScript).Execute(executionContext))
+            if (!new TestScriptStep(executionContext.CloneDirectory, _buildConfiguration.TestScript).Execute(executionContext))
             {
                 return false;
             }
