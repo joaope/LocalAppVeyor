@@ -90,7 +90,7 @@ Usage: LocalAppVeyor lint [options]
 
 Options:
   -?|-h|--help  Show help information
-  -t|--token    [Required] Your AppVeyor account API token. You can find it here: https://ci.appveyor.com/api-token
+  -t|--token    AppVeyor account API token. If not specified it tries to get it from LOCALAPPVEYOR_API_TOKEN environment variable. You can find it here: https://ci.appveyor.com/api-token
   -d|--dir      Local repository directory where appveyor.yml sits. If not specified current directory is used
 ```
 
