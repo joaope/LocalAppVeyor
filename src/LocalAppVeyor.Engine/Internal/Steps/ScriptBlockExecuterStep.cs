@@ -4,6 +4,8 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 {
     internal abstract class ScriptBlockExecuterStep : IInternalEngineStep
     {
+        public abstract string Name { get; }
+
         private readonly ScriptBlock _scriptBlock;
 
         private readonly string _workingDirectory;

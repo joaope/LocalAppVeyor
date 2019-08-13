@@ -4,6 +4,8 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 {
     internal class CloneFolderStep : IInternalEngineStep
     {
+        public string Name => "clone_folder";
+
         private readonly IFileSystem _fileSystem;
 
         public CloneFolderStep(IFileSystem fileSystem)

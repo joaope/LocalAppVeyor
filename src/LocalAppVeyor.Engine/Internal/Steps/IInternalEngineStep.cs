@@ -2,6 +2,8 @@
 {
     internal interface IInternalEngineStep
     {
+        string Name { get; }
+
         bool Execute(ExecutionContext executionContext);
     }
 }

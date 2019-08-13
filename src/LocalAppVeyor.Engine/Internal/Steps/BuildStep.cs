@@ -9,6 +9,8 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 {
     internal class BuildStep : IInternalEngineStep
     {
+        public string Name => "build";
+
         public bool Execute(ExecutionContext executionContext)
         {
             var platform = executionContext.CurrentJob.Platform;

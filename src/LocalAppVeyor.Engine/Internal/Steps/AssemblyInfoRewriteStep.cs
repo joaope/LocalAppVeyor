@@ -5,6 +5,8 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 {
     internal class AssemblyInfoRewriteStep : IInternalEngineStep
     {
+        public string Name => "assembly_info";
+
         private static readonly Regex AssemblyVersionPattern = new Regex(@"AssemblyVersion\("".+""\)", RegexOptions.Compiled);
 
         private static readonly Regex AssemblyFileVersionPattern = new Regex(@"AssemblyFileVersion\("".+""\)", RegexOptions.Compiled);

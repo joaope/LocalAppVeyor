@@ -5,6 +5,8 @@ namespace LocalAppVeyor.Engine.Internal.Steps
 {
     internal class InitStandardEnvironmentVariablesStep : IInternalEngineStep
     {
+        public string Name => "environment";
+
         public bool Execute(ExecutionContext executionContext)
         {
             executionContext.Outputter.Write("Initializing environment variables...");

@@ -8,5 +8,7 @@ namespace LocalAppVeyor.Engine.Internal.Steps
             : base(workigDirectory, scriptBlock)
         {
         }
+
+        public override string Name => "before_build";
     }
 }
