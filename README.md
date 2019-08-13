@@ -110,7 +110,7 @@ of the build pipeline.
 | platform | :white_check_mark: | |
 | os | :white_check_mark: | Relatively undocumented option but it exists apparently. It's usually a single value so it serves nothing other than to build the matrix job name. |
 | init | :white_check_mark: | |
-| clone_folder | :white_check_mark: | Tries first to clone to specified `clone_folder`, if any; otherwise it will use `C:\Projects\LocalAppVeyorTempClone`. From this step on all scripts will be executed as the clone folder being the working directory. |
+| clone_folder | :white_check_mark: | Tries first to clone to specified `clone_folder`, if any; otherwise it creates a random directory in user's temp folder. From this step on all scripts will be executed as the clone folder being the working directory. |
 | matrix | :white_check_mark: | |
 | install | :white_check_mark: | |
 | assembly_info | :white_check_mark: | |
