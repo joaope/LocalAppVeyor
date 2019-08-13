@@ -2,7 +2,7 @@
 
 namespace LocalAppVeyor.Engine.Internal.Steps
 {
-    internal class CloneFolderStep : IInternalEngineStep
+    internal class CloneFolderStep : IEngineStep
     {
         public string Name => "clone_folder";
 

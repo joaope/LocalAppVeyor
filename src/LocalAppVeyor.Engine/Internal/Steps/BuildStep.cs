@@ -7,7 +7,7 @@ using Microsoft.Build.Framework;
 
 namespace LocalAppVeyor.Engine.Internal.Steps
 {
-    internal class BuildStep : IInternalEngineStep
+    internal class BuildStep : IEngineStep
     {
         public string Name => "build";
 

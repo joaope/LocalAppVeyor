@@ -1,6 +1,6 @@
-﻿namespace LocalAppVeyor.Engine.Internal.Steps
+﻿namespace LocalAppVeyor.Engine.Internal
 {
-    internal interface IInternalEngineStep
+    internal interface IEngineStep
     {
         string Name { get; }
 

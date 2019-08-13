@@ -2,7 +2,7 @@
 
 namespace LocalAppVeyor.Engine.Internal.Steps
 {
-    internal abstract class ScriptBlockExecuterStep : IInternalEngineStep
+    internal abstract class ScriptBlockExecuterStep : IEngineStep
     {
         public abstract string Name { get; }
 

@@ -11,6 +11,7 @@ namespace LocalAppVeyor.Engine.Internal
         public string RepositoryDirectory { get; }
 
         public ExpandableString CloneDirectory { get; }
+
         public IFileSystem FileSystem { get; }
 
         public BuildConfiguration BuildConfiguration { get; }

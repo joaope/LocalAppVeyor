@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace LocalAppVeyor.Engine.Internal.Steps
 {
-    internal class InitStandardEnvironmentVariablesStep : IInternalEngineStep
+    internal class InitStandardEnvironmentVariablesStep : IEngineStep
     {
         public string Name => "environment";
 

@@ -4,8 +4,6 @@ using System.Linq;
 using LocalAppVeyor.Engine.Configuration;
 using LocalAppVeyor.Engine.Configuration.Reader;
 using LocalAppVeyor.Engine.Internal;
-using LocalAppVeyor.Engine.Internal.KnownExceptions;
-using LocalAppVeyor.Engine.Internal.Steps;
 
 namespace LocalAppVeyor.Engine
 {
@@ -96,35 +94,7 @@ namespace LocalAppVeyor.Engine
                     : new ExpandableString(_engineConfiguration.FallbackCloneDirectoryPath),
                 _engineConfiguration.FileSystem);
 
-            JobExecutionResult executionResult;
-
-            try
-            {
-                var isSuccess = ExecuteBuildPipeline(executionContext);
-
-                // on_success / on_failure only happen here, after we know the build status
-                // they do intervene on build final status though
-                isSuccess = isSuccess
-                    ? new OnSuccessStep(executionContext.CloneDirectory, _buildConfiguration.OnSuccessScript).Execute(executionContext)
-                    : new OnFailureStep(executionContext.CloneDirectory, _buildConfiguration.OnFailureScript).Execute(executionContext);
-
-                return isSuccess
-                    ? JobExecutionResult.CreateSuccess()
-                    : JobExecutionResult.CreateFailure();
-            }
-            catch (SolutionNotFoundException)
-            {
-                executionResult = JobExecutionResult.CreateSolutionNotFound();
-            }
-            catch (Exception e)
-            {
-                executionResult = JobExecutionResult.CreateUnhandledException(e);
-            }
-            finally
-            {
-                // on_finish don't influence build final status so we just run it
-                new OnFinishStep(executionContext.CloneDirectory, _buildConfiguration.OnFinishScript).Execute(executionContext);
-            }
+            var executionResult = new BuildPipelineExecuter(executionContext).Execute();
 
             JobEnded?.Invoke(this, new JobEndedEventArgs(job, executionResult));
 
@@ -161,75 +131,6 @@ namespace LocalAppVeyor.Engine
             }
 
             return results;
-        }
-
-        private bool ExecuteBuildPipeline(ExecutionContext executionContext)
-        {
-            // initialize standard variables
-            if (!new InitStandardEnvironmentVariablesStep().Execute(executionContext))
-            {
-                return false;
-            }
-            
-            // Init
-            if (!new InitStep(executionContext.RepositoryDirectory, _buildConfiguration.InitializationScript).Execute(executionContext))
-            {
-                return false;
-            }
-
-            // Clone
-            if (!new CloneFolderStep(_engineConfiguration.FileSystem).Execute(executionContext))
-            {
-                return false;
-            }
-
-            // Install
-            if (!new InstallStep(executionContext.CloneDirectory, _buildConfiguration.InstallScript).Execute(executionContext))
-            {
-                return false;
-            }
-
-            // AssemblyInfo rewrite
-            if (!new AssemblyInfoRewriteStep().Execute(executionContext))
-            {
-                return false;
-            }
-
-            // Before build
-            if (!new BeforeBuildStep(executionContext.CloneDirectory, _buildConfiguration.BeforeBuildScript).Execute(executionContext))
-            {
-                return false;
-            }
-
-            // Build
-            if (_buildConfiguration.Build.IsAutomaticBuildOff)
-            {
-                if (!new BuildScriptStep(executionContext.CloneDirectory, _buildConfiguration.BuildScript).Execute(executionContext))
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                if (!new BuildStep().Execute(executionContext))
-                {
-                    return false;
-                }
-            }
-
-            // After Build
-            if (!new AfterBuildStep(executionContext.CloneDirectory, _buildConfiguration.AfterBuildScript).Execute(executionContext))
-            {
-                return false;
-            }
-
-            // Test script
-            if (!new TestScriptStep(executionContext.CloneDirectory, _buildConfiguration.TestScript).Execute(executionContext))
-            {
-                return false;
-            }
-
-            return true;
         }
     }
 }

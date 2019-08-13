@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace LocalAppVeyor.Engine.Internal.Steps
 {
-    internal class AssemblyInfoRewriteStep : IInternalEngineStep
+    internal class AssemblyInfoRewriteStep : IEngineStep
     {
         public string Name => "assembly_info";
 
