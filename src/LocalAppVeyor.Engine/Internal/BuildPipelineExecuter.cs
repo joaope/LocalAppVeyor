@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using LocalAppVeyor.Engine.Internal.KnownExceptions;
 using LocalAppVeyor.Engine.Internal.Steps;
@@ -9,7 +8,6 @@ namespace LocalAppVeyor.Engine.Internal
     internal sealed class BuildPipelineExecuter
     {
         private readonly ExecutionContext _executionContext;
-        private readonly string[] _skipSteps;
 
         private readonly InitStandardEnvironmentVariablesStep _environmentStep;
         private readonly InitStep _initStep;
@@ -26,12 +24,9 @@ namespace LocalAppVeyor.Engine.Internal
         private readonly OnFailureStep _onFailureStep;
         private readonly OnFinishStep _onFinishStep;
 
-        public BuildPipelineExecuter(
-            ExecutionContext executionContext,
-            IEnumerable<string> skipSteps)
+        public BuildPipelineExecuter(ExecutionContext executionContext)
         {
             _executionContext = executionContext;
-            _skipSteps = skipSteps?.ToArray() ?? new string[0];
 
             _environmentStep = new InitStandardEnvironmentVariablesStep();
             _initStep = new InitStep(executionContext.RepositoryDirectory, executionContext.BuildConfiguration.InitializationScript);
@@ -150,7 +145,7 @@ namespace LocalAppVeyor.Engine.Internal
 
         private bool Execute(IEngineStep step, ExecutionContext executionContext)
         {
-            if (_skipSteps.Contains(step.Name, StringComparer.InvariantCultureIgnoreCase))
+            if (executionContext.BuildConfiguration.SkipSteps.Contains(step.Name, StringComparer.InvariantCultureIgnoreCase))
             {
                 executionContext.Outputter.Write($"Skipped '{step.Name}' step.");
                 return true;

@@ -44,6 +44,14 @@ namespace LocalAppVeyor.Engine.Configuration
 
         public ScriptBlock OnFinishScript { get; }
 
+        private string[] _skipSteps = new string[0];
+
+        public string[] SkipSteps
+        {
+            get => _skipSteps;
+            set => _skipSteps = value ?? new string[0];
+        }
+
         public BuildConfiguration()
             : this(
                   null, 

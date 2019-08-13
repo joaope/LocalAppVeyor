@@ -20,6 +20,8 @@ namespace LocalAppVeyor.Commands
 
         private CommandOption _jobsIndexesOption;
 
+        private CommandOption _skipStepsOptions;
+
         public BuildConsoleCommand(IPipelineOutputter outputter) 
             : base(outputter)
         {
@@ -36,6 +38,11 @@ namespace LocalAppVeyor.Commands
                 "-j|--job",
                 "Job to build. You can specify multiple jobs. Use 'jobs' command to list them all",
                 CommandOptionType.MultipleValue);
+
+             _skipStepsOptions = app.Option(
+                 "-s|--skip",
+                 "Step to skip from the build pipeline step. You can specify multiple steps to be skipped.",
+                 CommandOptionType.MultipleValue);
         }
 
         protected override Task<int> OnExecute(CommandLineApplication app)
@@ -180,6 +187,11 @@ namespace LocalAppVeyor.Commands
             {
                 Outputter.WriteError($"Error while parsing '{appVeyorYml}' file. Build aborted.");
                 Environment.Exit(1);
+            }
+
+            if (_skipStepsOptions.Values != null)
+            {
+                configuration.SkipSteps = _skipStepsOptions.Values.ToArray();
             }
 
             return configuration;
