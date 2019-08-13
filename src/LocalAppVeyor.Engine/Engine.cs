@@ -4,7 +4,6 @@ using System.Linq;
 using LocalAppVeyor.Engine.Configuration;
 using LocalAppVeyor.Engine.Configuration.Reader;
 using LocalAppVeyor.Engine.Internal;
-using LocalAppVeyor.Engine.Internal.Extensions;
 using LocalAppVeyor.Engine.Internal.KnownExceptions;
 using LocalAppVeyor.Engine.Internal.Steps;
 
@@ -94,7 +93,7 @@ namespace LocalAppVeyor.Engine
                 _engineConfiguration.RepositoryDirectoryPath,
                 !string.IsNullOrEmpty(_buildConfiguration.CloneFolder)
                     ? _buildConfiguration.CloneFolder
-                    : new ExpandableString(_engineConfiguration.FileSystem.GetTemporaryDirectory()));
+                    : new ExpandableString(_engineConfiguration.FallbackCloneDirectoryPath));
 
             JobExecutionResult executionResult;
 
