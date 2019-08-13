@@ -41,7 +41,7 @@ namespace LocalAppVeyor.Commands
 
              _skipStepsOptions = app.Option(
                  "-s|--skip",
-                 "Step to skip from the build pipeline step. You can specify multiple steps to be skipped.",
+                 "Step to skip from the build pipeline step. You can specify multiple steps.",
                  CommandOptionType.MultipleValue);
         }
 
