@@ -67,7 +67,7 @@ Options:
   -?|-h|--help  Show help information
   -d|--dir      Local repository directory where appveyor.yml sits. If not specified current directory is used
   -j|--job      Job to build. You can specify multiple jobs. Use 'jobs' command to list all jobs
-  -s|--skip     Step to skip from the build pipeline step. You can specify multiple steps.
+  -s|--skip     Step to skip from the build pipeline. You can specify multiple steps.
 ```
 
 ### • `jobs` command
