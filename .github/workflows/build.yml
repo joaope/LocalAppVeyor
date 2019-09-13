@@ -19,5 +19,4 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet }}
     
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - run: dotnet build --configuration Release
