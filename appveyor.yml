@@ -6,9 +6,7 @@ init:
   - dotnet --info
   - git config --global core.autocrlf true
 
-configuration:
-  - debug
-  - release
+configuration: release
 
 before_build:
   - dotnet restore --source https://api.nuget.org/v3/index.json
