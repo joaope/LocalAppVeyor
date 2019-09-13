@@ -8,9 +8,6 @@ init:
 
 configuration: release
 
-before_build:
-  - dotnet restore --source https://api.nuget.org/v3/index.json
-
 build_script:
   - dotnet build src\LocalAppVeyor.Engine --configuration %configuration%
   - dotnet build src\LocalAppVeyor --configuration %configuration%
