@@ -3,15 +3,15 @@ its build jobs, locally.
 
 | Windows | OS X / Linux  | Nuget  |
 | ------------- |:-------------:| ----- |
-|[![Build status](https://ci.appveyor.com/api/projects/status/hpi2lwuhrr2qbhfm?svg=true)](https://ci.appveyor.com/project/joaope/localappveyor)|[![Build Status](https://travis-ci.org/joaope/LocalAppVeyor.svg?branch=master)](https://travis-ci.org/joaope/LocalAppVeyor)|[![Nuget](https://img.shields.io/nuget/v/LocalAppVeyor.svg?maxAge=0)](https://www.nuget.org/packages/LocalAppVeyor/)|
+|[![Build status](https://ci.appveyor.com/api/projects/status/hpi2lwuhrr2qbhfm?svg=true)](https://ci.appveyor.com/project/joaope/localappveyor)|[![Build Status](https://github.com/joaope/LocalAppVeyor/workflows/Build/badge.svg)](https://github.com/joaope/LocalAppVeyor/actions)|[![Nuget](https://img.shields.io/nuget/v/LocalAppVeyor.svg?maxAge=0)](https://www.nuget.org/packages/LocalAppVeyor/)|
 
-* [How it works](#how-it-works)
-* [Install](#install)
-* [Usage](#usage)
-   * [```build``` command](#-build-command)
-   * [```jobs``` command](#-jobs-command)
-   * [```lint``` command](#-lint-command)
-* [Supported build steps](#supported-build-steps)
+- [How it works](#how-it-works)
+- [Install](#install)
+- [Usage](#usage)
+  - [• `build` command](#%e2%80%a2-build-command)
+  - [• `jobs` command](#%e2%80%a2-jobs-command)
+  - [• `lint` command](#%e2%80%a2-lint-command)
+- [Supported build steps](#supported-build-steps)
 
 ## How it works
 LocalAppVeyor tries to strictly follow same [build pipeline](https://www.appveyor.com/docs/build-configuration/#build-pipeline) 
