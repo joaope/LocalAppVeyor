@@ -5,7 +5,7 @@ on: [push]
 jobs:
 
   build:
-    name: Build on ${{ matrix.os }} using ${{ matrix.dotnet }}
+    name: ${{ matrix.os }} (${{ matrix.dotnet }})
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
