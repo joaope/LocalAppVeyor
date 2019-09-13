@@ -1,22 +1,23 @@
 name: Build solution
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
 
   build:
-    name: Build on ${{ matrix.os }}
+    name: Build on ${{ matrix.os }} using ${{ matrix.dotnet }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+        dotnet: ['2.2.402', '3.0.100-preview9-014004']
 
     steps:
       - uses: actions/checkout@master
 
       - uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 2.2.402
+          dotnet-version: ${{ matrix.dotnet }}
     
       - name: Build with dotnet
         run: dotnet build --configuration Release
