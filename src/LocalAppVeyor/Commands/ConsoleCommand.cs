@@ -24,7 +24,7 @@ namespace LocalAppVeyor.Commands
 
             SetUpAdditionalCommandOptions(app);
 
-            app.OnExecute(() => OnExecute(app));
+            app.OnExecuteAsync(token => OnExecute(app));
         }
 
         protected virtual void SetUpAdditionalCommandOptions(CommandLineApplication app)
