@@ -33,7 +33,7 @@ dotnet tool install -g localappveyor
 You have it now available on your command line:
 
 ```console
-localappveyor --help
+LocalAppVeyor --help
 ```
 
 <sup>*Note: to use CLI tool command you must have [.NET Core 2.1](https://www.microsoft.com/net/download) or higher.*</sup>
