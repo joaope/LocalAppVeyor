@@ -15,19 +15,19 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Converters
 
         public object ReadYaml(IParser parser, Type type)
         {
-            var name = parser.Expect<Scalar>().Value;
+            var name = parser.Consume<Scalar>().Value;
 
-            var mappingStart = parser.Allow<MappingStart>();
+            parser.TryConsume<MappingStart>(out var mappingStart);
 
             if (mappingStart != null)
             {
-                var secureNode = parser.Expect<Scalar>();
+                var secureNode = parser.Consume<Scalar>();
 
                 if (secureNode != null && secureNode.Value == "secure")
                 {
-                    var secureValue = parser.Expect<Scalar>().Value;
+                    var secureValue = parser.Consume<Scalar>().Value;
 
-                    parser.Expect<MappingEnd>();
+                    parser.Consume<MappingEnd>();
 
                     return new InternalVariable(name, secureValue, true);
                 }
@@ -35,7 +35,7 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Converters
                 throw new YamlException("error parsing environment variables");
             }
             
-            return new InternalVariable(name, parser.Expect<Scalar>().Value, false);
+            return new InternalVariable(name, parser.Consume<Scalar>().Value, false);
         }
 
         public void WriteYaml(IEmitter emitter, object value, Type type)

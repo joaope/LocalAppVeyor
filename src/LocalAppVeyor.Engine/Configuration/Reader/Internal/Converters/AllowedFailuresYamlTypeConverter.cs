@@ -29,7 +29,7 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Converters
             var allowedFailuresCollection = new AllowedFailuresCollection();
 
             // discard SequenceStart
-            parser.Expect<SequenceStart>();
+            parser.Consume<SequenceStart>();
 
             do
             {
@@ -39,7 +39,7 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Converters
                 string testCategory = null;
                 var variables = new List<Variable>();
 
-                parser.Expect<MappingStart>();
+                parser.Consume<MappingStart>();
 
                 do
                 {
@@ -63,16 +63,16 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Converters
                             variables.Add(possibleVar.ToVariable());
                             break;
                     }
-                } while (!parser.Accept<MappingEnd>());
+                } while (!parser.Accept<MappingEnd>(out _));
 
-                parser.Expect<MappingEnd>();
+                parser.Consume<MappingEnd>();
 
                 allowedFailuresCollection.Add(
                     new AllowedJobFailureConditions(os, configuration, platform, testCategory, variables.AsReadOnly()));
 
-            } while (!parser.Accept<SequenceEnd>());
+            } while (!parser.Accept<SequenceEnd>(out _));
 
-            parser.Expect<SequenceEnd>();
+            parser.Consume<SequenceEnd>();
 
             return allowedFailuresCollection;
         }
