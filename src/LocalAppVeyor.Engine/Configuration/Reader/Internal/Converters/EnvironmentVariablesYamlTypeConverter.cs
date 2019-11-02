@@ -28,58 +28,58 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Converters
         {
             var env = new InternalEnvironmentVariables();
 
-            parser.Expect<MappingStart>();
+            parser.Consume<MappingStart>();
 
             do
             {
-                var scalar = parser.Peek<Scalar>();
+                parser.Accept<Scalar>(out var scalar);
 
                 if (scalar != null)
                 {
                     if (scalar.Value == "global")
                     {
                         // discard "global" value itself
-                        parser.Expect<Scalar>();
+                        parser.Consume<Scalar>();
 
                         // read global variables (common to all matrix items)
-                        parser.Expect<MappingStart>();
+                        parser.Consume<MappingStart>();
 
                         do
                         {
                             env.InternalCommonVariables.Add(_deserializer.Deserialize<InternalVariable>(parser));
 
-                        } while (!parser.Accept<MappingEnd>());
+                        } while (!parser.Accept<MappingEnd>(out _));
 
-                        parser.Expect<MappingEnd>();
+                        parser.Consume<MappingEnd>();
 
                     }
                     else if (scalar.Value == "matrix")
                     {
                         // discard "matrix" value itself
-                        parser.Expect<Scalar>();
+                        parser.Consume<Scalar>();
 
                         // discard SequenceStart
-                        parser.Expect<SequenceStart>();
+                        parser.Consume<SequenceStart>();
 
                         do
                         {
                             var matrixItemVariables = new List<InternalVariable>();
 
-                            parser.Expect<MappingStart>();
+                            parser.Consume<MappingStart>();
 
                             do
                             {
                                 matrixItemVariables.Add(_deserializer.Deserialize<InternalVariable>(parser));
 
-                            } while (!parser.Accept<MappingEnd>());
+                            } while (!parser.Accept<MappingEnd>(out _));
 
-                            parser.Expect<MappingEnd>();
+                            parser.Consume<MappingEnd>();
 
                             env.InternalMatrix.Add(matrixItemVariables.AsReadOnly());
 
-                        } while (!parser.Accept<SequenceEnd>());
+                        } while (!parser.Accept<SequenceEnd>(out _));
 
-                        parser.Expect<SequenceEnd>();
+                        parser.Consume<SequenceEnd>();
                     }
                     else
                     {
@@ -89,9 +89,9 @@ namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Converters
                 }
                 
                 
-            } while (!parser.Accept<MappingEnd>());
+            } while (!parser.Accept<MappingEnd>(out _));
 
-            parser.Expect<MappingEnd>();
+            parser.Consume<MappingEnd>();
 
             return env;
         }
