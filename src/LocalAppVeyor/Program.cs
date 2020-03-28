@@ -18,11 +18,12 @@ namespace LocalAppVeyor
 
         public static void Main(string[] args)
         {
-            var app = new CommandLineApplication(false)
+            var app = new CommandLineApplication
             {
                 Name = "LocalAppVeyor",
                 FullName = "LocalAppVeyor",
-                Description = "LocalAppVeyor allows one to run an appveyor.yml build script locally"
+                Description = "LocalAppVeyor allows one to run an appveyor.yml build script locally",
+                UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopParsingAndCollect
             };
 
             var (shortFormVersion, longFormVersion) = GetShortAndLongVersion();
@@ -30,9 +31,9 @@ namespace LocalAppVeyor
             app.HelpOption("-?|-h|--help");
             app.VersionOption("-v|--version", shortFormVersion, longFormVersion);
 
-            app.Command(BuildCommand.Name, conf => { BuildCommand.SetUp(conf); }, false);
-            app.Command(JobsCommand.Name, conf => { JobsCommand.SetUp(conf); }, false);
-            app.Command(LintCommand.Name, conf => { LintCommand.SetUp(conf); }, false);
+            app.Command(BuildCommand.Name, conf => { BuildCommand.SetUp(conf); });
+            app.Command(JobsCommand.Name, conf => { JobsCommand.SetUp(conf); });
+            app.Command(LintCommand.Name, conf => { LintCommand.SetUp(conf); });
 
             app.OnExecute(() =>
             {
