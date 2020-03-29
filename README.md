@@ -36,7 +36,7 @@ You have it now available on your command line:
 LocalAppVeyor --help
 ```
 
-<sup>*Note: to use CLI tool command you must have [.NET Core 2.1](https://www.microsoft.com/net/download) or higher.*</sup>
+<sup>*Requires [.NET Core 3.1](https://www.microsoft.com/net/download) or higher.*</sup>
 
 ## Usage
 ```
