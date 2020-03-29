@@ -5,7 +5,7 @@
     <Copyright>joaope 2016</Copyright>
     <VersionPrefix>0.5.1</VersionPrefix>
     <Authors>joaope</Authors>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <LangVersion>latest</LangVersion>
     <OutputType>Exe</OutputType>
