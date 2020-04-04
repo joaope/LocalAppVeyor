@@ -18,12 +18,24 @@ namespace LocalAppVeyor.Engine.Internal
 
                 powerShell.Streams.Information.DataAdded += (sender, args) =>
                 {
-                    onOutputDataReceived(powerShell.Streams.Information[args.Index].MessageData.ToString());
+                    onOutputDataReceived(powerShell.Streams.Information[args.Index].MessageData?.ToString());
                 };
 
                 powerShell.Streams.Error.DataAdded += (sender, args) =>
                 {
-                    onErrorDataReceived(powerShell.Streams.Error[args.Index].ErrorDetails.Message);
+                    var error = powerShell.Streams.Error[args.Index];
+                    var msg =
+                        $"STACKTRACE: {(string.IsNullOrEmpty(error.ScriptStackTrace) ? "<no stacktrace>" : error.ScriptStackTrace)}. ";
+
+                    if (error.ErrorDetails != null)
+                    {
+                        msg +=
+                            $"MESSAGE: {(string.IsNullOrEmpty(error.ErrorDetails.Message) ? "<no error message>" : error.ErrorDetails.Message)}. ";
+                        msg +=
+                            $"RECOMMENDED ACTION: {(string.IsNullOrEmpty(error.ErrorDetails.RecommendedAction) ? "<no recommended action>" : error.ErrorDetails.RecommendedAction)}.";
+                    }
+
+                    onErrorDataReceived(msg);
                     success = false;
                 };
 

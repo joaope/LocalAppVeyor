@@ -80,7 +80,7 @@ namespace LocalAppVeyor.Commands
                         break;
                     case JobExecutionResultType.UnhandledException:
                         Outputter.WriteError($"Unhandled exception while executing '{args.Job.Name}': " +
-                                                     $"{args.ExecutionResult.UnhandledException.Message}");
+                                                     $"{args.ExecutionResult.UnhandledException.Message} {args.ExecutionResult.UnhandledException.StackTrace}");
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
