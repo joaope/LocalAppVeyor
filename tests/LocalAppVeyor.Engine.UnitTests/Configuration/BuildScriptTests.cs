@@ -32,5 +32,17 @@ build_script:
                 conf.BuildScript[0].Script);
             Assert.Equal(ScriptType.PowerShell, conf.BuildScript[0].ScriptType);
         }
+
+        [Fact]
+        public void ShouldGracefullyReadAnInvalidScriptBlock_AndMakeItAnEmptyScript()
+        {
+            const string yaml = @"
+build_script: true;
+";
+
+            var conf = new BuildConfigurationYamlStringReader(yaml).GetBuildConfiguration();
+
+            Assert.Empty(conf.BuildScript);
+        }
     }
 }
