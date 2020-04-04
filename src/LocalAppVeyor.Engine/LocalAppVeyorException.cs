@@ -23,8 +23,8 @@ namespace LocalAppVeyor.Engine
         {
             return innerException is YamlException yamlEx
                 ? "Error while parsing YAML " +
-                  $"<Line: {yamlEx.Start.Line}, Column: {yamlEx.Start.Column}> to " +
-                  $"<Line: {yamlEx.End.Line}, Column: {yamlEx.End.Column}>"
+                  $"(Line: {yamlEx.Start.Line}, Column: {yamlEx.Start.Column}) to " +
+                  $"(Line: {yamlEx.End.Line}, Column: {yamlEx.End.Column})"
                 : message;
         }
     }
