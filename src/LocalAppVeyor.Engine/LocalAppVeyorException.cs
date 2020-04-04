@@ -5,6 +5,10 @@ namespace LocalAppVeyor.Engine
 {
     public class LocalAppVeyorException : Exception
     {
+        public Mark Start { get; }
+
+        public Mark End { get; }
+
         public LocalAppVeyorException()
         {
         }
@@ -15,17 +19,33 @@ namespace LocalAppVeyor.Engine
         }
         
         public LocalAppVeyorException(string message, Exception innerException)
-            : base(GetDetailedMessage(message, innerException), innerException)
+            : base(message, innerException)
         {
+            if (!(innerException is YamlException yamlEx))
+            {
+                return;
+            }
+
+            Start = new Mark(yamlEx.Start.Line, yamlEx.Start.Column);
+            End = new Mark(yamlEx.End.Line, yamlEx.End.Column);
         }
 
-        private static string GetDetailedMessage(string message, Exception innerException)
+        public sealed class Mark
         {
-            return innerException is YamlException yamlEx
-                ? "Error while parsing YAML " +
-                  $"(Line: {yamlEx.Start.Line}, Column: {yamlEx.Start.Column}) to " +
-                  $"(Line: {yamlEx.End.Line}, Column: {yamlEx.End.Column})"
-                : message;
+            public int Line { get; }
+
+            public int Column { get; }
+
+            public Mark(int line, int column)
+            {
+                Line = line;
+                Column = column;
+            }
+
+            public override string ToString()
+            {
+                return $"(Line: {Line}, Column: {Column})";
+            }
         }
     }
 }

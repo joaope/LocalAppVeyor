@@ -183,9 +183,9 @@ namespace LocalAppVeyor.Commands
                 configuration = new BuildConfigurationYamlFileReader(appVeyorYml)
                     .GetBuildConfiguration();
             }
-            catch (LocalAppVeyorException)
+            catch (LocalAppVeyorException exception)
             {
-                Outputter.WriteError($"Error while parsing '{appVeyorYml}' file. Build aborted.");
+                Outputter.WriteError(GetDetailedErrorMessage(appVeyorYml, exception));
                 Environment.Exit(1);
             }
 
@@ -195,6 +195,18 @@ namespace LocalAppVeyor.Commands
             }
 
             return configuration;
+        }
+
+        private static string GetDetailedErrorMessage(string appVeyorYml, LocalAppVeyorException exception)
+        {
+            string marksMessage = null;
+
+            if (exception.Start != null && exception.End != null)
+            {
+                marksMessage = $"{exception.Start} to {exception.End}";
+            }
+
+            return $"Error while parsing '{appVeyorYml}' file{(marksMessage != null ? $" {marksMessage}." : ".")}";
         }
 
         private EngineConfiguration TryGetEngineConfigurationOrTerminate(string repositoryPath)
