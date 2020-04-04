@@ -96,14 +96,14 @@ namespace LocalAppVeyor.Engine.Internal.Steps
                 {
                     if (data != null)
                     {
-                        executionContext.Outputter.Write(data);
+                        executionContext.Outputter.Write(data?.ToString() ?? "PowerShell: <no information output>");
                     }
                 },
                 data =>
                 {
                     if (data != null)
                     {
-                        executionContext.Outputter.WriteError(data);
+                        executionContext.Outputter.WriteError(data?.ToString() ?? "PowerShell: Error while executing command.");
                     }
                 });
         }
