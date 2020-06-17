@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.0.2" />
-    <PackageReference Include="System.IO.Abstractions" Version="11.0.13" />
+    <PackageReference Include="System.IO.Abstractions" Version="11.0.14" />
     <PackageReference Include="YamlDotNet" Version="8.1.2" />
     <PackageReference Include="Microsoft.Build" Version="16.6.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
