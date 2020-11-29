@@ -6,7 +6,7 @@
     <AssemblyTitle>LocalAppVeyor.Engine</AssemblyTitle>
     <VersionPrefix>6</VersionPrefix>
     <Authors>joaope</Authors>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <PlatformTarget>anycpu</PlatformTarget>
     <LangVersion>latest</LangVersion>
@@ -22,8 +22,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.0.3" />
-    <PackageReference Include="System.IO.Abstractions" Version="12.2.24" />
+    <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.1.0" />
+    <PackageReference Include="System.IO.Abstractions" Version="13.2.2" />
     <PackageReference Include="YamlDotNet" Version="9.1.0" />
     <PackageReference Include="Microsoft.Build" Version="16.8.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
