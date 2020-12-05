@@ -1,6 +1,6 @@
 image: Visual Studio 2019
 
-version: 0.5.7+appveyor.{build}
+version: 0.5.8+appveyor.{build}
 
 init:
   - dotnet --info
