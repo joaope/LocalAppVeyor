@@ -24,8 +24,8 @@ internal class CloneFolderStep : IEngineStep
 
     private void Clone(string source, string destination)
     {
-        var dirSource = _fileSystem.DirectoryInfo.FromDirectoryName(source);
-        var dirDestination = _fileSystem.DirectoryInfo.FromDirectoryName(destination);
+        var dirSource = _fileSystem.DirectoryInfo.New(source);
+        var dirDestination = _fileSystem.DirectoryInfo.New(destination);
 
         if (!dirDestination.Exists)
         {
