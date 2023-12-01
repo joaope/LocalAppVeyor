@@ -7,31 +7,7 @@ updates:
   open-pull-requests-limit: 10
   labels:
   - dependencies
-  ignore:
-  - dependency-name: YamlDotNet
-    versions:
-    - 10.1.0
-    - 11.1.0
-  - dependency-name: System.IO.Abstractions.TestingHelpers
-    versions:
-    - 13.2.11
-    - 13.2.13
-    - 13.2.16
-    - 13.2.17
-    - 13.2.18
-    - 13.2.20
-    - 13.2.22
-    - 13.2.24
-    - 13.2.27
-  - dependency-name: System.IO.Abstractions
-    versions:
-    - 13.2.10
-    - 13.2.11
-    - 13.2.13
-    - 13.2.14
-    - 13.2.16
-    - 13.2.18
-    - 13.2.20
-    - 13.2.22
-    - 13.2.24
-    - 13.2.27
+- package-ecosystem: "github-actions"
+  directory: "/"
+  schedule:
+    interval: daily
