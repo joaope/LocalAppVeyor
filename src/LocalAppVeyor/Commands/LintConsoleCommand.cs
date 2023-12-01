@@ -4,10 +4,10 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security;
+using System.Text.Json;
 using System.Threading.Tasks;
 using LocalAppVeyor.Engine;
 using McMaster.Extensions.CommandLineUtils;
-using Newtonsoft.Json;
 
 namespace LocalAppVeyor.Commands;
 
@@ -67,45 +67,41 @@ internal sealed class LintConsoleCommand : ConsoleCommand
 
         Outputter.Write($"Validating '{yamlFilePath}'...");
 
-        using (var client = new HttpClient())
+        using var client = new HttpClient();
+        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiToken);
+
+        Outputter.Write("Connecting to AppVeyor validation API...");
+
+        try
         {
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiToken);
+            using var response = await client.PostAsync(YmlValidationUrl, new StringContent(ymlFileContent));
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var responseObj = JsonSerializer.Deserialize<dynamic>(responseContent);
 
-            Outputter.Write("Connecting to AppVeyor validation API...");
-
-            try
+            switch (response.StatusCode)
             {
-                using (var response = await client.PostAsync(YmlValidationUrl, new StringContent(ymlFileContent)))
-                {
-                    var responseContent = await response.Content.ReadAsStringAsync();
-                    var responseObj = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                case HttpStatusCode.OK when (bool)responseObj.isValid:
+                    Outputter.WriteSuccess("YAML configuration file is valid.");
+                    return 0;
+                case HttpStatusCode.OK:
+                    Outputter.WriteError((string)responseObj.errorMessage);
+                    break;
+                case HttpStatusCode.Unauthorized:
+                    Outputter.WriteError("Authorization failed. Make sure you're specifying an updated API token.");
+                    break;
+                default:
+                    var msg = (string) responseObj.message;
+                    Outputter.WriteError(!string.IsNullOrEmpty(msg)
+                        ? $"Validation failed with status code {response.StatusCode}. Message: {msg}"
+                        : $"Validation failed with status code {response.StatusCode}.");
 
-                    switch (response.StatusCode)
-                    {
-                        case HttpStatusCode.OK when (bool)responseObj.isValid:
-                            Outputter.WriteSuccess("YAML configuration file is valid.");
-                            return 0;
-                        case HttpStatusCode.OK:
-                            Outputter.WriteError((string)responseObj.errorMessage);
-                            break;
-                        case HttpStatusCode.Unauthorized:
-                            Outputter.WriteError("Authorization failed. Make sure you're specifying an updated API token.");
-                            break;
-                        default:
-                            var msg = (string) responseObj.message;
-                            Outputter.WriteError(!string.IsNullOrEmpty(msg)
-                                ? $"Validation failed with status code {response.StatusCode}. Message: {msg}"
-                                : $"Validation failed with status code {response.StatusCode}.");
-
-                            break;
-                    }
-                }
+                    break;
             }
-            catch (HttpRequestException)
-            {
-                Outputter.WriteError("Error connecting to AppVeyor validation API. Check your interner connection.");
-            }
+        }
+        catch (HttpRequestException)
+        {
+            Outputter.WriteError("Error connecting to AppVeyor validation API. Check your interner connection.");
         }
 
         return 1;
