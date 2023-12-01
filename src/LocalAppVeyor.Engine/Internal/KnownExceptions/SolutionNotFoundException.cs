@@ -1,8 +1,7 @@
 ﻿using System;
 
-namespace LocalAppVeyor.Engine.Internal.KnownExceptions
+namespace LocalAppVeyor.Engine.Internal.KnownExceptions;
+
+public class SolutionNotFoundException : Exception
 {
-    public class SolutionNotFoundException : Exception
-    {
-    }
 }

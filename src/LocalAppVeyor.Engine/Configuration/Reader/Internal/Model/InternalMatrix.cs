@@ -1,18 +1,17 @@
 ﻿using YamlDotNet.Serialization;
 
-namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
+namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model;
+
+internal class InternalMatrix
 {
-    internal class InternalMatrix
+    [YamlMember(Alias = "fast_finish")]
+    public bool IsFastFinish { get; set; }
+
+    [YamlMember(Alias = "allow_failures")]
+    public AllowedFailuresCollection AllowedFailures { get; set; }
+
+    public Matrix ToMatrix()
     {
-        [YamlMember(Alias = "fast_finish")]
-        public bool IsFastFinish { get; set; }
-
-        [YamlMember(Alias = "allow_failures")]
-        public AllowedFailuresCollection AllowedFailures { get; set; }
-
-        public Matrix ToMatrix()
-        {
-            return new Matrix(IsFastFinish, AllowedFailures);
-        }
+        return new Matrix(IsFastFinish, AllowedFailures);
     }
 }

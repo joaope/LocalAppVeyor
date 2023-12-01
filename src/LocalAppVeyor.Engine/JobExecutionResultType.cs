@@ -1,13 +1,12 @@
-﻿namespace LocalAppVeyor.Engine
-{
-    public enum JobExecutionResultType
-    {
-        Success,
-        Failure,
+﻿namespace LocalAppVeyor.Engine;
 
-        NotExecuted,
-        JobNotFound,
-        SolutionFileNotFound,
-        UnhandledException
-    }
+public enum JobExecutionResultType
+{
+    Success,
+    Failure,
+
+    NotExecuted,
+    JobNotFound,
+    SolutionFileNotFound,
+    UnhandledException
 }

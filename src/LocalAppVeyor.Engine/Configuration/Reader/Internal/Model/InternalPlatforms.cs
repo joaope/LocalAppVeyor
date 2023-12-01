@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 
-namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
+namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model;
+
+internal class InternalPlatforms : List<string>
 {
-    internal class InternalPlatforms : List<string>
+    public static implicit operator InternalPlatforms(string platform)
     {
-        public static implicit operator InternalPlatforms(string platform)
+        return new InternalPlatforms
         {
-            return new InternalPlatforms
-            {
-                platform
-            };
-        }
+            platform
+        };
     }
 }

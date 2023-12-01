@@ -1,9 +1,8 @@
-﻿namespace LocalAppVeyor.Engine.Configuration
+﻿namespace LocalAppVeyor.Engine.Configuration;
+
+public enum ScriptType
 {
-    public enum ScriptType
-    {
-        Batch,
-        PowerShell,
-        Bash
-    }
+    Batch,
+    PowerShell,
+    Bash
 }

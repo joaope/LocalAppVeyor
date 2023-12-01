@@ -1,66 +1,65 @@
 ﻿using System;
 
-namespace LocalAppVeyor.Engine
+namespace LocalAppVeyor.Engine;
+
+public sealed class JobExecutionResult
 {
-    public sealed class JobExecutionResult
-    {
-        public JobExecutionResultType ResultType { get; private set; }
+    public JobExecutionResultType ResultType { get; private set; }
 
-        public bool IsSuccessfulExecution => ResultType == JobExecutionResultType.Success;
+    public bool IsSuccessfulExecution => ResultType == JobExecutionResultType.Success;
 
-        public Exception UnhandledException { get; private set; }
+    public Exception UnhandledException { get; private set; }
         
-        private JobExecutionResult ()
-        {
-        }
+    private JobExecutionResult ()
+    {
+    }
 
-        internal static JobExecutionResult CreateSuccess()
+    internal static JobExecutionResult CreateSuccess()
+    {
+        return new JobExecutionResult
         {
-            return new JobExecutionResult
-            {
-                ResultType = JobExecutionResultType.Success
-            };
-        }
+            ResultType = JobExecutionResultType.Success
+        };
+    }
 
-        internal static JobExecutionResult CreateFailure()
+    internal static JobExecutionResult CreateFailure()
+    {
+        return new JobExecutionResult
         {
-            return new JobExecutionResult
-            {
-                ResultType = JobExecutionResultType.Failure
-            };
-        }
+            ResultType = JobExecutionResultType.Failure
+        };
+    }
 
-        internal static JobExecutionResult CreateNotExecuted()
+    internal static JobExecutionResult CreateNotExecuted()
+    {
+        return new JobExecutionResult
         {
-            return new JobExecutionResult
-            {
-                ResultType = JobExecutionResultType.NotExecuted
-            };
-        }
+            ResultType = JobExecutionResultType.NotExecuted
+        };
+    }
 
-        internal static JobExecutionResult CreateUnhandledException(Exception exception)
+    internal static JobExecutionResult CreateUnhandledException(Exception exception)
+    {
+        return new JobExecutionResult
         {
-            return new JobExecutionResult
-            {
-                ResultType = JobExecutionResultType.UnhandledException,
-                UnhandledException = exception
-            };
-        }
+            ResultType = JobExecutionResultType.UnhandledException,
+            UnhandledException = exception
+        };
+    }
 
-        internal static JobExecutionResult CreateSolutionNotFound()
+    internal static JobExecutionResult CreateSolutionNotFound()
+    {
+        return new JobExecutionResult
         {
-            return new JobExecutionResult
-            {
-                ResultType = JobExecutionResultType.SolutionFileNotFound
-            };
-        }
+            ResultType = JobExecutionResultType.SolutionFileNotFound
+        };
+    }
 
-        internal static JobExecutionResult CreateJobNotFound()
+    internal static JobExecutionResult CreateJobNotFound()
+    {
+        return new JobExecutionResult
         {
-            return new JobExecutionResult
-            {
-                ResultType = JobExecutionResultType.JobNotFound
-            };
-        }
+            ResultType = JobExecutionResultType.JobNotFound
+        };
     }
 }

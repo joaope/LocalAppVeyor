@@ -1,10 +1,9 @@
-﻿namespace LocalAppVeyor.Engine.Configuration
+﻿namespace LocalAppVeyor.Engine.Configuration;
+
+public enum BuildVerbosity
 {
-    public enum BuildVerbosity
-    {
-        Quiet,
-        Minimal,
-        Normal,
-        Detailed
-    }
+    Quiet,
+    Minimal,
+    Normal,
+    Detailed
 }

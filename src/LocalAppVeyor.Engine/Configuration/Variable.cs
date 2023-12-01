@@ -1,37 +1,36 @@
 ﻿using System;
 
-namespace LocalAppVeyor.Engine.Configuration
+namespace LocalAppVeyor.Engine.Configuration;
+
+public class Variable : IEquatable<Variable>
 {
-    public class Variable : IEquatable<Variable>
+    public string Name { get; }    
+
+    public bool IsSecuredValue { get; }
+
+    public ExpandableString Value { get; }
+
+    public Variable(string name, string value, bool isSecuredValue)
     {
-        public string Name { get; }    
+        Name = name;
+        Value = value;
+        IsSecuredValue = isSecuredValue;
+    }
 
-        public bool IsSecuredValue { get; }
-
-        public ExpandableString Value { get; }
-
-        public Variable(string name, string value, bool isSecuredValue)
+    public bool Equals(Variable other)
+    {
+        if (other == null)
         {
-            Name = name;
-            Value = value;
-            IsSecuredValue = isSecuredValue;
+            return false;
         }
 
-        public bool Equals(Variable other)
-        {
-            if (other == null)
-            {
-                return false;
-            }
+        return Name == other.Name &&
+               Value == other.Value &&
+               IsSecuredValue == other.IsSecuredValue;
+    }
 
-            return Name == other.Name &&
-                   Value == other.Value &&
-                   IsSecuredValue == other.IsSecuredValue;
-        }
-
-        public override string ToString()
-        {
-            return $"{Name}={Value}";
-        }
+    public override string ToString()
+    {
+        return $"{Name}={Value}";
     }
 }

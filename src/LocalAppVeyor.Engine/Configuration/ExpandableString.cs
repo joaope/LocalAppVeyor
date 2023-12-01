@@ -1,62 +1,61 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace LocalAppVeyor.Engine.Configuration
+namespace LocalAppVeyor.Engine.Configuration;
+
+public struct ExpandableString
 {
-    public struct ExpandableString
+    private static readonly Regex VarPattern = new Regex(@"\$\([\w-]+\)", RegexOptions.Compiled);
+
+    private readonly string _internalStr;
+
+    public static ExpandableString Empty => new ExpandableString(string.Empty);
+
+    public ExpandableString(string str)
     {
-        private static readonly Regex VarPattern = new Regex(@"\$\([\w-]+\)", RegexOptions.Compiled);
+        _internalStr = str;
+    }
 
-        private readonly string _internalStr;
+    public static implicit operator ExpandableString(string str)
+    {
+        return new ExpandableString(str);
+    }
 
-        public static ExpandableString Empty => new ExpandableString(string.Empty);
-
-        public ExpandableString(string str)
+    public static implicit operator string(ExpandableString expandable)
+    {
+        if (string.IsNullOrEmpty(expandable._internalStr))
         {
-            _internalStr = str;
+            return expandable._internalStr;
         }
-
-        public static implicit operator ExpandableString(string str)
-        {
-            return new ExpandableString(str);
-        }
-
-        public static implicit operator string(ExpandableString expandable)
-        {
-            if (string.IsNullOrEmpty(expandable._internalStr))
-            {
-                return expandable._internalStr;
-            }
             
-            return VarPattern
-                .Replace(expandable._internalStr, m => Environment.GetEnvironmentVariable(m.Value.Substring(2, m.Value.Length - 3)))
-                .Replace("{build}", "0")
-                .Replace("{version}", Environment.GetEnvironmentVariable("APPVEYOR_BUILD_VERSION"));
-        }
+        return VarPattern
+            .Replace(expandable._internalStr, m => Environment.GetEnvironmentVariable(m.Value.Substring(2, m.Value.Length - 3)))
+            .Replace("{build}", "0")
+            .Replace("{version}", Environment.GetEnvironmentVariable("APPVEYOR_BUILD_VERSION"));
+    }
 
-        public override bool Equals(object obj)
+    public override bool Equals(object obj)
+    {
+        switch (obj)
         {
-            switch (obj)
-            {
-                case null:
-                    return false;
-                case string s:
-                    return this == s;
-                case ExpandableString expandableString:
-                    return expandableString._internalStr == _internalStr;
-            }
-
-            return false;
+            case null:
+                return false;
+            case string s:
+                return this == s;
+            case ExpandableString expandableString:
+                return expandableString._internalStr == _internalStr;
         }
 
-        public override int GetHashCode()
-        {
-            return _internalStr.GetHashCode();
-        }
+        return false;
+    }
 
-        public override string ToString()
-        {
-            return this;
-        }
+    public override int GetHashCode()
+    {
+        return _internalStr.GetHashCode();
+    }
+
+    public override string ToString()
+    {
+        return this;
     }
 }

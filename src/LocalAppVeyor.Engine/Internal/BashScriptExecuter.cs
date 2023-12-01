@@ -1,46 +1,45 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace LocalAppVeyor.Engine.Internal
+namespace LocalAppVeyor.Engine.Internal;
+
+internal static class BashScriptExecuter
 {
-    internal static class BashScriptExecuter
+    public static bool Execute(
+        string script,
+        Action<string> onOutputDataReceived,
+        Action<string> onErrorDataReceived)
     {
-        public static bool Execute(
-            string script,
-            Action<string> onOutputDataReceived,
-            Action<string> onErrorDataReceived)
+        if (string.IsNullOrEmpty(script))
         {
-            if (string.IsNullOrEmpty(script))
+            return true;
+        }
+
+        using (var process = Process.Start(new ProcessStartInfo
+               {
+                   FileName = "/bin/bash",
+                   Arguments = $"-c \"{script.Replace("\"", "\\\"")}\"",
+                   CreateNoWindow = true,
+                   UseShellExecute = false,
+                   RedirectStandardError = true,
+                   RedirectStandardOutput = true
+               }))
+        {
+            process.OutputDataReceived += (s, e) =>
             {
-                return true;
-            }
-
-            using (var process = Process.Start(new ProcessStartInfo
+                onOutputDataReceived?.Invoke(e.Data);
+            };
+            process.ErrorDataReceived += (s, e) =>
             {
-                FileName = "/bin/bash",
-                Arguments = $"-c \"{script.Replace("\"", "\\\"")}\"",
-                CreateNoWindow = true,
-                UseShellExecute = false,
-                RedirectStandardError = true,
-                RedirectStandardOutput = true
-            }))
-            {
-                process.OutputDataReceived += (s, e) =>
-                {
-                    onOutputDataReceived?.Invoke(e.Data);
-                };
-                process.ErrorDataReceived += (s, e) =>
-                {
-                    onErrorDataReceived?.Invoke(e.Data);
-                };
+                onErrorDataReceived?.Invoke(e.Data);
+            };
 
-                process.BeginOutputReadLine();
-                process.BeginErrorReadLine();
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
 
-                process.WaitForExit();
+            process.WaitForExit();
 
-                return process.ExitCode == 0;
-            }
+            return process.ExitCode == 0;
         }
     }
 }

@@ -1,19 +1,18 @@
 ﻿using System;
 
-namespace LocalAppVeyor.Engine
+namespace LocalAppVeyor.Engine;
+
+public interface IPipelineOutputter
 {
-    public interface IPipelineOutputter
-    {
-        void SetColor(ConsoleColor color);
+    void SetColor(ConsoleColor color);
 
-        void ResetColor();
+    void ResetColor();
 
-        void Write(string message);
+    void Write(string message);
 
-        void WriteSuccess(string successMessage);
+    void WriteSuccess(string successMessage);
 
-        void WriteWarning(string warningMessage);
+    void WriteWarning(string warningMessage);
 
-        void WriteError(string errorMessage);
-    }
+    void WriteError(string errorMessage);
 }

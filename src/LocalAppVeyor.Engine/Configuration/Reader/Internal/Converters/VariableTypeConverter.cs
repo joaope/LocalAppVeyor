@@ -4,43 +4,42 @@ using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
-namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Converters
+namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Converters;
+
+internal class VariableTypeConverter : IYamlTypeConverter
 {
-    internal class VariableTypeConverter : IYamlTypeConverter
+    public bool Accepts(Type type)
     {
-        public bool Accepts(Type type)
+        return type == typeof(InternalVariable);
+    }
+
+    public object ReadYaml(IParser parser, Type type)
+    {
+        var name = parser.Consume<Scalar>().Value;
+
+        parser.TryConsume<MappingStart>(out var mappingStart);
+
+        if (mappingStart != null)
         {
-            return type == typeof(InternalVariable);
-        }
+            var secureNode = parser.Consume<Scalar>();
 
-        public object ReadYaml(IParser parser, Type type)
-        {
-            var name = parser.Consume<Scalar>().Value;
-
-            parser.TryConsume<MappingStart>(out var mappingStart);
-
-            if (mappingStart != null)
+            if (secureNode != null && secureNode.Value == "secure")
             {
-                var secureNode = parser.Consume<Scalar>();
+                var secureValue = parser.Consume<Scalar>().Value;
 
-                if (secureNode != null && secureNode.Value == "secure")
-                {
-                    var secureValue = parser.Consume<Scalar>().Value;
+                parser.Consume<MappingEnd>();
 
-                    parser.Consume<MappingEnd>();
-
-                    return new InternalVariable(name, secureValue, true);
-                }
-
-                throw new YamlException("error parsing environment variables");
+                return new InternalVariable(name, secureValue, true);
             }
-            
-            return new InternalVariable(name, parser.Consume<Scalar>().Value, false);
-        }
 
-        public void WriteYaml(IEmitter emitter, object value, Type type)
-        {
-            throw new NotImplementedException();
+            throw new YamlException("error parsing environment variables");
         }
+            
+        return new InternalVariable(name, parser.Consume<Scalar>().Value, false);
+    }
+
+    public void WriteYaml(IEmitter emitter, object value, Type type)
+    {
+        throw new NotImplementedException();
     }
 }

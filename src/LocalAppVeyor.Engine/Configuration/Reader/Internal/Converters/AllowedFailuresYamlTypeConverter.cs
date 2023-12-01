@@ -5,81 +5,80 @@ using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
-namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Converters
+namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Converters;
+
+internal class AllowedFailuresYamlTypeConverter : IYamlTypeConverter
 {
-    internal class AllowedFailuresYamlTypeConverter : IYamlTypeConverter
+    private readonly IDeserializer _deserializer;
+
+    public AllowedFailuresYamlTypeConverter()
     {
-        private readonly IDeserializer _deserializer;
+        _deserializer = new DeserializerBuilder()
+            .IgnoreUnmatchedProperties()
+            .WithTypeConverter(new VariableTypeConverter())
+            .Build();
+    }
 
-        public AllowedFailuresYamlTypeConverter()
+    public bool Accepts(Type type)
+    {
+        return type == typeof(AllowedFailuresCollection);
+    }
+
+    public object ReadYaml(IParser parser, Type type)
+    {
+        var allowedFailuresCollection = new AllowedFailuresCollection();
+
+        // discard SequenceStart
+        parser.Consume<SequenceStart>();
+
+        do
         {
-            _deserializer = new DeserializerBuilder()
-                .IgnoreUnmatchedProperties()
-                .WithTypeConverter(new VariableTypeConverter())
-                .Build();
-        }
+            string os = null;
+            string configuration = null;
+            string platform = null;
+            string testCategory = null;
+            var variables = new List<Variable>();
 
-        public bool Accepts(Type type)
-        {
-            return type == typeof(AllowedFailuresCollection);
-        }
-
-        public object ReadYaml(IParser parser, Type type)
-        {
-            var allowedFailuresCollection = new AllowedFailuresCollection();
-
-            // discard SequenceStart
-            parser.Consume<SequenceStart>();
+            parser.Consume<MappingStart>();
 
             do
             {
-                string os = null;
-                string configuration = null;
-                string platform = null;
-                string testCategory = null;
-                var variables = new List<Variable>();
+                var possibleVar = _deserializer.Deserialize<InternalVariable>(parser);
 
-                parser.Consume<MappingStart>();
-
-                do
+                switch (possibleVar.Name)
                 {
-                    var possibleVar = _deserializer.Deserialize<InternalVariable>(parser);
+                    case "os":
+                        os = possibleVar.Value;
+                        break;
+                    case "configuration":
+                        configuration = possibleVar.Value;
+                        break;
+                    case "platform":
+                        platform = possibleVar.Value;
+                        break;
+                    case "test_category":
+                        testCategory = possibleVar.Value;
+                        break;
+                    default:
+                        variables.Add(possibleVar.ToVariable());
+                        break;
+                }
+            } while (!parser.Accept<MappingEnd>(out _));
 
-                    switch (possibleVar.Name)
-                    {
-                        case "os":
-                            os = possibleVar.Value;
-                            break;
-                        case "configuration":
-                            configuration = possibleVar.Value;
-                            break;
-                        case "platform":
-                            platform = possibleVar.Value;
-                            break;
-                        case "test_category":
-                            testCategory = possibleVar.Value;
-                            break;
-                        default:
-                            variables.Add(possibleVar.ToVariable());
-                            break;
-                    }
-                } while (!parser.Accept<MappingEnd>(out _));
+            parser.Consume<MappingEnd>();
 
-                parser.Consume<MappingEnd>();
+            allowedFailuresCollection.Add(
+                new AllowedJobFailureConditions(os, configuration, platform, testCategory, variables.AsReadOnly()));
 
-                allowedFailuresCollection.Add(
-                    new AllowedJobFailureConditions(os, configuration, platform, testCategory, variables.AsReadOnly()));
+        } while (!parser.Accept<SequenceEnd>(out _));
 
-            } while (!parser.Accept<SequenceEnd>(out _));
+        parser.Consume<SequenceEnd>();
 
-            parser.Consume<SequenceEnd>();
+        return allowedFailuresCollection;
+    }
 
-            return allowedFailuresCollection;
-        }
-
-        public void WriteYaml(IEmitter emitter, object value, Type type)
-        {
-            throw new NotImplementedException();
-        }
+    public void WriteYaml(IEmitter emitter, object value, Type type)
+    {
+        throw new NotImplementedException();
     }
 }

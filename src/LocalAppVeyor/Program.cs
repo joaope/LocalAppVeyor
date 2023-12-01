@@ -4,65 +4,64 @@ using LocalAppVeyor.Commands;
 using LocalAppVeyor.Engine;
 using McMaster.Extensions.CommandLineUtils;
 
-namespace LocalAppVeyor
+namespace LocalAppVeyor;
+
+public static class Program
 {
-    public static class Program
+    private static readonly IPipelineOutputter PipelineOutputter = new ConsoleOutputter();
+
+    private static readonly BuildConsoleCommand BuildCommand = new BuildConsoleCommand(PipelineOutputter);
+
+    private static readonly JobsConsoleCommand JobsCommand = new JobsConsoleCommand(PipelineOutputter);
+
+    private static readonly LintConsoleCommand LintCommand = new LintConsoleCommand(PipelineOutputter);
+
+    public static void Main(string[] args)
     {
-        private static readonly IPipelineOutputter PipelineOutputter = new ConsoleOutputter();
-
-        private static readonly BuildConsoleCommand BuildCommand = new BuildConsoleCommand(PipelineOutputter);
-
-        private static readonly JobsConsoleCommand JobsCommand = new JobsConsoleCommand(PipelineOutputter);
-
-        private static readonly LintConsoleCommand LintCommand = new LintConsoleCommand(PipelineOutputter);
-
-        public static void Main(string[] args)
+        var app = new CommandLineApplication
         {
-            var app = new CommandLineApplication
-            {
-                Name = "LocalAppVeyor",
-                FullName = "LocalAppVeyor",
-                Description = "LocalAppVeyor allows one to run an appveyor.yml build script locally",
-                UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopParsingAndCollect
-            };
+            Name = "LocalAppVeyor",
+            FullName = "LocalAppVeyor",
+            Description = "LocalAppVeyor allows one to run an appveyor.yml build script locally",
+            UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.StopParsingAndCollect
+        };
 
-            var (shortFormVersion, longFormVersion) = GetShortAndLongVersion();
+        var (shortFormVersion, longFormVersion) = GetShortAndLongVersion();
 
-            app.HelpOption("-?|-h|--help");
-            app.VersionOption("-v|--version", shortFormVersion, longFormVersion);
+        app.HelpOption("-?|-h|--help");
+        app.VersionOption("-v|--version", shortFormVersion, longFormVersion);
 
-            app.Command(BuildCommand.Name, conf => { BuildCommand.SetUp(conf); });
-            app.Command(JobsCommand.Name, conf => { JobsCommand.SetUp(conf); });
-            app.Command(LintCommand.Name, conf => { LintCommand.SetUp(conf); });
+        app.Command(BuildCommand.Name, conf => { BuildCommand.SetUp(conf); });
+        app.Command(JobsCommand.Name, conf => { JobsCommand.SetUp(conf); });
+        app.Command(LintCommand.Name, conf => { LintCommand.SetUp(conf); });
 
-            app.OnExecute(() =>
-            {
-                app.ShowHelp();
-                return 0;
-            });
-
-            app.Execute(args);
-        }
-
-        private static (string ShortFormVersion, string LongFormVersion) GetShortAndLongVersion()
+        app.OnExecute(() =>
         {
-            string GetVersionFromTypeInfo(Type typeInfo)
+            app.ShowHelp();
+            return 0;
+        });
+
+        app.Execute(args);
+    }
+
+    private static (string ShortFormVersion, string LongFormVersion) GetShortAndLongVersion()
+    {
+        string GetVersionFromTypeInfo(Type typeInfo)
+        {
+            var infoVersion = typeInfo.Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+                .InformationalVersion;
+
+            if (string.IsNullOrEmpty(infoVersion))
             {
-                var infoVersion = typeInfo.Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-                    .InformationalVersion;
-
-                if (string.IsNullOrEmpty(infoVersion))
-                {
-                    infoVersion = typeInfo.Assembly.GetName().Version.ToString();
-                }
-
-                return infoVersion;
+                infoVersion = typeInfo.Assembly.GetName().Version.ToString();
             }
 
-            var consoleVer = GetVersionFromTypeInfo(typeof(Program).GetTypeInfo());
-            var engineVer = GetVersionFromTypeInfo(typeof(Engine.Engine).GetTypeInfo());
-
-            return (consoleVer, $"{consoleVer} (engine: {engineVer})");
+            return infoVersion;
         }
+
+        var consoleVer = GetVersionFromTypeInfo(typeof(Program).GetTypeInfo());
+        var engineVer = GetVersionFromTypeInfo(typeof(Engine.Engine).GetTypeInfo());
+
+        return (consoleVer, $"{consoleVer} (engine: {engineVer})");
     }
 }

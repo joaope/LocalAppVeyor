@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 
-namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model
+namespace LocalAppVeyor.Engine.Configuration.Reader.Internal.Model;
+
+internal class InternalOperatingSystems : List<string>
 {
-    internal class InternalOperatingSystems : List<string>
+    public static implicit operator InternalOperatingSystems(string os)
     {
-        public static implicit operator InternalOperatingSystems(string os)
+        return new InternalOperatingSystems
         {
-            return new InternalOperatingSystems
-            {
-                os
-            };
-        }
+            os
+        };
     }
 }

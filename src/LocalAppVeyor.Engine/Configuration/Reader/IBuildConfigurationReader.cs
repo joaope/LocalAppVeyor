@@ -1,7 +1,6 @@
-﻿namespace LocalAppVeyor.Engine.Configuration.Reader
+﻿namespace LocalAppVeyor.Engine.Configuration.Reader;
+
+public interface IBuildConfigurationReader
 {
-    public interface IBuildConfigurationReader
-    {
-        BuildConfiguration GetBuildConfiguration();
-    }
+    BuildConfiguration GetBuildConfiguration();
 }
