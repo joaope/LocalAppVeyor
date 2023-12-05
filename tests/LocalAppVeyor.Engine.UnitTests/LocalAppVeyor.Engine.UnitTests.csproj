@@ -19,5 +19,11 @@
     <PackageReference Include="moq" Version="4.20.70" />
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="xunit.runner.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>
