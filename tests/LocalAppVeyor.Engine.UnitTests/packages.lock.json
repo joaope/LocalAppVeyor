@@ -32,11 +32,11 @@
       },
       "System.IO.Abstractions.TestingHelpers": {
         "type": "Direct",
-        "requested": "[20.0.4, )",
-        "resolved": "20.0.4",
-        "contentHash": "Dp6gPoqJ7i8dRGubfxzA219fFCtkam9BgSmuIT+fQcFPKkW6vx9PuLTSELsNq+gRoEAzxGbWjsT/3WslfcmRfg==",
+        "requested": "[21.1.1, )",
+        "resolved": "21.1.1",
+        "contentHash": "Vo+7rmWkvhX/Lu8GhAOB0ZVsJ76FSKqwP454eE0Wh9Cq+5XqB0KJ2eMA08FIdNPJE97vnpoBVEdPC/BIY2Sl3g==",
         "dependencies": {
-          "TestableIO.System.IO.Abstractions.TestingHelpers": "20.0.4"
+          "TestableIO.System.IO.Abstractions.TestingHelpers": "21.1.1"
         }
       },
       "xunit": {
@@ -1772,24 +1772,24 @@
       },
       "TestableIO.System.IO.Abstractions": {
         "type": "Transitive",
-        "resolved": "20.0.4",
-        "contentHash": "zvuE3an8qmEjlz72ZKyW/gBZprR0TMTDxuw77i1OXi5wEagXRhHwP4lOaLvHIXNlwyCAmdmei6iLHsfsZcuUAA=="
+        "resolved": "21.1.1",
+        "contentHash": "rOpwfPzkMnXEm1tXzCuFAIcB5vEy2WQJ4vZ4ixAHv6UE95ddYeJ6JJh4rg/3fmf+5ewit9Oful6POUjnbOkang=="
       },
       "TestableIO.System.IO.Abstractions.TestingHelpers": {
         "type": "Transitive",
-        "resolved": "20.0.4",
-        "contentHash": "O8YeM+jsunyWt4ch93QnvWmMN/uguU0uX2VvDEvlltOxxHfCOuy0jG9m9p/lys52orlbpRa/Rl6mMXwoK2tdcA==",
+        "resolved": "21.1.1",
+        "contentHash": "mBG+qZdA+nrMVEEm0GIRTiWnVtqndGGuutLlMqBCc/42lPDQx1Nboyuz2oO3BVf8Jm7haJllu9druFYmJP7t3w==",
         "dependencies": {
-          "TestableIO.System.IO.Abstractions": "20.0.4",
-          "TestableIO.System.IO.Abstractions.Wrappers": "20.0.4"
+          "TestableIO.System.IO.Abstractions": "21.1.1",
+          "TestableIO.System.IO.Abstractions.Wrappers": "21.1.1"
         }
       },
       "TestableIO.System.IO.Abstractions.Wrappers": {
         "type": "Transitive",
-        "resolved": "20.0.4",
-        "contentHash": "LbVaZauZfCkcGmHyPhQ2yiKv5GQqTvMViPYd3NjU1tGxp0N2p7Oc6Q/2trN6ZNIZCr42ujJdYUB63hE4mtsHRQ==",
+        "resolved": "21.1.1",
+        "contentHash": "BVymeYb9xqUdffJq9zqVyGglyQDi8QXv+VYUM0Z9Mrfau+rFFGk6GmFhEiCC3TIGOfDSIFWFUPWzxXHXjWmXIQ==",
         "dependencies": {
-          "TestableIO.System.IO.Abstractions": "20.0.4"
+          "TestableIO.System.IO.Abstractions": "21.1.1"
         }
       },
       "xunit.abstractions": {
